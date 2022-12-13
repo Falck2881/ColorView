@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>imgNotFound.png</file>
+        <file>ship.bmp</file>
+    </qresource>
+</RCC>
