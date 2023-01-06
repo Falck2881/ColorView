@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/">
+        <file>imgNotFound.png</file>
+        <file>ship.bmp</file>
+        <file>Normal/Undo.bmp</file>
+        <file>Normal/Save as.bmp</file>
+        <file>Normal/Save.bmp</file>
+        <file>Normal/Redo.bmp</file>
+        <file>Normal/Open Image.bmp</file>
+        <file>Normal/Export.bmp</file>
+        <file>Disabled/Undo.bmp</file>
+        <file>Disabled/Save as.bmp</file>
+        <file>Disabled/Save.bmp</file>
+        <file>Disabled/Redo.bmp</file>
+        <file>Disabled/Export.bmp</file>
+        <file>Takezo.qss</file>
+        <file>ImgFrames/BlueFrame.png</file>
+        <file>ImgFrames/ClassicFrame.png</file>
+        <file>ImgFrames/FrameTree.png</file>
+        <file>ImgFrames/GoldFrame.png</file>
+        <file>ImgFrames/LineFrame.png</file>
+        <file>ImgFrames/Painting.png</file>
+        <file>ImgFrames/RedFrame.png</file>
+        <file>ImgFrames/SheetFrame.png</file>
+        <file>ImgFrames/SpottedFrame.png</file>
+        <file>ImgFrames/Vintag.png</file>
+    </qresource>
+</RCC>
