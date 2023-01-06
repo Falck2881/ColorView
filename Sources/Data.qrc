@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Warm.txt</file>
+        <file>Pink.txt</file>
+        <file>Saturation.txt</file>
+        <file>Forest.txt</file>
+        <file>Cool.txt</file>
+    </qresource>
+</RCC>
