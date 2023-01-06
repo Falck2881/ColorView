@@ -38,10 +38,11 @@ QStringList MatrixCalculateColor::loadMatrix(const QString nameFileMatrix)
     {
         QString symbols(fileMatrix.readAll());
         fileMatrix.close();
+        QString endStr("(\r\n|\n)");
         QString pattern("(\\d\\.\\d\\d|\\d\\.\\d|\\d|-\\d)");
-        QRegularExpression reg(pattern + "\\s{1,20}" + pattern + "\\s{1,20}" + pattern + "\n" +
-                               pattern + "\\s{1,20}" + pattern + "\\s{1,20}" + pattern + "\n" +
-                               pattern + "\\s{1,20}" + pattern + "\\s{1,20}" + pattern + "\n");
+        QRegularExpression reg(pattern + "\\s{1,20}" + pattern + "\\s{1,20}" + pattern + endStr +
+                               pattern + "\\s{1,20}" + pattern + "\\s{1,20}" + pattern + endStr +
+                               pattern + "\\s{1,20}" + pattern + "\\s{1,20}" + pattern + endStr);
 
         QRegularExpressionMatch regMatch = reg.match(symbols);
 

@@ -2,6 +2,7 @@
 #include "MainWindow.h"
 #include "Image.h"
 #include <QLabel>
+#define NDEBUG
 #include <assert.h>
 #define START_PAGE 0
 

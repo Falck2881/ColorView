@@ -2,6 +2,8 @@
 #include "MainWindow.h"
 #include <QKeySequence>
 #include <QVector>
+#define NDEBUG
+#include <assert.h>
 
 App::Item::Edit::Edit(App::MainWindow* const mainWin):
     aUndo{std::make_unique<QAction>("&Undo")},

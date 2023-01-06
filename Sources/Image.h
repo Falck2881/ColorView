@@ -5,6 +5,7 @@
 #include <QImage>
 #include <QString>
 #include <mutex>
+#include <memory>
 
 class QPixmap;
 class QColor;

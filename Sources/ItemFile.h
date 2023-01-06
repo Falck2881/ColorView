@@ -3,6 +3,7 @@
 
 #include "Items.h"
 #include "Image.h"
+#include <QDebug>
 
 namespace App{
     class MainWindow;

@@ -11,8 +11,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Core Gui REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Core Gui REQUIRED)
 
 qt6_add_resources(IMG "${CMAKE_CURRENT_SOURCE_DIR}/Image/Img.qrc")
 qt6_add_resources(DATA "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Data.qrc")

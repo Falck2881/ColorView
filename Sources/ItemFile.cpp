@@ -6,6 +6,8 @@
 #include <QDir>
 #include <QMessageBox>
 #include <QApplication>
+#define NDEBUG
+#include <assert.h>
 
 App::Item::File::File(App::MainWindow* const mainWin):
     aExite{std::make_unique<QAction>("&Exit")},

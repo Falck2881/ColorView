@@ -1,6 +1,8 @@
 #include "ItemImage.h"
 #include "MainWindow.h"
 #include <QList>
+#define NDEBUG
+#include <assert.h>
 
 App::Item::Image::Image(App::MainWindow* const mainWin):
     winFrames{std::make_unique<WinFrames>(this)},
