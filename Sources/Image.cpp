@@ -143,11 +143,7 @@ void Fk::Image::scaled(const quint32 width, const quint32 hight)
 
 void Fk::Image::setFilter(std::shared_ptr<FilterImage> filter)
 {
-    std::thread threadCalculateFilter(&FilterImage::applyFilter,
-                                      filter.get(),
-                                      this);
-
-    threadCalculateFilter.join();
+    filter->applyFilter(this);
 
 }
 

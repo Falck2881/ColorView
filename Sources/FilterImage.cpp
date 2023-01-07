@@ -4,12 +4,12 @@
 
 FilterImage::FilterImage(FilterImage& oldObj)
 {
-    this->method = std::move(oldObj.method);
+    this->method = oldObj.method;
 }
 
 FilterImage::FilterImage(FilterImage&& oldObj)
 {
-    this->method = std::move(oldObj.method);
+    this->method = oldObj.method;
 }
 
 FilterImage::FilterImage(std::shared_ptr<Base::CalculateColor> newMethod):
@@ -19,14 +19,12 @@ FilterImage::FilterImage(std::shared_ptr<Base::CalculateColor> newMethod):
 
 void FilterImage::applyFilter(Fk::Image* const wrapper)
 {
-    std::scoped_lock(wrapper->mutex);
-    QRgb* oldRgb;
 
-    for(qint32 y = 0; y < wrapper->qImage().height(); ++y){
-        oldRgb = reinterpret_cast<QRgb*>(wrapper->qImage().scanLine(y));
-        for(qint32 x = 0; x < wrapper->qImage().width(); ++x)
+    for(qint32 x = 0; x < wrapper->qImage().width(); ++x){
+        for(qint32 y = 0; y < wrapper->qImage().height(); ++y)
         {
-            QColor newColor = method->calculateColor(QColor(oldRgb[x]));
+            QColor oldPixel(wrapper->qImage().pixelColor(x,y));
+            QColor newColor = method->calculateColor(oldPixel);
             wrapper->qImage().setPixelColor(x,y,newColor);
         }
     }

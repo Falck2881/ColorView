@@ -10,7 +10,7 @@ class FilterImage
     public:
         FilterImage(FilterImage& oldObj);
         FilterImage(FilterImage&& oldObj);
-        explicit FilterImage(std::shared_ptr<Base::CalculateColor> newMethod);
+        FilterImage(std::shared_ptr<Base::CalculateColor> newMethod);
         void applyFilter(Fk::Image* const image);
     private:
         std::shared_ptr<Base::CalculateColor> method;

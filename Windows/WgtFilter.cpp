@@ -80,12 +80,12 @@ void WinFilter::updateContainFrames(Fk::Image image)
                              ui->labelSaturation,ui->labelWarm,ui->labelCool};
 
     QVector<std::shared_ptr<Base::CalculateColor>> methodCalculateColor;
-    methodCalculateColor << make_unique<MatrixCalculateColor>(":/Forest.txt") <<
-                            make_unique<AveragingColor>() <<
-                            make_unique<MatrixCalculateColor>(":/Sharpness.txt") <<
-                            make_unique<MatrixCalculateColor>(":/Saturation.txt") <<
-                            make_unique<MatrixCalculateColor>(":/Warm.txt") <<
-                            make_unique<MatrixCalculateColor>(":/Cool.txt");
+    methodCalculateColor << make_shared<MatrixCalculateColor>(":/Forest.txt") <<
+                            make_shared<AveragingColor>() <<
+                            make_shared<MatrixCalculateColor>(":/Sharpness.txt") <<
+                            make_shared<MatrixCalculateColor>(":/Saturation.txt") <<
+                            make_shared<MatrixCalculateColor>(":/Warm.txt") <<
+                            make_shared<MatrixCalculateColor>(":/Cool.txt");
 
 
     for(qsizetype i = 0; i < frames.size(); ++i)

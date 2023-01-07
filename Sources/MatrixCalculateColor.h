@@ -16,7 +16,7 @@ class MatrixCalculateColor: public Base::CalculateColor
         QStringList loadMatrix(const QString nameFileMatrix);
         void setValuesInMatrix(const QStringList& value);
     private:
-        qreal **matrix;
+        qreal matrix[3][3];
 };
 
 #endif // MATRIXCALCULATE_H

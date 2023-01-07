@@ -6,22 +6,20 @@
 
 MatrixCalculateColor::MatrixCalculateColor(MatrixCalculateColor& oldMethod)
 {
-    this->matrix = oldMethod.matrix;
+    for(int i = 0; i < 3; ++i)
+        for(int j = 0; j < 3; ++j)
+            this->matrix[i][j] = oldMethod.matrix[i][j];
 }
 
 MatrixCalculateColor::MatrixCalculateColor(const QString nameFileMatrix)
 {
-    highlightsMemoryForMatrix();
+
     setMatrixFilter(nameFileMatrix);
 }
 
 void MatrixCalculateColor::highlightsMemoryForMatrix()
 {
-    const qint32 N{3};
-    matrix = new qreal*[N];
 
-    for(qint32 i = 0; i < N; ++i)
-        matrix[i] = new qreal[sizeof(qreal) * N];
 }
 
 void MatrixCalculateColor::setMatrixFilter(const QString nameFileMatrix)
@@ -58,7 +56,7 @@ void MatrixCalculateColor::setValuesInMatrix(const QStringList &valuesMatrix)
     auto value{valuesMatrix.begin()+1};
     const quint32 N{3};
 
-    for(quint32 i = 0; i < N; ++i)
+    for(quint32 i = 0; i < N; ++i, ++value)
     {
         for(quint32 j = 0; j < N && value < valuesMatrix.end(); ++j, ++value)
         {
@@ -82,7 +80,7 @@ QColor MatrixCalculateColor::calculateColor(QColor oldColor)
         for(quint32 j = 0; j < N; ++j)
         {
             newRgb[i] += matrix[i][j] * oldRgb[i][j];
-            newRgb[i] = qBound(0.0, newRgb[i], 1.0);
+            newRgb[i] = qBound(0.0,newRgb[i],1.0);
         }
     }
 
@@ -93,7 +91,5 @@ QColor MatrixCalculateColor::calculateColor(QColor oldColor)
 
 MatrixCalculateColor::~MatrixCalculateColor()
 {
-    const quint32 N{3};
-    for(quint32 i = 0; i < N; ++i)
-        delete[] matrix[i];
+
 }
