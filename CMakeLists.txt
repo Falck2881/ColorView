@@ -11,10 +11,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 COMPONENTS Widgets Core Gui REQUIRED)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core Gui)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core Gui)
 
-qt6_add_resources(IMG "${CMAKE_CURRENT_SOURCE_DIR}/Image/Img.qrc")
-qt6_add_resources(DATA "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Data.qrc")
+qt_add_resources(IMG "${CMAKE_CURRENT_SOURCE_DIR}/Image/Img.qrc")
+qt_add_resources(DATA "${CMAKE_CURRENT_SOURCE_DIR}/Sources/Data.qrc")
 
 set(WINDOWS_SRC Windows/MainWindow.h Windows/MainWindow.cpp
                 Windows/WgtImgProperty.h
@@ -65,7 +66,9 @@ endif()
 target_include_directories(ProjectColorView PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Windows"
                                                     "${CMAKE_CURRENT_SOURCE_DIR}/Sources")
 
-target_link_libraries(ProjectColorView PRIVATE Qt6::Widgets Qt6::Core Qt6::Gui)
+target_link_libraries(ProjectColorView PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
+                                               Qt${QT_VERSION_MAJOR}::Core
+                                               Qt${QT_VERSION_MAJOR}::Gui)
 
 set_target_properties(ProjectColorView PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -75,6 +78,3 @@ set_target_properties(ProjectColorView PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(ProjectColorView)
-endif()
