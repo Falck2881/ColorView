@@ -26,7 +26,10 @@ set(WINDOWS_SRC Windows/MainWindow.h Windows/MainWindow.cpp
                 Windows/WgtFilter.ui
                 Windows/WgtFraming.h
                 Windows/WgtFraming.cpp
-                Windows/WgtFraming.ui)
+                Windows/WgtFraming.ui
+                Windows/WgtSaveImg.h
+                Windows/WgtSaveImg.cpp
+                Windows/WgtSaveImg.ui)
 
 set(PROJECT_SOURCES     main.cpp
                         Sources/History.h
@@ -39,6 +42,7 @@ set(PROJECT_SOURCES     main.cpp
                         Sources/ThreadProcessingImages.cpp
                         Sources/SetConversions.h Sources/SetConversions.cpp
                         Sources/Command.h
+                        Sources/SCApplyDepth.h Sources/SCApplyDepth.cpp
                         Sources/SCApplyFilter.h Sources/SCApplyFilter.cpp
                         Sources/SCApplyFrame.h Sources/SCApplyFrame.cpp
                         Sources/Items.h

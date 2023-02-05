@@ -2,6 +2,7 @@
 #define WGTFILTER_H
 
 #include <QWidget>
+#include "SCApplyDepth.h"
 #include "SCApplyFilter.h"
 #include "Image.h"
 #include "SetConversions.h"
@@ -22,9 +23,10 @@ class WinFilter : public QWidget
         explicit WinFilter(App::Item::Image* const imageItem);
         ~WinFilter();
         Fk::Image getModifiedImage() const;
+        void setModifiedImage(Fk::Image modifiedImage);
+        void updateDepthColorsInImage(QImage::Format depthColor);
         void updateContant(const Fk::Image image,
                            const QVector<Fk::Image> imagesAfterProcessing);
-        void setModifiedImage(Fk::Image modifiedImage);
     private:
         void initializeCommands();
         void connect();
@@ -38,7 +40,6 @@ class WinFilter : public QWidget
         SetConversions collection;
         App::Item::Image* const imgItem;
         Fk::Image processingImage;
-        std::unique_ptr<Command::ApplyFilter> cBlackWhite;
-        QVector<std::shared_ptr<Command::ApplyFilter>> commands;
+        QVector<std::shared_ptr<Command::ApplyFilter>> comApplysFilters;
 };
 #endif // WGTFILTER_H

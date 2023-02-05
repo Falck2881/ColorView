@@ -17,7 +17,8 @@ App::Item::File::File(App::MainWindow* const mainWin):
     aOpenFile{std::make_unique<QAction>("&Open")},
     mFile{std::make_unique<QMenu>("&File")},
     toolBar{std::make_unique<QToolBar>()},
-    mainWindow{mainWin}
+    mainWindow{mainWin},
+    winSaveImg{std::make_unique<WinSaveImg>()}
 {
     mainWindow->appand(this);
     initializeEachAction();
@@ -96,18 +97,8 @@ void App::Item::File::save()
 void App::Item::File::saveAs()
 {
     assert(indexOnFile != -1);
-    QString newFormat;
-    const QString newAbsPathToFile = QFileDialog::getSaveFileName(mainWindow,"Save As",QDir::homePath(),
-                                                                  "*.bmp ;; *.png ;; *.jpg",
-                                                                  &newFormat);
-    auto image = images.at(indexOnFile);
-
-    if(newFormat.contains("bmp"))
-        image.save(newAbsPathToFile + ".bmp", "bmp");
-    else if(newFormat.contains("png"))
-        image.save(newAbsPathToFile + ".png", "png");
-    else if(newFormat.contains("jpg"))
-        image.save(newAbsPathToFile + ".jpg", "jpg");
+    winSaveImg->updateContent(images.at(indexOnFile));
+    winSaveImg->show();
 }
 
 void App::Item::File::exportAs()

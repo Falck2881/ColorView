@@ -22,10 +22,12 @@ namespace  App::Item
         public:
            Page(App::MainWindow* const mainWin);
            QTabWidget* getTabWidget() const;
+           Fk::Image getImageCurrentPage() const;
         private:
            void updateContant(Fk::Image image) override final;
+           void updatePage(Fk::Image image);
            void setContant(Fk::Image image) override final;
-        private:
+           void setImageIntoPage(Fk::Image image);
            void connectWithCommand();
            void initializeStartPage();
            void hideStartPage();

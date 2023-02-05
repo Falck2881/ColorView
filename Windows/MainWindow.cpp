@@ -76,4 +76,8 @@ void App::MainWindow::changesItems(Base::Item* const item)
         itemEdit->saveChangesInHistory(itemImage->getImage());
     else if(item == itemEdit.get())
         updateFileInEachObserver(itemEdit->getCurrentImage());
+    else if(item == itemPage.get()){
+        itemImage->updateContant(itemPage->getImageCurrentPage());
+        itemImage->updateActivityFilter();
+    }
 }

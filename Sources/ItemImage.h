@@ -30,22 +30,28 @@ namespace Item {
             QMenu* getMenu() const;
             Fk::Image getImage() const;
             void saveModifiedImage(QWidget* const widget);
-        private:
+            void updateActivityFilter();
             void updateContant(Fk::Image image) override final;
+        private:
             void checkStatyActions() override final;
             void setContant(Fk::Image image) override final;
         private:
             void replaceImage(const Fk::Image& image);
             void startThreadProcessingImages(const Fk::Image& image);
-            void connectW();
-            void initializeEachAction();
+            void connect();
+            void initializeSubItemDepth();
+            void initializeSubItemImage();
             void setPropertActions(bool value);
+            bool isImageHightQuality(Fk::Image image) const;
         private slots:
             void updateProcessingImages(QVector<Fk::Image> processingImages);
-            void changeDepth();
             void showProperty();
             void changeFilters();
             void changeFrame();
+            void changeDepth256Color();
+            void changeDepth16Color();
+            void changeDepth24Color();
+            void changeDepth32Color();
         signals:
             void sourceImage(const Fk::Image& image);
         private:
@@ -57,7 +63,11 @@ namespace Item {
             std::unique_ptr<WinFrames> winFrames;
             std::unique_ptr<WinFilter> winFilter;
             std::unique_ptr<WinImgProperty> winProperty;
-            std::unique_ptr<QAction> aDepth;
+            std::unique_ptr<QMenu> mDepthColor;
+            std::unique_ptr<QAction> aDepth256Color;
+            std::unique_ptr<QAction> aDepth16Color;
+            std::unique_ptr<QAction> aDepth24Color;
+            std::unique_ptr<QAction> aDepth32Color;
             std::unique_ptr<QAction> aProperty;
             std::unique_ptr<QAction> aFilter;
             std::unique_ptr<QAction> aFrame;

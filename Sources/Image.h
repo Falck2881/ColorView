@@ -4,6 +4,7 @@
 #include <QtGlobal>
 #include <QImage>
 #include <QString>
+#include <QSet>
 #include <memory>
 
 class QPixmap;
@@ -20,7 +21,9 @@ namespace Fk {
             Fk::Image& operator=(Fk::Image&& oldImage);
             Fk::Image& operator=(const Fk::Image& oldImage);
             Image(const QString nameFile, const char* format = nullptr);
-            bool save(const QString newAbsPathToFile,const char* newFormat) const;
+            bool isNull() const;
+            void setDepthColor(QImage::Format depthColor);
+            bool save(const QString newAbsPathToFile,const char* newFormats) const;
             QPixmap pixmap() const;
             QColor pixel(qint32 x, qint32 y) const;
             void setPixelColor(qint32 x, qint32 y, QColor newColor);
@@ -36,10 +39,14 @@ namespace Fk {
             QString absolutlePathToFile() const;
             void scaled(const quint32 width, const quint32 hight);
             void setFraming(const QString nameFileFrame);
+       private:
+            void setAllNameColorsInSet();
+       private:
             QImage image;
             char* charFormat;
             QString absPathToFile;
             QString strFormat;
+            QSet<QString> setColors;
     };
 }
 #endif // IMAGE_H

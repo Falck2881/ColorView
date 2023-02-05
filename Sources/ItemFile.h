@@ -1,6 +1,7 @@
 #ifndef ITEMFILE_H
 #define ITEMFILE_H
 
+#include "Windows/WgtSaveImg.h"
 #include "Items.h"
 #include "Image.h"
 #include <QDebug>
@@ -48,6 +49,7 @@ namespace App::Item
             QList<Fk::Image> images;
             std::unique_ptr<QToolBar> toolBar;
             App::MainWindow* const mainWindow;
+            std::unique_ptr<WinSaveImg> winSaveImg;
 
     };
 }
