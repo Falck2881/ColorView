@@ -49,21 +49,27 @@ void WinFilter::apply()
     imgItem->saveModifiedImage(this);
 }
 
-void WinFilter::setModifiedImage(Fk::Image newImageProcessing)
+void WinFilter::setCollectionProcessingImage(QVector<Fk::Image> newCollectionProcessingImages)
 {
-    updateMainFrame(newImageProcessing);
-    processingImage = newImageProcessing;
+    collectionProcessingImages = newCollectionProcessingImages;
 }
 
-void WinFilter::updateContant(Fk::Image image,  QVector<Fk::Image> processingImages)
+void WinFilter::setModifiedImage(Fk::Image newImageProcessing)
 {
-    processingImage = image;
-    updateContainFrames(processingImages);
-    updateMainFrame(image);
+    updateMainImage(newImageProcessing);
+    modifiedImage = newImageProcessing;
+}
+
+void WinFilter::updateContant(Fk::Image image)
+{
+    if(!collectionProcessingImages.isEmpty())
+        updateFilters();
+
+    updateMainImage(image);
     updateCommands(image);
 }
 
-void WinFilter::updateContainFrames(QVector<Fk::Image> processingImages)
+void WinFilter::updateFilters()
 {
 
     QVector<QLabel*> frames{ui->labelForest,ui->labelBlackWhite,ui->labelPunk,
@@ -75,13 +81,13 @@ void WinFilter::updateContainFrames(QVector<Fk::Image> processingImages)
     {
         width = frames.at(i)->width();
         height = frames.at(i)->height();
-        processingImages[i].scaled(width,height);
+        collectionProcessingImages[i].scaled(width,height);
         frames.at(i)->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        frames.at(i)->setPixmap(processingImages.at(i).pixmap());
+        frames.at(i)->setPixmap(collectionProcessingImages.at(i).pixmap());
     }
 }
 
-void WinFilter::updateMainFrame(Fk::Image image)
+void WinFilter::updateMainImage(Fk::Image image)
 {
     image.scaled(ui->labelImage->width(), ui->labelImage->height());
     ui->labelImage->setPixmap(image.pixmap());
@@ -95,12 +101,12 @@ void WinFilter::updateCommands(Fk::Image image)
 
 void WinFilter::updateDepthColorsInImage(QImage::Format depthColor)
 {
-    processingImage.setDepthColor(depthColor);
+    modifiedImage.setDepthColor(depthColor);
 }
 
 Fk::Image WinFilter::getModifiedImage() const
 {
-    return processingImage;
+    return modifiedImage;
 }
 
 WinFilter::~WinFilter()

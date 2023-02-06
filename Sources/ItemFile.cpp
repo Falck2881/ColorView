@@ -11,7 +11,6 @@
 
 App::Item::File::File(App::MainWindow* const mainWin):
     aExite{std::make_unique<QAction>("&Exit")},
-    aExportAs{std::make_unique<QAction>("&Export As...")},
     aSaveFileAs{std::make_unique<QAction>("&Save As ...")},
     aSaveFile{std::make_unique<QAction>("&Save")},
     aOpenFile{std::make_unique<QAction>("&Open")},
@@ -38,11 +37,8 @@ void App::Item::File::initializeEachAction()
     aSaveFile->setShortcut(QKeySequence("CTRL+S"));
     aSaveFile->setWhatsThis("Save an image.");
     aSaveFile->setIcon(QIcon(":/Disabled/Save.bmp"));
-    aExportAs->setShortcut(QKeySequence("CTRL+E"));
-    aExportAs->setWhatsThis("Export image in format JPEG,PNG,BMP..");
-    aExportAs->setIcon(QIcon(":/Disabled/Export.bmp"));
 
-    QList<QAction*> listAction{aSaveFile.get(),aSaveFileAs.get(),aExportAs.get()};
+    QList<QAction*> listAction{aSaveFile.get(),aSaveFileAs.get()};
 
     for(auto action: listAction){
         action->setEnabled(false);
@@ -62,8 +58,6 @@ void App::Item::File::connectWithCommand()
     QObject::connect(aSaveFile.get(), &QAction::triggered, this, &App::Item::File::save);
 
     QObject::connect(aSaveFileAs.get(), &QAction::triggered, this, &App::Item::File::saveAs);
-
-    QObject::connect(aExportAs.get(), &QAction::triggered, this, &App::Item::File::exportAs);
 
     QObject::connect(aExite.get(), &QAction::triggered, this, &App::Item::File::exit);
 }
@@ -99,11 +93,6 @@ void App::Item::File::saveAs()
     assert(indexOnFile != -1);
     winSaveImg->updateContent(images.at(indexOnFile));
     winSaveImg->show();
-}
-
-void App::Item::File::exportAs()
-{
-
 }
 
 void App::Item::File::exit()
@@ -146,11 +135,11 @@ void App::Item::File::checkStatyActions()
 {
     QVector<QString> icons;
     if(images.empty()){
-        icons << ":/Disabled/Save.bmp" << ":/Disabled/Save as.bmp" << ":/Disabled/Export.bmp";
+        icons << ":/Disabled/Save.bmp" << ":/Disabled/Save as.bmp" ;
         setPropertyActions(false,icons);
     }
     else{
-        icons << ":/Normal/Save.bmp" << ":/Normal/Save as.bmp" << ":/Normal/Export.bmp";
+        icons << ":/Normal/Save.bmp" << ":/Normal/Save as.bmp";
         setPropertyActions(true, icons);
     }
 }
@@ -158,7 +147,7 @@ void App::Item::File::checkStatyActions()
 
 void App::Item::File::setPropertyActions(bool value, const QVector<QString>& icons)
 {
-    QList<QAction*> listAction{aSaveFile.get(),aSaveFileAs.get(),aExportAs.get()};
+    QList<QAction*> listAction{aSaveFile.get(),aSaveFileAs.get()};
 
     for(quint32 index = 0; index < listAction.size(); ++index)
     {

@@ -36,12 +36,10 @@ namespace App::Item
             void open();
             void save();
             void saveAs();
-            void exportAs();
             void exit();
 
         private:
             std::unique_ptr<QAction> aExite;
-            std::unique_ptr<QAction> aExportAs;
             std::unique_ptr<QAction> aSaveFileAs;
             std::unique_ptr<QAction> aSaveFile;
             std::unique_ptr<QAction> aOpenFile;

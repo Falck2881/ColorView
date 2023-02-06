@@ -36,6 +36,7 @@ namespace Item {
             void checkStatyActions() override final;
             void setContant(Fk::Image image) override final;
         private:
+            void moveConversionsColorIntoThreads();
             void replaceImage(const Fk::Image& image);
             void startThreadProcessingImages(const Fk::Image& image);
             void connect();
@@ -43,8 +44,10 @@ namespace Item {
             void initializeSubItemImage();
             void setPropertActions(bool value);
             bool isImageHightQuality(Fk::Image image) const;
+            void addToCompleteImageProcessing(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing);
+            void removeOldsProcessingImages();
         private slots:
-            void updateProcessingImages(QVector<Fk::Image> processingImages);
+            void setProcessingImages(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing);
             void showProperty();
             void changeFilters();
             void changeFrame();
@@ -55,10 +58,11 @@ namespace Item {
         signals:
             void sourceImage(const Fk::Image& image);
         private:
+            QVector<std::pair<QVector<Fk::Image>, NumbersThreads>> completedImageProcessing;
             SetConversions collection;
-            ThreadProcessingImages* threadProcessingImg;
+            QVector<std::shared_ptr<ThreadProcessingImages>> threadsProcessingImages;
             Fk::Image modifiedImage;
-            QList<Fk::Image> collectionSourceImages;
+            QVector<Fk::Image> collectionSourceImages;
             QVector<Fk::Image> collectionProcessingImage;
             std::unique_ptr<WinFrames> winFrames;
             std::unique_ptr<WinFilter> winFilter;

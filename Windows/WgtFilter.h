@@ -23,15 +23,15 @@ class WinFilter : public QWidget
         explicit WinFilter(App::Item::Image* const imageItem);
         ~WinFilter();
         Fk::Image getModifiedImage() const;
+        void setCollectionProcessingImage(QVector<Fk::Image> collectionProcessingImages);
         void setModifiedImage(Fk::Image modifiedImage);
         void updateDepthColorsInImage(QImage::Format depthColor);
-        void updateContant(const Fk::Image image,
-                           const QVector<Fk::Image> imagesAfterProcessing);
+        void updateContant(const Fk::Image image);
     private:
         void initializeCommands();
         void connect();
-        void updateContainFrames(QVector<Fk::Image> images);
-        void updateMainFrame(Fk::Image image);
+        void updateFilters();
+        void updateMainImage(Fk::Image image);
         void updateCommands(Fk::Image image);
     private slots:
         void apply();
@@ -39,7 +39,8 @@ class WinFilter : public QWidget
         Ui::Filter *ui;
         SetConversions collection;
         App::Item::Image* const imgItem;
-        Fk::Image processingImage;
+        Fk::Image modifiedImage;
+        QVector<Fk::Image> collectionProcessingImages;
         QVector<std::shared_ptr<Command::ApplyFilter>> comApplysFilters;
 };
 #endif // WGTFILTER_H

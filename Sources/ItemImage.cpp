@@ -2,12 +2,12 @@
 #include "MainWindow.h"
 #include "ThreadProcessingImages.h"
 #include <QList>
+#include <algorithm>
 //#define NDEBUG
 #include <assert.h>
 #include <QObject>
 
 App::Item::Image::Image(App::MainWindow* const mainWin):
-    threadProcessingImg{new ThreadProcessingImages(collection.getFilters())},
     winFrames{std::make_unique<WinFrames>(this)},
     winFilter{std::make_unique<WinFilter>(this)},
     winProperty{std::make_unique<WinImgProperty>()},
@@ -23,9 +23,49 @@ App::Item::Image::Image(App::MainWindow* const mainWin):
     mainWindow{mainWin}
 {
     mainWindow->appand(this);
+    moveConversionsColorIntoThreads();
     initializeSubItemDepth();
     initializeSubItemImage();
     connect();
+}
+
+void App::Item::Image::moveConversionsColorIntoThreads()
+{
+    QVector<std::shared_ptr<ConversionColor>> methodsConversionColor{collection.getFilters()};
+    QVector<NumbersThreads> numbersThreads{NumbersThreads::FIRST_THREAD,
+                                           NumbersThreads::SECOND_THREAD,
+                                           NumbersThreads::THIRD_THREAD};
+
+    qsizetype indexA{0};
+    qsizetype indexB{0};
+
+    while(indexA < numbersThreads.size())
+    {
+        threadsProcessingImages.push_back(std::make_shared<ThreadProcessingImages>());
+        threadsProcessingImages.at(indexA)->setNumberThread(numbersThreads.at(indexA));
+        QVector<std::shared_ptr<ConversionColor>> copyMethodsConversionColor;
+
+        while(indexB < methodsConversionColor.size())
+        {
+            if(indexB <= 1){
+                copyMethodsConversionColor.push_back(methodsConversionColor.at(indexB));
+                if(indexB == 1) break;
+            }
+            else if(indexB <= 3){
+                copyMethodsConversionColor.push_back(methodsConversionColor.at(indexB));
+                if(indexB == 3) break;
+            }
+            else if(indexB <= 5){
+                copyMethodsConversionColor.push_back(methodsConversionColor.at(indexB));
+                if(indexB == 5) break;
+            }
+            ++indexB;
+        }
+
+        threadsProcessingImages.at(indexA)->setMethodsConversionColor(copyMethodsConversionColor);
+        ++indexA;
+        ++indexB;
+    }
 }
 
 void App::Item::Image::initializeSubItemDepth()
@@ -105,12 +145,15 @@ void App::Item::Image::connect()
     QObject::connect(aFrame.get(), &QAction::triggered,
                      this, &App::Item::Image::changeFrame);
 
-    QObject::connect(this, &App::Item::Image::sourceImage,
-                     threadProcessingImg, &ThreadProcessingImages::applyProcessing);
+    auto threadProcessingImg{threadsProcessingImages.begin()};
 
-    QObject::connect(threadProcessingImg, &ThreadProcessingImages::returnProcessingImages,
-                     this, &App::Item::Image::updateProcessingImages);
+    while(threadProcessingImg != threadsProcessingImages.end())
+    {
+        QObject::connect(threadProcessingImg->get(), &ThreadProcessingImages::returnProcessingImages,
+                         this, &App::Item::Image::setProcessingImages);
 
+        ++threadProcessingImg;
+    }
 }
 
 void App::Item::Image::changeDepth256Color()
@@ -179,7 +222,8 @@ void App::Item::Image::changeFilters()
     assert(indexOnFile != -1);
 
     Fk::Image image = collectionSourceImages.at(indexOnFile);
-    winFilter->updateContant(image,collectionProcessingImage);
+    winFilter->setCollectionProcessingImage(collectionProcessingImage);
+    winFilter->updateContant(image);
     winFilter->show();
 }
 
@@ -210,13 +254,58 @@ void App::Item::Image::replaceImage(const Fk::Image& image)
 
 void App::Item::Image::startThreadProcessingImages(const Fk::Image &image)
 {
-    threadProcessingImg->start();
-    emit sourceImage(image);
+    auto threadProcessingImage{threadsProcessingImages.begin()};
+
+    while(threadProcessingImage != threadsProcessingImages.end())
+    {
+        if(!threadProcessingImage->get()->isRun()){
+            threadProcessingImage->get()->setCopyImage(image);
+            threadProcessingImage->get()->start();
+        }
+        ++threadProcessingImage;
+    }
 }
 
-void App::Item::Image::updateProcessingImages(QVector<Fk::Image> newCollectionProcessingImages)
+void App::Item::Image::setProcessingImages(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing)
 {
-    collectionProcessingImage = newCollectionProcessingImages;
+    addToCompleteImageProcessing(newCompletedImageProcessing);
+    removeOldsProcessingImages();
+
+    if(completedImageProcessing.size() == 3)
+    {
+        for(auto& processingImage: completedImageProcessing){
+               collectionProcessingImage.append(processingImage.first);
+        }
+
+        completedImageProcessing.erase(completedImageProcessing.constBegin(), completedImageProcessing.constEnd());
+        completedImageProcessing.squeeze();
+    }
+
+}
+
+void App::Item::Image::addToCompleteImageProcessing(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing)
+{
+    if(completedImageProcessing.size() != 3)
+    {
+        completedImageProcessing.append(newCompletedImageProcessing);
+        auto comparation{[](std::pair<QVector<Fk::Image>, NumbersThreads> fPair,
+                            std::pair<QVector<Fk::Image>, NumbersThreads> sPair)
+                            {
+                                return fPair.second < sPair.second;
+                            }
+                        };
+
+        std::sort(completedImageProcessing.begin(),completedImageProcessing.end(),comparation);
+    }
+}
+
+void App::Item::Image::removeOldsProcessingImages()
+{
+    if(!collectionProcessingImage.isEmpty())
+    {
+        collectionProcessingImage.erase(collectionProcessingImage.constBegin(), collectionProcessingImage.constEnd());
+        collectionProcessingImage.squeeze();
+    }
 }
 
 void App::Item::Image::setContant(Fk::Image image)
