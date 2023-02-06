@@ -35,4 +35,5 @@
 ![изображение](https://user-images.githubusercontent.com/100667839/216953258-a52dc643-1d4d-456e-81a3-f1b8aeedbd4c.png)
 
 -Окно свойств изображения 
+
 ![изображение](https://user-images.githubusercontent.com/100667839/216953480-3ba26ac1-1d9a-4233-bb85-507633b3a1a4.png)
