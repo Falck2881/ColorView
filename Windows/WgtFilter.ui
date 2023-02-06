@@ -220,7 +220,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="buttonOk">
+     <widget class="QPushButton" name="buttonApply">
       <property name="minimumSize">
        <size>
         <width>120</width>

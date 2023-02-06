@@ -1,6 +1,7 @@
 #ifndef ITEMFILE_H
 #define ITEMFILE_H
 
+#include "Windows/WgtSaveImg.h"
 #include "Items.h"
 #include "Image.h"
 #include <QDebug>
@@ -35,12 +36,10 @@ namespace App::Item
             void open();
             void save();
             void saveAs();
-            void exportAs();
             void exit();
 
         private:
             std::unique_ptr<QAction> aExite;
-            std::unique_ptr<QAction> aExportAs;
             std::unique_ptr<QAction> aSaveFileAs;
             std::unique_ptr<QAction> aSaveFile;
             std::unique_ptr<QAction> aOpenFile;
@@ -48,6 +47,7 @@ namespace App::Item
             QList<Fk::Image> images;
             std::unique_ptr<QToolBar> toolBar;
             App::MainWindow* const mainWindow;
+            std::unique_ptr<WinSaveImg> winSaveImg;
 
     };
 }

@@ -15,7 +15,6 @@ Conversion::MatrixColor::MatrixColor(std::array<std::array<float,4>,4> newMatrix
 
 }
 
-
 QColor Conversion::MatrixColor::conversion(QColor oldColor)
 {
     std::array<float,4> oldRgbaPixel{oldColor.redF(), oldColor.greenF(),

@@ -19,39 +19,29 @@ WinFilter::WinFilter(App::Item::Image* const itemImage):
 
 void WinFilter::initializeCommands()
 {
-
     auto collectionFilters{collection.getFilters()};
     auto iterOnFilter = collectionFilters.begin();
 
     for(; iterOnFilter < collectionFilters.end(); ++iterOnFilter)
-        commands.push_back(make_shared<Command::ApplyFilter>(*iterOnFilter,this));
+        comApplysFilters.push_back(make_shared<Command::ApplyFilter>(*iterOnFilter,this));
 
 }
 
 void WinFilter::connect()
 {
-    QVector<QPushButton*> buttons{ui->buttonForest,ui->buttonBlackWhite, ui->buttonPurply,
+    QVector<QPushButton*> buttonsChoiceFilter{ui->buttonForest,ui->buttonBlackWhite, ui->buttonPurply,
                                   ui->buttonEmerald, ui->buttonWarm,ui->buttonCool};
 
-    for(qsizetype i = 0; i < commands.size(); ++i)
-        QObject::connect(buttons.at(i), &QPushButton::clicked,
-                         commands.at(i).get(), &Command::ApplyFilter::execute);
+    for(qsizetype i{0}; i < comApplysFilters.size(); ++i)
+        QObject::connect(buttonsChoiceFilter.at(i), &QPushButton::clicked,
+                         comApplysFilters.at(i).get(), &Command::ApplyFilter::execute);
 
     QObject::connect(ui->buttonCancel, &QPushButton::clicked,
                      this, &QWidget::hide);
-    QObject::connect(ui->buttonOk, &QPushButton::clicked,
+    QObject::connect(ui->buttonApply, &QPushButton::clicked,
                      this, &WinFilter::apply);
-    QObject::connect(ui->buttonOk, &QPushButton::clicked,
+    QObject::connect(ui->buttonApply, &QPushButton::clicked,
                      this, &QWidget::hide);
-}
-
-QVector<Fk::Image> getFinalyData(QVariant vData)
-{
-    QVector<Fk::Image> images;
-
-    for(auto& data: vData.toList())
-        images.push_back(data.value<Fk::Image>());
-    return images;
 }
 
 void WinFilter::apply()
@@ -59,20 +49,27 @@ void WinFilter::apply()
     imgItem->saveModifiedImage(this);
 }
 
-void WinFilter::setModifiedImage(Fk::Image newImageProcessing)
+void WinFilter::setCollectionProcessingImage(QVector<Fk::Image> newCollectionProcessingImages)
 {
-    updateMainFrame(newImageProcessing);
-    processingImage = newImageProcessing;
+    collectionProcessingImages = newCollectionProcessingImages;
 }
 
-void WinFilter::updateContant(Fk::Image image,  QVector<Fk::Image> processingImages)
+void WinFilter::setModifiedImage(Fk::Image newImageProcessing)
 {
-    updateContainFrames(processingImages);
-    updateMainFrame(image);
+    updateMainImage(newImageProcessing);
+    modifiedImage = newImageProcessing;
+}
+
+void WinFilter::updateContant(Fk::Image image)
+{
+    if(!collectionProcessingImages.isEmpty())
+        updateFilters();
+
+    updateMainImage(image);
     updateCommands(image);
 }
 
-void WinFilter::updateContainFrames(QVector<Fk::Image> processingImages)
+void WinFilter::updateFilters()
 {
 
     QVector<QLabel*> frames{ui->labelForest,ui->labelBlackWhite,ui->labelPunk,
@@ -84,13 +81,13 @@ void WinFilter::updateContainFrames(QVector<Fk::Image> processingImages)
     {
         width = frames.at(i)->width();
         height = frames.at(i)->height();
-        processingImages[i].scaled(width,height);
+        collectionProcessingImages[i].scaled(width,height);
         frames.at(i)->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        frames.at(i)->setPixmap(processingImages.at(i).pixmap());
+        frames.at(i)->setPixmap(collectionProcessingImages.at(i).pixmap());
     }
 }
 
-void WinFilter::updateMainFrame(Fk::Image image)
+void WinFilter::updateMainImage(Fk::Image image)
 {
     image.scaled(ui->labelImage->width(), ui->labelImage->height());
     ui->labelImage->setPixmap(image.pixmap());
@@ -98,14 +95,18 @@ void WinFilter::updateMainFrame(Fk::Image image)
 
 void WinFilter::updateCommands(Fk::Image image)
 {
-
-    for(auto command: commands)
+    for(auto command: comApplysFilters)
         command->setCurrentImage(image);
+}
+
+void WinFilter::updateDepthColorsInImage(QImage::Format depthColor)
+{
+    modifiedImage.setDepthColor(depthColor);
 }
 
 Fk::Image WinFilter::getModifiedImage() const
 {
-    return processingImage;
+    return modifiedImage;
 }
 
 WinFilter::~WinFilter()

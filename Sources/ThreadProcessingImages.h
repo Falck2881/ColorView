@@ -1,6 +1,7 @@
 #ifndef THREADPROCESSINGIMAGE_H
 #define THREADPROCESSINGIMAGE_H
 
+#include <utility>
 #include <QVector>
 #include <memory>
 #include <QObject>
@@ -8,21 +9,29 @@
 #include "MatrixFilter.h"
 #include "Image.h"
 
-class ThreadProcessingImages: public QObject
+enum class NumbersThreads{FIRST_THREAD, SECOND_THREAD, THIRD_THREAD};
+
+class ThreadProcessingImages: public QThread
 {
     Q_OBJECT
 
     public:
-        ThreadProcessingImages(QVector<std::shared_ptr<ConversionColor>> methodsConversionColor);
+        ThreadProcessingImages();
         ~ThreadProcessingImages();
-    public slots:
-        void start();
-        void applyProcessing(const Fk::Image& image);
+        void setMethodsConversionColor(QVector<std::shared_ptr<ConversionColor>> methodsConversionColor);
+        void setNumberThread(NumbersThreads numberThread);
+        void setCopyImage(Fk::Image image);
+        bool isRun() const;
+    protected:
+        void run() override;
+    private:
+        void removeCollectionProcessingImages();
     private:
         QVector<std::shared_ptr<ConversionColor>> methodsConversionColor;
-        QThread thread;
+        NumbersThreads currentNumberThread;
+        QVector<Fk::Image> collectionProcessingImages;
     signals:
-        void returnProcessingImages(QVector<Fk::Image> processingImages);
+        void returnProcessingImages(std::pair<QVector<Fk::Image>, NumbersThreads> processingImages);
 };
 
 #endif // THREADPROCESSINGIMAGE_H

@@ -11,6 +11,7 @@ Fk::Image::Image(const Fk::Image& copyObj)
     this->charFormat = copyObj.charFormat;
     this->absPathToFile = copyObj.absPathToFile;
     this->strFormat = copyObj.strFormat;
+    this->setColors = copyObj.setColors;
 }
 
 Fk::Image::Image(Fk::Image&& copyObj)
@@ -20,6 +21,7 @@ Fk::Image::Image(Fk::Image&& copyObj)
     copyObj.charFormat = nullptr;
     this->absPathToFile = copyObj.absPathToFile;
     this->strFormat = copyObj.strFormat;
+    this->setColors = copyObj.setColors;
 }
 
 Fk::Image& Fk::Image::operator=(Fk::Image &&copyObj)
@@ -32,6 +34,7 @@ Fk::Image& Fk::Image::operator=(Fk::Image &&copyObj)
     copyObj.charFormat = nullptr;
     this->absPathToFile = copyObj.absPathToFile;
     this->strFormat = copyObj.strFormat;
+    this->setColors = copyObj.setColors;
 
     return *this;
 }
@@ -45,6 +48,7 @@ Fk::Image& Fk::Image::operator=(const Fk::Image &copyObj)
     this->charFormat = copyObj.charFormat;
     this->absPathToFile = copyObj.absPathToFile;
     this->strFormat = copyObj.strFormat;
+    this->setColors = copyObj.setColors;
 
     return *this;
 }
@@ -56,11 +60,37 @@ Fk::Image::Image(const QString pathFile, const char* format):
     strFormat(format)
 {
     image = image.scaled(QSize(1024,768),Qt::KeepAspectRatio);
+    setAllNameColorsInSet();
+}
+
+void Fk::Image::setAllNameColorsInSet()
+{
+    if(!setColors.isEmpty())
+        setColors.clear();
+
+    for(qint32 y = 0; y < image.height(); ++y)
+        for(qint32 x = 0; x < image.width(); ++x)
+            setColors << image.pixelColor(x,y).name();
+}
+
+bool Fk::Image::isNull() const
+{
+    return image.isNull();
+}
+
+void Fk::Image::setDepthColor(QImage::Format depthColor)
+{
+    image = image.convertToFormat(depthColor,Qt::ColorOnly);
+
+    setAllNameColorsInSet();
 }
 
 bool Fk::Image::save(const QString newAbsPathToFile,const char* newFormat) const
 {
-    return image.save(newAbsPathToFile,newFormat,90);
+    if(!newAbsPathToFile.contains(newFormat))
+        return image.save(newAbsPathToFile + "." + newFormat,newFormat,90);
+    else
+        return image.save(newAbsPathToFile,nullptr,90);
 }
 
 QPixmap Fk::Image::pixmap() const
@@ -95,12 +125,6 @@ qint32 Fk::Image::height() const
 
 QString Fk::Image::numberColor() const
 {
-    QSet<QString> setColors;
-
-    for(qint32 y = 0; y < image.height(); ++y)
-        for(qint32 x = 0; x < image.width(); ++x)
-            setColors << image.pixelColor(x,y).name();
-
     return QString::number(setColors.size());
 }
 

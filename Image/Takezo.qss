@@ -25,9 +25,14 @@ QWidget
 {
 	background-color: #17212b;
 	color: #fff;
-
 }
 
+/*----QPushButton---------*/
+QPushButton:disabled
+{
+    color: white;
+    background-color: #0f1521;
+}
 
 /*-----QLabel-----*/
 QLabel
@@ -303,25 +308,21 @@ QLineEdit:hover
 
 
 /*-----QGroupBox-----*/
-QGroupBox 
-{
-    border: 0px solid #3a546e;
-	background-color: #1e2329;
-    margin-top: 5.5ex;
-
+QGroupBox {
+  border: 1px solid gray;
+  border-radius: 9px;
+  margin-top: 0.5em;
 }
 
 
 QGroupBox::title 
 {
-	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(67, 79, 91, 255),stop:1 rgba(32, 44, 56, 255));
-	border: 1px solid #3a3a3a;
+    background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(67, 79, 91, 255),stop:1 rgba(32, 44, 56, 255));
+    border: 1px solid #778899;
     subcontrol-origin: margin;
-	subcontrol-position: top right 0px;
-	border-radius: 0px;
+    subcontrol-position: top right 0px;
+    border-radius: 0px;
     padding: 1px 30px;
-	margin-bottom: 52px;
-
 }
 
 
@@ -527,32 +528,35 @@ QCheckBox::indicator:disabled
 
 
 /*-----QRadioButton-----*/
-QRadioButton 
+QRadioButton::indicator
 {
-	color: lightgray;
-	background-color: transparent;
-
+    background-color: #fff;
+    border: 2px solid #fff;
+    border-radius: 6px;
 }
 
-
-QRadioButton::indicator::unchecked:hover 
+QRadioButton::indicator:disabled
 {
-	background-color: #fff;
-	border: 2px solid #3a546e;
-	border-radius: 6px;
+    background-color: #0f1521;
+    border: 2px solid #3a546e;
 }
 
-
-QRadioButton::indicator::checked 
+QRadioButton::indicator:unchecked:hover
 {
-	border: 2px solid #3a546e;
-	border-radius: 6px;
-	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(23, 43, 68, 255),stop:1 rgba(33, 51, 75, 255)); 
-	width: 9px; 
-	height: 9px; 
-
+        background-color: #008080;
+        border: 2px solid #3a546e;
+        border-radius: 6px;
 }
 
+QRadioButton::indicator:checked
+{
+        border: 2px solid #008080;
+        border-radius: 6px;
+        background-color: #008080;
+        width: 9px;
+        height: 9px;
+
+}
 
 /*-----QStatusBar-----*/
 QStatusBar 
