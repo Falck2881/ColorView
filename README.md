@@ -12,8 +12,9 @@
 
 # Платформы
 Вы можете выбрать доступную целевую платформу:
-Для ОС Windows - 
-Для ОС Linux - 
+
+- Для ОС Windows - 
+- Для ОС Linux - https://drive.google.com/drive/folders/1qdZq4HuMhf6_JNeYnZrKDDrGrIqWI0uQ?usp=share_link
 
 # Скриншоты 
 Ниже будут ознакомительные скриншоты проекта.
