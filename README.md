@@ -13,7 +13,7 @@
 # Платформы
 Вы можете выбрать доступную целевую платформу:
 
-- Для ОС Windows - 
+- Для ОС Windows - https://drive.google.com/drive/folders/1otlgKfBVi6bIxXVQ6e2WJm5JMwJiU5d0?usp=share_link
 - Для ОС Linux - https://drive.google.com/drive/folders/1qdZq4HuMhf6_JNeYnZrKDDrGrIqWI0uQ?usp=share_link
 
 # Скриншоты 
