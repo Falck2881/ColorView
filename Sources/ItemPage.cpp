@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 #include "Image.h"
 #include <QLabel>
-//#define NDEBUG
+#define NDEBUG
 #include <assert.h>
 #define START_PAGE 0
 
@@ -37,12 +37,12 @@ void App::Item::Page::currentPage(const qint32 index)
     }
 }
 
-void App::Item::Page::updateContant(Fk::Image image)
+void App::Item::Page::updateContent(const Fk::Image& image)
 {
     updatePage(image);
 }
 
-void App::Item::Page::updatePage(Fk::Image image)
+void App::Item::Page::updatePage(const Fk::Image& image)
 {
     assert(indexOnFile != -1);
 
@@ -56,12 +56,12 @@ void App::Item::Page::updatePage(Fk::Image image)
     tabWidget->setCurrentIndex(tabWidget->insertTab(indexOnFile, label, "*"+imageCurrentPage.nameFile()));
 }
 
-void App::Item::Page::setContant(Fk::Image image)
+void App::Item::Page::setContent(const Fk::Image& image)
 {
     setImageIntoPage(image);
 }
 
-void App::Item::Page::setImageIntoPage(Fk::Image image)
+void App::Item::Page::setImageIntoPage(const Fk::Image& image)
 {
     if(images.empty())
         hideStartPage();

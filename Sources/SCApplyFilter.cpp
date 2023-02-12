@@ -12,7 +12,7 @@ Command::ApplyFilter::ApplyFilter
 {
 }
 
-void Command::ApplyFilter::setCurrentImage(Fk::Image sourcesImage)
+void Command::ApplyFilter::setCurrentImage(const Fk::Image& sourcesImage)
 {
     sourcesImg = sourcesImage;
 }

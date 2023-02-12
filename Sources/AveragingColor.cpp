@@ -1,6 +1,6 @@
 #include "AveragingColor.h"
 
-QColor Conversion::AveragingColor::conversion(QColor oldColor)
+QColor Conversion::AveragingColor::conversion(const QColor& oldColor)
 {
     QColor newColor;
     qreal averaging = (oldColor.redF() + oldColor.greenF() + oldColor.blueF())/3;

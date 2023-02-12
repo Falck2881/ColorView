@@ -17,8 +17,8 @@ namespace App::Base
 
         public:
             virtual ~Item() = default;
-            virtual void updateContant(Fk::Image image){Q_UNUSED(image);}
-            virtual void setContant(Fk::Image image){Q_UNUSED(image);}
+            virtual void updateContent(const Fk::Image&){}
+            virtual void setContent(const Fk::Image&){}
             virtual void checkStatyActions(){};
             void saveIndex(const qint32 newIndex)
             {

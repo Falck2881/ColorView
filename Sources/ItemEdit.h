@@ -22,7 +22,7 @@ namespace App::Item
             Fk::Image getCurrentImage() const;
         private:
             void checkStatyActions() override final;
-            void setContant(Fk::Image image) override final;
+            void setContent(const Fk::Image& image) override final;
         private:
             void initializeEachAction();
             void connectWithCommand();

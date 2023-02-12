@@ -12,7 +12,7 @@ namespace Conversion
         public:
             MatrixColor(const MatrixColor& oldMatrix);
             MatrixColor(std::array<std::array<float,4>,4> newMAtrix);
-            QColor conversion(QColor oldColor) override;
+            QColor conversion(const QColor& oldColor) override;
         private:
             std::array<std::array<float,4>,4> matrix;
 

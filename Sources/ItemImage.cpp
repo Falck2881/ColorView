@@ -3,7 +3,7 @@
 #include "ThreadProcessingImages.h"
 #include <QList>
 #include <algorithm>
-//#define NDEBUG
+#define NDEBUG
 #include <assert.h>
 #include <QObject>
 
@@ -236,7 +236,7 @@ void App::Item::Image::changeFrame()
     winFrames->show();
 }
 
-void App::Item::Image::updateContant(Fk::Image image)
+void App::Item::Image::updateContent(const Fk::Image& image)
 {
     assert(indexOnFile != -1);
     replaceImage(image);
@@ -308,7 +308,7 @@ void App::Item::Image::removeOldsProcessingImages()
     }
 }
 
-void App::Item::Image::setContant(Fk::Image image)
+void App::Item::Image::setContent(const Fk::Image& image)
 {
     collectionSourceImages.push_back(image); 
 
@@ -341,7 +341,7 @@ void App::Item::Image::setPropertActions(bool value)
     aProperty->setEnabled(value);
 }
 
-bool App::Item::Image::isImageHightQuality(Fk::Image image) const
+bool App::Item::Image::isImageHightQuality(const Fk::Image& image) const
 {
     return image.numberBitOnPix() == "24" ||
            image.numberBitOnPix() == "32" ?true:false;

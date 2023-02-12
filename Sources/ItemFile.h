@@ -22,8 +22,8 @@ namespace App::Item
             QToolBar* getToolBar() const;
 
         private:
-            void updateContant(Fk::Image image) override final;
-            void setContant(Fk::Image image) override final;
+            void updateContent(const Fk::Image& image) override final;
+            void setContent(const Fk::Image& image) override final;
             void checkStatyActions() override final;
 
         private:

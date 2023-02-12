@@ -71,7 +71,7 @@ void WinFrames::choiceRandomFrame()
     commands.at(choice)->execute();
 }
 
-void WinFrames::updateBySourceImage(Fk::Image image)
+void WinFrames::updateBySourceImage(const Fk::Image& image)
 {
     updateContantFrames();
     updateMainFrame(image);
@@ -114,13 +114,13 @@ void WinFrames::updateMainFrame(Fk::Image image)
     ui->labelCurrentImage->setPixmap(image.pixmap());
 }
 
-void WinFrames::updateCommands(Fk::Image image)
+void WinFrames::updateCommands(const Fk::Image& image)
 {
     for(auto command: commands)
         command->setCurrentImage(image);
 }
 
-void WinFrames::setModifiedImage(Fk::Image modifiedImage)
+void WinFrames::setModifiedImage(const Fk::Image& modifiedImage)
 {
     updateMainFrame(modifiedImage);
     imageAfterAddedFrame = modifiedImage;

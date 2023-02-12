@@ -31,10 +31,10 @@ namespace Item {
             Fk::Image getImage() const;
             void saveModifiedImage(QWidget* const widget);
             void updateActivityFilter();
-            void updateContant(Fk::Image image) override final;
+            void updateContent(const Fk::Image& image) override final;
         private:
             void checkStatyActions() override final;
-            void setContant(Fk::Image image) override final;
+            void setContent(const Fk::Image& image) override final;
         private:
             void moveConversionsColorIntoThreads();
             void replaceImage(const Fk::Image& image);
@@ -43,7 +43,7 @@ namespace Item {
             void initializeSubItemDepth();
             void initializeSubItemImage();
             void setPropertActions(bool value);
-            bool isImageHightQuality(Fk::Image image) const;
+            bool isImageHightQuality(const Fk::Image& image) const;
             void addToCompleteImageProcessing(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing);
             void removeOldsProcessingImages();
         private slots:
