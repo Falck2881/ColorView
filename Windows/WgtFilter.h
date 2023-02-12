@@ -24,15 +24,15 @@ class WinFilter : public QWidget
         ~WinFilter();
         Fk::Image getModifiedImage() const;
         void setCollectionProcessingImage(QVector<Fk::Image> collectionProcessingImages);
-        void setModifiedImage(Fk::Image modifiedImage);
+        void setModifiedImage(const Fk::Image& modifiedImage);
         void updateDepthColorsInImage(QImage::Format depthColor);
-        void updateContant(const Fk::Image image);
+        void updateContant(const Fk::Image& image);
     private:
         void initializeCommands();
         void connect();
         void updateFilters();
         void updateMainImage(Fk::Image image);
-        void updateCommands(Fk::Image image);
+        void updateCommands(const Fk::Image& image);
     private slots:
         void apply();
     private:

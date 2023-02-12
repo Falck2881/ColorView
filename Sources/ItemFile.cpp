@@ -119,14 +119,14 @@ void App::Item::File::exit()
     }
 }
 
-void App::Item::File::updateContant(Fk::Image image)
+void App::Item::File::updateContent(const Fk::Image& image)
 {
     assert(indexOnFile != -1);
 
     images.replace(indexOnFile,image);
 }
 
-void App::Item::File::setContant(Fk::Image image)
+void App::Item::File::setContent(const Fk::Image& image)
 {
     images.push_back(image);
 }

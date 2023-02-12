@@ -13,7 +13,7 @@ namespace Command
         Q_OBJECT
         public:
             ApplyFrame(const QString nameFileFrame, WinFrames* const winFrames);
-            void setCurrentImage(Fk::Image currentImage);
+            void setCurrentImage(const Fk::Image& currentImage);
         public slots:
             void execute() override final;
         private:

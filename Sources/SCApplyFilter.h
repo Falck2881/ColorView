@@ -17,7 +17,7 @@ namespace Command
         public:
             ApplyFilter(std::shared_ptr<ConversionColor> methodConversionColor,
                         WinFilter* const window);
-            void setCurrentImage(Fk::Image sourcesImage);
+            void setCurrentImage(const Fk::Image& sourcesImage);
         private:
            void connect();
         public slots:

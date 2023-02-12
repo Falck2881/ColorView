@@ -24,10 +24,10 @@ namespace  App::Item
            QTabWidget* getTabWidget() const;
            Fk::Image getImageCurrentPage() const;
         private:
-           void updateContant(Fk::Image image) override final;
-           void updatePage(Fk::Image image);
-           void setContant(Fk::Image image) override final;
-           void setImageIntoPage(Fk::Image image);
+           void updateContent(const Fk::Image& image) override final;
+           void updatePage(const Fk::Image& image);
+           void setContent(const Fk::Image& image) override final;
+           void setImageIntoPage(const Fk::Image& image);
            void connectWithCommand();
            void initializeStartPage();
            void hideStartPage();

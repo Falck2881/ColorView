@@ -19,8 +19,8 @@ class WinFrames : public QWidget
 
     public:
         explicit WinFrames(App::Item::Image* const imageItem);
-        void updateBySourceImage(Fk::Image image);
-        void setModifiedImage(Fk::Image modifiedImage);
+        void updateBySourceImage(const Fk::Image& image);
+        void setModifiedImage(const Fk::Image& modifiedImage);
         Fk::Image getModifiedImage() const;
         ~WinFrames();
     private:
@@ -29,7 +29,7 @@ class WinFrames : public QWidget
         void connect();
         void updateContantFrames();
         void updateMainFrame(Fk::Image image);
-        void updateCommands(Fk::Image image);
+        void updateCommands(const Fk::Image& image);
     private slots:
         void apply();
         void choiceRandomFrame();

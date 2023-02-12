@@ -46,11 +46,11 @@ void App::MainWindow::appand(App::Base::Item *const observer)
 }
 
 
-void App::MainWindow::setFileInEachObserver(Fk::Image image)
+void App::MainWindow::setFileInEachObserver(const Fk::Image& image)
 {
     for(auto obs: observers)
     {
-        obs->setContant(image);
+        obs->setContent(image);
         obs->checkStatyActions();
     }
 }
@@ -63,10 +63,10 @@ void App::MainWindow::changeIndexOnFile(const quint32 index)
     }
 }
 
-void App::MainWindow::updateFileInEachObserver(Fk::Image image)
+void App::MainWindow::updateFileInEachObserver(const Fk::Image& image)
 {
     for(auto obs: observers){
-        obs->updateContant(image);
+        obs->updateContent(image);
     }
 }
 

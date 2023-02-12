@@ -23,9 +23,9 @@ namespace App
         public:
             MainWindow();
             void appand(App::Base::Item* const observer);
-            void setFileInEachObserver(Fk::Image image);
+            void setFileInEachObserver(const Fk::Image& image);
             void changeIndexOnFile(const quint32 index);
-            void updateFileInEachObserver(Fk::Image image);
+            void updateFileInEachObserver(const Fk::Image& image);
             void changesItems(Base::Item* const item);
         private:
             void initializeItemsApp();

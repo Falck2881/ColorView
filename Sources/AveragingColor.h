@@ -10,7 +10,7 @@ namespace Conversion
     {
         public:
             AveragingColor() = default;
-            QColor conversion(QColor oldColor) override;
+            QColor conversion(const QColor& oldColor) override;
     };
 }
 #endif // AVERAGINGCOLOR_H

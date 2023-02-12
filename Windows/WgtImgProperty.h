@@ -19,7 +19,7 @@ class WinImgProperty : public QWidget
     public:
         WinImgProperty();
         ~WinImgProperty();
-        void setPropertyImage(Fk::Image image);
+        void setPropertyImage(const Fk::Image& image);
     private:
         void connect() const;
     private:

@@ -54,13 +54,13 @@ void WinFilter::setCollectionProcessingImage(QVector<Fk::Image> newCollectionPro
     collectionProcessingImages = newCollectionProcessingImages;
 }
 
-void WinFilter::setModifiedImage(Fk::Image newImageProcessing)
+void WinFilter::setModifiedImage(const Fk::Image& newImageProcessing)
 {
     updateMainImage(newImageProcessing);
     modifiedImage = newImageProcessing;
 }
 
-void WinFilter::updateContant(Fk::Image image)
+void WinFilter::updateContant(const Fk::Image& image)
 {
     if(!collectionProcessingImages.isEmpty())
         updateFilters();
@@ -93,7 +93,7 @@ void WinFilter::updateMainImage(Fk::Image image)
     ui->labelImage->setPixmap(image.pixmap());
 }
 
-void WinFilter::updateCommands(Fk::Image image)
+void WinFilter::updateCommands(const Fk::Image& image)
 {
     for(auto command: comApplysFilters)
         command->setCurrentImage(image);

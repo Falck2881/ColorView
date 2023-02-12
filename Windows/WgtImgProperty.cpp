@@ -13,7 +13,7 @@ WinImgProperty::WinImgProperty():
     this->connect();
 }
 
-void WinImgProperty::setPropertyImage(Fk::Image image)
+void WinImgProperty::setPropertyImage(const Fk::Image& image)
 {
     ui->widthImg->setText(QString::number(image.width()));
     ui->hightImg->setText(QString::number(image.height()));

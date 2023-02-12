@@ -6,6 +6,7 @@
 #include <memory>
 #include <assert.h>
 #include "Image.h"
+#define NDEBUG
 
 template<typename T>
 concept isFile = std::same_as<T, Fk::Image>;

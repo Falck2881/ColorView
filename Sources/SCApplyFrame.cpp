@@ -9,7 +9,7 @@ Command::ApplyFrame::ApplyFrame(const QString nameFileFrame, WinFrames* const wi
 
 }
 
-void Command::ApplyFrame::setCurrentImage(Fk::Image currentImage)
+void Command::ApplyFrame::setCurrentImage(const Fk::Image& currentImage)
 {
     currentImg = currentImage;
 }

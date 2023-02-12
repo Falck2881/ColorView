@@ -7,7 +7,7 @@ class ConversionColor
 {
     public:
         virtual ~ConversionColor() = default;
-        virtual QColor conversion(QColor oldColor) = 0;
+        virtual QColor conversion(const QColor& oldColor) = 0;
     protected:
         ConversionColor() = default;
 };

@@ -15,18 +15,18 @@ Conversion::MatrixColor::MatrixColor(std::array<std::array<float,4>,4> newMatrix
 
 }
 
-QColor Conversion::MatrixColor::conversion(QColor oldColor)
+QColor Conversion::MatrixColor::conversion(const QColor& oldColor)
 {
     std::array<float,4> oldRgbaPixel{oldColor.redF(), oldColor.greenF(),
                                 oldColor.blueF(), oldColor.alphaF()};
-    std::array<float,4> newRgbaPixel{0,0,0,0};
+    std::array<float,4> newRgbaPixel{0.0f,0.0f,0.0f,0.0f};
 
     for(quint32 i = 0; i < matrix.size(); ++i)
     {
         for(quint32 j = 0; j < matrix.size(); ++j)
         {
             newRgbaPixel.at(i) += matrix.at(i).at(j) * oldRgbaPixel.at(i);
-            newRgbaPixel.at(i) = qBound(0.0,newRgbaPixel.at(i),1.0);
+            newRgbaPixel.at(i) = qBound(0.0f,newRgbaPixel.at(i),1.0f);
         }
     }
 

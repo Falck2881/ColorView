@@ -83,7 +83,7 @@ void App::Item::Edit::saveChangesInHistory(Fk::Image image)
     mainWindow->changesItems(this);
 }
 
-void App::Item::Edit::setContant(Fk::Image  image)
+void App::Item::Edit::setContent(const Fk::Image&  image)
 {
     historyEdit.push_back(FileModified::History<Fk::Image>{image});
 }
