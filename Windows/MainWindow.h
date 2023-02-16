@@ -27,6 +27,7 @@ namespace App
             void changeIndexOnFile(const quint32 index);
             void updateFileInEachObserver(const Fk::Image& image);
             void changesItems(Base::Item* const item);
+            bool observersOfExist() const;
         private:
             void initializeItemsApp();
             void setGeometryScreen();

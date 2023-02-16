@@ -73,6 +73,47 @@ target_link_libraries(ProjectColorView PRIVATE Qt6::Widgets
                                                Qt6::Core
                                                Qt6::Gui)
 
+
+
+
+#Connecting the library GTest
+
+
+
+include(FetchContent)
+FetchContent_Declare(googletest
+                     URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip)
+
+file(GLOB_RECURSE all_src_cpp "${CMAKE_CURRENT_SOURCE_DIR}/Windows/*.cpp"
+                              "${CMAKE_CURRENT_SOURCE_DIR}/Sources/*.cpp")
+
+file(GLOB_RECURSE all_src_hpp "${CMAKE_CURRENT_SOURCE_DIR}/Windows/*.h"
+                              "${CMAKE_CURRENT_SOURCE_DIR}/Sources/*.h")
+
+file(GLOB_RECURSE all_test_windows "${CMAKE_CURRENT_SOURCE_DIR}/TestingColorView/TestingWindows/*.cpp")
+
+
+set(AllTestsColorView TestingColorView/test_main.cpp
+                  ${all_src_cpp}
+                  ${all_src_hpp}
+                  ${all_test_windows})
+
+enable_testing()
+
+add_executable(TestColorView ${AllTestsColorView})
+
+target_include_directories(TestColorView PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Windows"
+                                                 "${CMAKE_CURRENT_SOURCE_DIR}/Sources"
+                                                 )
+
+target_link_libraries(TestColorView PRIVATE GTest::gtest GTest::gtest_main
+                                            Qt6::Widgets Qt6::Core)
+
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+
 set_target_properties(ProjectColorView PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

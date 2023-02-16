@@ -80,3 +80,8 @@ void App::MainWindow::changesItems(Base::Item* const item)
         itemImage->updateActivityFilter();
     }
 }
+
+bool App::MainWindow::observersOfExist() const
+{
+    return !observers.empty() ? true:false;
+}
