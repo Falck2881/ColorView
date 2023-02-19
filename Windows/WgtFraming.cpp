@@ -106,12 +106,13 @@ void WinFrames::updateContantFrames()
 
 }
 
-void WinFrames::updateMainFrame(Fk::Image image)
+void WinFrames::updateMainFrame(const Fk::Image& image)
 {
     quint32 width = ui->labelCurrentImage->width();
     quint32 height = ui->labelCurrentImage->height();
-    image.scaled(width,height);
-    ui->labelCurrentImage->setPixmap(image.pixmap());
+    Fk::Image tempImage{const_cast<const Fk::Image&>(image)};
+    tempImage.scaled(width,height);
+    ui->labelCurrentImage->setPixmap(tempImage.pixmap());
 }
 
 void WinFrames::updateCommands(const Fk::Image& image)

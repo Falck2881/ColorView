@@ -44,11 +44,17 @@ set(PROJECT_SOURCES     main.cpp
                         Sources/SCApplyDepth.h Sources/SCApplyDepth.cpp
                         Sources/SCApplyFilter.h Sources/SCApplyFilter.cpp
                         Sources/SCApplyFrame.h Sources/SCApplyFrame.cpp
-                        Sources/Items.h
+                        Sources/Items.h Sources/Items.cpp
+                        Sources/Content.h Sources/Content.cpp
+                        Sources/ContentItemFile.h Sources/ContentItemFile.cpp
+                        Sources/ContentItemEdit.h Sources/ContentItemEdit.cpp
+                        Sources/ContentItemImage.h Sources/ContentItemImage.cpp
+                        Sources/ContentItemPage.h Sources/ContentItemPage.cpp
                         Sources/ItemFile.h Sources/ItemFile.cpp
                         Sources/ItemEdit.h Sources/ItemEdit.cpp
                         Sources/ItemImage.h Sources/ItemImage.cpp
                         Sources/ItemPage.h Sources/ItemPage.cpp
+                        Sources/Board.h Sources/Board.cpp
                         Sources/Image.h Sources/Image.cpp   
                         )
 
@@ -92,15 +98,17 @@ file(GLOB_RECURSE all_src_hpp "${CMAKE_CURRENT_SOURCE_DIR}/Windows/*.h"
 
 file(GLOB_RECURSE all_test_windows "${CMAKE_CURRENT_SOURCE_DIR}/TestingColorView/TestingWindows/*.cpp")
 
+file(GLOB_RECURSE all_test_sources "${CMAKE_CURRENT_SOURCE_DIR}/TestingColorView/TestingSources/test_itemfile.cpp")
 
 set(AllTestsColorView TestingColorView/test_main.cpp
                   ${all_src_cpp}
                   ${all_src_hpp}
-                  ${all_test_windows})
+                  ${all_test_windows}
+                  ${all_test_sources})
 
 enable_testing()
 
-add_executable(TestColorView ${AllTestsColorView})
+add_executable(TestColorView ${AllTestsColorView} ${DATA} ${IMG})
 
 target_include_directories(TestColorView PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Windows"
                                                  "${CMAKE_CURRENT_SOURCE_DIR}/Sources"

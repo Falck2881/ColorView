@@ -3,16 +3,16 @@
 
 #include <QtGlobal>
 #include <QImage>
-#include <QString>
 #include <QSet>
 #include <memory>
+#include "Board.h"
 
 class QPixmap;
 class QColor;
 
 namespace Fk {
 
-    class Image
+    class Image: public Billboard
     {
         public:
             Image() = default;
@@ -22,8 +22,11 @@ namespace Fk {
             Fk::Image& operator=(const Fk::Image& oldImage);
             Image(const QString nameFile, const char* format = nullptr);
             bool isNull() const;
+            bool isHighQuality() const;
+            bool is16BitsOnPixel() const;
+            bool is8BitsOnPixel() const;
             void setDepthColor(QImage::Format depthColor);
-            bool save(const QString newAbsPathToFile,const char* newFormats) const;
+            bool save(const QString newAbsPathToFile,const char* newFormats) override;
             QPixmap pixmap() const;
             QColor pixel(qint32 x, qint32 y) const;
             void setPixelColor(qint32 x, qint32 y, QColor newColor);

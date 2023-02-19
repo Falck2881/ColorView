@@ -9,63 +9,67 @@
 #define NDEBUG
 
 template<typename T>
-concept isFile = std::same_as<T, Fk::Image>;
+concept isBillboard = std::same_as<T, Billboard>;
 
-namespace FileModified
+namespace Modified
 {
-    template<isFile T>
-    class History
-    {
-        public:
-            explicit History(T typeFile);
-            auto file() const;
-            void push_back(T typeFile);
-            auto last() const;
-            void increment();
-            void decrement();
-        private:
-            qint32 index;
-            QList<T> historyEdit;
-    };
+    namespace Billboard {
+
+
+        template<isBillboard T>
+        class History
+        {
+            public:
+                explicit History(std::shared_ptr<T> typeFile);
+                auto billboard() const;
+                void push_back(std::shared_ptr<T> typeFile);
+                auto last() const;
+                void redo();
+                void undo();
+            private:
+                qint32 index;
+                QList<std::shared_ptr<T>> historyEdit;
+        };
+    }
 }
 
-template<isFile T>
-FileModified::History<T>::History(T typeFile):index(0)
+template<isBillboard T>
+Modified::Billboard::History<T>::History(std::shared_ptr<T> typeFile):index(0)
 {
     historyEdit.push_back(typeFile);
 }
 
-template<isFile T>
-auto FileModified::History<T>::file() const
+template<isBillboard T>
+auto Modified::Billboard::History<T>::billboard() const
 {
     assert(index >= 0);
     return historyEdit.at(index);
 }
 
-template<isFile T>
-void FileModified::History<T>::push_back(T typeFile)
+template<isBillboard T>
+void Modified::Billboard::History<T>::push_back(std::shared_ptr<T> typeFile)
 {
     historyEdit.push_back(typeFile);
     ++index;
 }
 
-template<isFile T>
-auto FileModified::History<T>::last() const
+template<isBillboard T>
+auto Modified::Billboard::History<T>::last() const
 {
     assert(!historyEdit.empty());
     return historyEdit.last();
 }
 
-template<isFile T>
-void FileModified::History<T>::increment()
+template<isBillboard T>
+void Modified::Billboard::History<T>::redo()
 {
     if(index < historyEdit.size()-1)
         ++index;
 
 }
 
-template<isFile T>
-void FileModified::History<T>::decrement()
+template<isBillboard T>
+void Modified::Billboard::History<T>::undo()
 {
     if(index != 0)
         --index;

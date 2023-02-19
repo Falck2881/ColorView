@@ -78,6 +78,21 @@ bool Fk::Image::isNull() const
     return image.isNull();
 }
 
+bool Fk::Image::isHighQuality() const
+{
+    return numberBitOnPix() == "24" || numberBitOnPix() == "32" ? true : false;
+}
+
+bool Fk::Image::is16BitsOnPixel() const
+{
+    return numberBitOnPix() == "16" ? true : false;
+}
+
+bool Fk::Image::is8BitsOnPixel() const
+{
+    return numberBitOnPix() == "8" ? true : false;
+}
+
 void Fk::Image::setDepthColor(QImage::Format depthColor)
 {
     image = image.convertToFormat(depthColor,Qt::ColorOnly);
@@ -85,7 +100,7 @@ void Fk::Image::setDepthColor(QImage::Format depthColor)
     setAllNameColorsInSet();
 }
 
-bool Fk::Image::save(const QString newAbsPathToFile,const char* newFormat) const
+bool Fk::Image::save(const QString newAbsPathToFile,const char* newFormat)
 {
     if(!newAbsPathToFile.contains(newFormat))
         return image.save(newAbsPathToFile + "." + newFormat,newFormat,90);

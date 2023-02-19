@@ -29,7 +29,7 @@ class ThreadProcessingImages: public QThread
     private:
         QVector<std::shared_ptr<ConversionColor>> methodsConversionColor;
         NumbersThreads currentNumberThread;
-        QVector<Fk::Image> collectionProcessingImages;
+        QVector<Fk::Image> collageProcessingImages;
     signals:
         void returnProcessingImages(std::pair<QVector<Fk::Image>, NumbersThreads> processingImages);
 };

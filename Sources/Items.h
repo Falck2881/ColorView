@@ -7,7 +7,8 @@
 #include <QToolButton>
 #include <QMenu>
 #include <memory>
-#include "Image.h"
+#include "Content.h"
+#include "Board.h"
 
 namespace App::Base
 {
@@ -16,17 +17,15 @@ namespace App::Base
         Q_OBJECT
 
         public:
-            virtual ~Item() = default;
-            virtual void updateContent(const Fk::Image&){}
-            virtual void setContent(const Fk::Image&){}
-            virtual void checkStatyActions(){};
-            void saveIndex(const qint32 newIndex)
-            {
-                indexOnFile = newIndex;
-            };
-        protected:
-            qsizetype indexOnFile;
             Item() = default;
+            virtual ~Item() = default;
+            void setContent(std::shared_ptr<Billboard> billboard);
+            void updateContent(std::shared_ptr<Billboard> billboard);
+            void setIndex(const qint32 newIndex);
+            virtual void checkStatyActions(){};
+        protected:
+            Item(std::shared_ptr<Content> content);
+            std::shared_ptr<Content> content;
     };
 }
 #endif // ITEMS_H
