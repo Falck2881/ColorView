@@ -2,7 +2,7 @@
 #include <assert.h>
 //#define NDEBUG
 
-ContentItemImage::ContentItemImage(App::Item::Image* const itemImage):itemImage(itemImage)
+ContentItemImage::ContentItemImage()
 {
     moveConversionsColorIntoThreads();
     connect();
@@ -105,7 +105,6 @@ void ContentItemImage::removeOldsProcessingBillboards()
 void ContentItemImage::setContent(std::shared_ptr<Billboard> billboard)
 {
     billboards.push_back(billboard);
-    itemImage->updateSubItems();
 }
 
 void ContentItemImage::updateContent(std::shared_ptr<Billboard> billboard)

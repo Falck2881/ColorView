@@ -23,18 +23,15 @@ bool Content::isBillboardEmpty() const
 Fk::Image Content::image() const
 {
     assert(index != -1);
-    Fk::Image* image{dynamic_cast<Fk::Image*>(billboards.at(index).get())};
-    return *image;
+    return billboards.at(index)->toImage();
 }
 
 
 QVector<Fk::Image> Content::images() const
 {
     QVector<Fk::Image> images;
-    for(auto billboard{billboards.begin()}; billboard != billboards.end(); ++billboard){
-        Fk::Image* image = dynamic_cast<Fk::Image*>(billboard->get());
-        images.push_back(*image);
-    }
+    for(auto billboard{billboards.begin()}; billboard != billboards.end(); ++billboard)
+        images.push_back(billboard->get()->toImage());
 
     return images;
 }

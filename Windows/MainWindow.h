@@ -8,7 +8,7 @@
 #include "ItemEdit.h"
 #include "ItemPage.h"
 #include "ItemImage.h"
-#include "Board.h"
+#include "Billboard.h"
 
 namespace Fk{
     class Image;
@@ -30,7 +30,8 @@ namespace App
             void changesItems(Base::Item* const item);
             bool observersExist() const;
         private:
-            void initializeItemsApp();
+            void initializeMembersOfClass();
+            void addAllItemsInManinWindow();
             void setGeometryScreen();
         private:
             std::unique_ptr<App::Item::File> itemFile;

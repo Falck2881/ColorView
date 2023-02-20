@@ -6,7 +6,7 @@
 #include <algorithm>
 
 App::Item::Image::Image(App::MainWindow* const mainWin):
-    App::Base::Item(std::make_unique<ContentItemImage>(this)),
+    App::Base::Item(std::make_unique<ContentItemImage>()),
     winFrames{std::make_unique<WinFrames>(this)},
     winFilter{std::make_unique<WinFilter>(this)},
     winProperty{std::make_unique<WinImgProperty>()},
@@ -211,12 +211,17 @@ std::shared_ptr<Fk::Image> App::Item::Image::getImage() const
 
 void App::Item::Image::updateSubItems()
 {
-    ContentItemImage* childContent = qobject_cast<ContentItemImage*>(content.get());
+    if(!content->isBillboardEmpty())
+        setFlagsSubitems();
+}
+
+void App::Item::Image::setFlagsSubitems()
+{
     Fk::Image image = content->image();
+
     if(image.isHighQuality()){
         aFilter->setEnabled(true);
         aFrame->setEnabled(true);
-        childContent->startThreadsForProcessingImages(image);
     }
     else if(image.is16BitsOnPixel())
         aFilter->setEnabled(false);
@@ -224,4 +229,13 @@ void App::Item::Image::updateSubItems()
         aFilter->setEnabled(false);
         aFrame->setEnabled(false);
     }
+}
+
+void App::Item::Image::startThreadsForProcessingImages()
+{
+    ContentItemImage* const childContent = dynamic_cast<ContentItemImage* const>(content.get());
+    Fk::Image image = childContent->image();
+
+    if(image.isHighQuality())
+        childContent->startThreadsForProcessingImages(image);
 }

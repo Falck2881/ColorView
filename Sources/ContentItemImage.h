@@ -11,7 +11,7 @@ class ContentItemImage: public Content
     Q_OBJECT
 
     public:
-        ContentItemImage(App::Item::Image* const itemImage);
+        ContentItemImage();
         void setContent(std::shared_ptr<Billboard> billboard) override;
         void updateContent(std::shared_ptr<Billboard> billboard) override;
         void startThreadsForProcessingImages(const Fk::Image& image);
@@ -26,7 +26,6 @@ class ContentItemImage: public Content
         SetConversions collection;
         QVector<std::shared_ptr<ThreadProcessingImages>> threadsProcessingImages;
         QVector<std::pair<QVector<Fk::Image>, NumbersThreads>> readyProcessingOfBillboard;
-        App::Item::Image* const itemImage;
 
 };
 

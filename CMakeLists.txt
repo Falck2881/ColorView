@@ -54,7 +54,7 @@ set(PROJECT_SOURCES     main.cpp
                         Sources/ItemEdit.h Sources/ItemEdit.cpp
                         Sources/ItemImage.h Sources/ItemImage.cpp
                         Sources/ItemPage.h Sources/ItemPage.cpp
-                        Sources/Board.h Sources/Board.cpp
+                        Sources/Billboard.h Sources/Billboard.cpp
                         Sources/Image.h Sources/Image.cpp   
                         )
 

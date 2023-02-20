@@ -1,5 +1,5 @@
-#ifndef BOARD_H
-#define BOARD_H
+#ifndef BILLBOARD_H
+#define BILLBOARD_H
 
 #include <QString>
 namespace Fk {
@@ -10,9 +10,12 @@ class Billboard
 {
     public:
         virtual ~Billboard() = default;
+        Fk::Image toImage() const;
         virtual bool save(const QString newAbsPathToFile, const char* newFormats) = 0;
+    private:
+        Billboard* const derivative;
     protected:
-        Billboard() = default;
+        Billboard(Billboard* const derivative);
 };
 
-#endif // BOARD_H
+#endif // BILLBOARD_H

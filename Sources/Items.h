@@ -8,7 +8,7 @@
 #include <QMenu>
 #include <memory>
 #include "Content.h"
-#include "Board.h"
+#include "Billboard.h"
 
 namespace App::Base
 {

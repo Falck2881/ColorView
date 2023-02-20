@@ -7,7 +7,7 @@
 #include <QtGlobal>
 #include "ThreadProcessingImages.h"
 #include "Image.h"
-#include "Board.h"
+#include "Billboard.h"
 #include "History.h"
 
 

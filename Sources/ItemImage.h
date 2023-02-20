@@ -27,6 +27,7 @@ namespace Item {
             std::shared_ptr<Fk::Image> getImage() const;
             void saveModifiedImage(QWidget* const widget);
             void updateSubItems();
+            void startThreadsForProcessingImages();
         private:
             void checkStatyActions() override final;
         private:
@@ -34,6 +35,7 @@ namespace Item {
             void initializeSubItemDepth();
             void initializeSubItemImage();
             void setPropertActions(bool value);
+            void setFlagsSubitems();
         private slots:
             void showProperty();
             void changeFilters();

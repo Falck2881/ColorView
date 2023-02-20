@@ -5,7 +5,7 @@
 #include <QImage>
 #include <QSet>
 #include <memory>
-#include "Board.h"
+#include "Billboard.h"
 
 class QPixmap;
 class QColor;
@@ -15,7 +15,7 @@ namespace Fk {
     class Image: public Billboard
     {
         public:
-            Image() = default;
+            Image();
             Image(const Fk::Image& copyObj);
             Image(Fk::Image&& copyObj);
             Fk::Image& operator=(Fk::Image&& oldImage);
