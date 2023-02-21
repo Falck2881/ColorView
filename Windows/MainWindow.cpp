@@ -55,11 +55,11 @@ void App::MainWindow::appand(App::Base::Item *const observer)
 }
 
 
-void App::MainWindow::setBillboardInEachObserver(std::shared_ptr<Billboard> billboard)
+void App::MainWindow::setBillboardInEachObserver(const std::pair<QString,QString>& content)
 {
     for(auto obs: observers)
     {
-        obs->setContent(billboard);
+        obs->setContent(content);
         obs->checkStatyActions();
     }
 }

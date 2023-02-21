@@ -12,7 +12,7 @@ class ContentItemImage: public Content
 
     public:
         ContentItemImage();
-        void setContent(std::shared_ptr<Billboard> billboard) override;
+        void setContent(const std::pair<QString,QString>& newContent) override;
         void updateContent(std::shared_ptr<Billboard> billboard) override;
         void startThreadsForProcessingImages(const Fk::Image& image);
     private:

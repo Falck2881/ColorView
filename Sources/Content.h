@@ -17,7 +17,7 @@ class Content: public QObject
 
     public:
         virtual ~Content() = default;
-        virtual void setContent(std::shared_ptr<Billboard>){};
+        virtual void setContent(const std::pair<QString,QString>&){};
         virtual void updateContent(std::shared_ptr<Billboard>){};
         void setIndex(const qint32 index);
         bool isBillboardEmpty() const;

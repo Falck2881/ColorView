@@ -10,9 +10,9 @@ void App::Base::Item::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Base::Item::setContent(std::shared_ptr<Billboard> billboard)
+void App::Base::Item::setContent(const std::pair<QString,QString>& newContent)
 {
-    content->setContent(billboard);
+    content->setContent(newContent);
 }
 
 void App::Base::Item::updateContent(std::shared_ptr<Billboard> billboard)

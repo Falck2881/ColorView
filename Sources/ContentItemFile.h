@@ -8,7 +8,7 @@ class ContentItemFile: public Content
 {
     public:
         ContentItemFile() = default;
-        void setContent(std::shared_ptr<Billboard>) override;
+        void setContent(const std::pair<QString,QString>& newContent) override;
         void updateContent(std::shared_ptr<Billboard>) override;
 
 };

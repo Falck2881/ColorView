@@ -7,7 +7,7 @@ class ContentItemEdit: public Content
 {
     public:
         ContentItemEdit() = default;
-        void setContent(std::shared_ptr<Billboard>) override;
+        void setContent(const std::pair<QString,QString>& newContent) override;
 };
 
 #endif // CONTENTITEMEDIT_H

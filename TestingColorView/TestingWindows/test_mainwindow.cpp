@@ -18,7 +18,6 @@ TEST(MainWindow, setBoardInEachObserver)
 {
     std::unique_ptr<App::MainWindow> mainWindow{std::make_unique<App::MainWindow>()};
 
-    mainWindow->setBillboardInEachObserver(std::make_shared<Fk::Image>(":/ship.bmp","bmp"));
-
+    ASSERT_NO_THROW(mainWindow->setBillboardInEachObserver(std::make_pair<QString,QString>(":/imgNotFound.png", "png")));
 
 }

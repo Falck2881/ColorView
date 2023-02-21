@@ -1,4 +1,5 @@
 #include "ContentItemFile.h"
+#include "Allocation.h"
 #include <assert.h>
 //#define NDEBUG
 
@@ -9,7 +10,8 @@ void ContentItemFile::updateContent(std::shared_ptr<Billboard> board)
     billboards.replace(index,board);
 }
 
-void ContentItemFile::setContent(std::shared_ptr<Billboard> board)
+void ContentItemFile::setContent(const std::pair<QString,QString>& newContent)
 {
-    billboards.push_back(board);
+    //Fk::Allocation makeBillboardImage(newContent);
+    billboards.push_back(std::make_unique<Fk::Image>(newContent.first,newContent.second.toLatin1().data()));
 }

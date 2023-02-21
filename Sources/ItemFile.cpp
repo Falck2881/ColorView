@@ -2,6 +2,7 @@
 #include "Image.h"
 #include "MainWindow.h"
 #include "ContentItemFile.h"
+#include <utility>
 #include <QFileDialog>
 #include <QVector>
 #include <QDir>
@@ -67,13 +68,13 @@ void App::Item::File::open()
     const QString pathToFile = QFileDialog::getOpenFileName(mainWindow, "Open File Image",
                                                              QDir::homePath(),"*.bmp ;; *.png ;; *.jpg");
     if(pathToFile.contains("bmp")){
-        mainWindow->setBillboardInEachObserver(std::make_shared<Fk::Image>(pathToFile,"bmp"));
+        mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"bmp"));
     }
     else if(pathToFile.contains("jpg")){
-        mainWindow->setBillboardInEachObserver(std::make_shared<Fk::Image>(pathToFile,"jpg"));
+        mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"jpg"));
     }
     else if(pathToFile.contains("png")){
-        mainWindow->setBillboardInEachObserver(std::make_shared<Fk::Image>(pathToFile,"png"));
+        mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"png"));
     }
 }
 

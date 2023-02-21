@@ -1,7 +1,8 @@
 #include "ContentItemEdit.h"
+#include "Allocation.h"
 
-
-void ContentItemEdit::setContent(std::shared_ptr<Billboard> board)
+void ContentItemEdit::setContent(const std::pair<QString,QString>& newContent)
 {
-    history.push_back(Modified::Billboard::History<Billboard>{board});
+    Fk::Allocation makeBillboardImage(newContent);
+    history.push_back(Modified::Billboard::History<Billboard>{makeBillboardImage()});
 }

@@ -50,6 +50,7 @@ set(PROJECT_SOURCES     main.cpp
                         Sources/ContentItemEdit.h Sources/ContentItemEdit.cpp
                         Sources/ContentItemImage.h Sources/ContentItemImage.cpp
                         Sources/ContentItemPage.h Sources/ContentItemPage.cpp
+                        Sources/Allocation.h Sources/Allocation.cpp
                         Sources/ItemFile.h Sources/ItemFile.cpp
                         Sources/ItemEdit.h Sources/ItemEdit.cpp
                         Sources/ItemImage.h Sources/ItemImage.cpp

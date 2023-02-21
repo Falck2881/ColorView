@@ -19,7 +19,7 @@ namespace App::Base
         public:
             Item() = default;
             virtual ~Item() = default;
-            void setContent(std::shared_ptr<Billboard> billboard);
+            void setContent(const std::pair<QString,QString>& content);
             void updateContent(std::shared_ptr<Billboard> billboard);
             void setIndex(const qint32 newIndex);
             virtual void checkStatyActions(){};
