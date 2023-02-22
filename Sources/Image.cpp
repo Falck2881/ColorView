@@ -5,7 +5,12 @@
 #include <thread>
 #include <QPainter>
 
-Fk::Image::Image(const Fk::Image& copyObj)
+Fk::Image::Image():Billboard(this), charFormat(nullptr)
+{
+
+}
+
+Fk::Image::Image(const Fk::Image& copyObj):Billboard(this)
 {
     this->image = copyObj.image;
     this->charFormat = copyObj.charFormat;
@@ -14,7 +19,7 @@ Fk::Image::Image(const Fk::Image& copyObj)
     this->setColors = copyObj.setColors;
 }
 
-Fk::Image::Image(Fk::Image&& copyObj)
+Fk::Image::Image(Fk::Image&& copyObj):Billboard(this)
 {
     this->image = copyObj.image;
     this->charFormat = copyObj.charFormat;
@@ -54,6 +59,7 @@ Fk::Image& Fk::Image::operator=(const Fk::Image &copyObj)
 }
 
 Fk::Image::Image(const QString pathFile, const char* format):
+    Billboard(this),
     image(pathFile,format),
     charFormat(const_cast<char*>(format)),
     absPathToFile(pathFile),
@@ -78,6 +84,21 @@ bool Fk::Image::isNull() const
     return image.isNull();
 }
 
+bool Fk::Image::isHighQuality() const
+{
+    return numberBitOnPix() == "24" || numberBitOnPix() == "32" ? true : false;
+}
+
+bool Fk::Image::is16BitsOnPixel() const
+{
+    return numberBitOnPix() == "16" ? true : false;
+}
+
+bool Fk::Image::is8BitsOnPixel() const
+{
+    return numberBitOnPix() == "8" ? true : false;
+}
+
 void Fk::Image::setDepthColor(QImage::Format depthColor)
 {
     image = image.convertToFormat(depthColor,Qt::ColorOnly);
@@ -85,7 +106,7 @@ void Fk::Image::setDepthColor(QImage::Format depthColor)
     setAllNameColorsInSet();
 }
 
-bool Fk::Image::save(const QString newAbsPathToFile,const char* newFormat) const
+bool Fk::Image::save(const QString newAbsPathToFile,const char* newFormat)
 {
     if(!newAbsPathToFile.contains(newFormat))
         return image.save(newAbsPathToFile + "." + newFormat,newFormat,90);

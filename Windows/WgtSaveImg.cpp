@@ -53,7 +53,6 @@ void WinSaveImg::updateDepthColorsInImage(QImage::Format depthColor)
 
 void WinSaveImg::updateContent(Fk::Image image)
 {
-
     image.scaled(ui->labelCurrentImg->width(), ui->labelCurrentImg->height());
     ui->labelCurrentImg->setAlignment(Qt::AlignCenter);
     ui->labelCurrentImg->setPixmap(image.pixmap());

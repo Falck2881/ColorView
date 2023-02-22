@@ -3,6 +3,7 @@
 
 #include "Items.h"
 #include "History.h"
+#include "Content.h"
 
 namespace App{
     class MainWindow;
@@ -17,12 +18,11 @@ namespace App::Item
         public:
             explicit Edit(App::MainWindow* const mainWin);
             QMenu* getMenu() const;
-            virtual QToolBar* getToolBar() const;
-            void saveChangesInHistory(Fk::Image image);
-            Fk::Image getCurrentImage() const;
+            QToolBar* getToolBar() const;
+            void saveChangesInHistory(std::shared_ptr<Billboard> board);
+            std::shared_ptr<Billboard> getBillboard() const;
         private:
             void checkStatyActions() override final;
-            void setContent(const Fk::Image& image) override final;
         private:
             void initializeEachAction();
             void connectWithCommand();
@@ -31,8 +31,7 @@ namespace App::Item
             void undo();
             void redo();
         private:
-            Fk::Image imageInHistory;
-            QVector<FileModified::History<Fk::Image>> historyEdit;
+            std::shared_ptr<Billboard> currentBillboard;
             std::unique_ptr<QAction> aUndo;
             std::unique_ptr<QAction> aRedo;
             std::unique_ptr<QMenu> mEdit;

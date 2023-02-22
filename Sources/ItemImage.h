@@ -5,12 +5,8 @@
 #include "WgtImgProperty.h"
 #include "WgtFilter.h"
 #include "WgtFraming.h"
-#include "SetConversions.h"
-#include "ThreadProcessingImages.h"
+#include "ContentItemImage.h"
 
-namespace Fk{
-    class Image;
-}
 
 namespace App{
     class MainWindow;
@@ -28,26 +24,19 @@ namespace Item {
         public:
             explicit Image(App::MainWindow* const mainWin);
             QMenu* getMenu() const;
-            Fk::Image getImage() const;
+            std::shared_ptr<Fk::Image> getImage() const;
             void saveModifiedImage(QWidget* const widget);
-            void updateActivityFilter();
-            void updateContent(const Fk::Image& image) override final;
+            void updateSubItems();
+            void startThreadsForProcessingImages();
         private:
             void checkStatyActions() override final;
-            void setContent(const Fk::Image& image) override final;
         private:
-            void moveConversionsColorIntoThreads();
-            void replaceImage(const Fk::Image& image);
-            void startThreadProcessingImages(const Fk::Image& image);
             void connect();
             void initializeSubItemDepth();
             void initializeSubItemImage();
             void setPropertActions(bool value);
-            bool isImageHightQuality(const Fk::Image& image) const;
-            void addToCompleteImageProcessing(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing);
-            void removeOldsProcessingImages();
+            void setFlagsSubitems();
         private slots:
-            void setProcessingImages(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing);
             void showProperty();
             void changeFilters();
             void changeFrame();
@@ -58,12 +47,7 @@ namespace Item {
         signals:
             void sourceImage(const Fk::Image& image);
         private:
-            QVector<std::pair<QVector<Fk::Image>, NumbersThreads>> completedImageProcessing;
-            SetConversions collection;
-            QVector<std::shared_ptr<ThreadProcessingImages>> threadsProcessingImages;
             Fk::Image modifiedImage;
-            QVector<Fk::Image> collectionSourceImages;
-            QVector<Fk::Image> collectionProcessingImage;
             std::unique_ptr<WinFrames> winFrames;
             std::unique_ptr<WinFilter> winFilter;
             std::unique_ptr<WinImgProperty> winProperty;
