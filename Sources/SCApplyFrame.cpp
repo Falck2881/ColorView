@@ -17,7 +17,6 @@ void Command::ApplyFrame::setCurrentImage(const Fk::Image& currentImage)
 
 void Command::ApplyFrame::execute()
 {
-    Fk::Image newImage = currentImg;
-    newImage.setFraming(nameFileFrame);
-    winFrames->setModifiedImage(newImage);
+    currentImg.setFraming(nameFileFrame);
+    winFrames->setModifiedImage(currentImg);
 }

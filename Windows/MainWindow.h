@@ -8,6 +8,7 @@
 #include "ItemEdit.h"
 #include "ItemPage.h"
 #include "ItemImage.h"
+#include "Billboard.h"
 
 namespace Fk{
     class Image;
@@ -23,12 +24,14 @@ namespace App
         public:
             MainWindow();
             void appand(App::Base::Item* const observer);
-            void setFileInEachObserver(const Fk::Image& image);
+            void setBillboardInEachObserver(const std::pair<QString,QString>& content);
             void changeIndexOnFile(const quint32 index);
-            void updateFileInEachObserver(const Fk::Image& image);
+            void updateBillboardInEachObserver(std::shared_ptr<Billboard> billboard);
             void changesItems(Base::Item* const item);
+            bool observersExist() const;
         private:
-            void initializeItemsApp();
+            void initializeMembersOfClass();
+            void addAllItemsInManinWindow();
             void setGeometryScreen();
         private:
             std::unique_ptr<App::Item::File> itemFile;

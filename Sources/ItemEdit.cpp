@@ -1,11 +1,11 @@
 #include "ItemEdit.h"
 #include "MainWindow.h"
+#include "ContentItemEdit.h"
 #include <QKeySequence>
 #include <QVector>
-#define NDEBUG
-#include <assert.h>
 
 App::Item::Edit::Edit(App::MainWindow* const mainWin):
+    App::Base::Item(std::make_unique<ContentItemEdit>()),
     aUndo{std::make_unique<QAction>("&Undo")},
     aRedo{std::make_unique<QAction>("&Redo")},
     mEdit{std::make_unique<QMenu>("&Edit")},
@@ -42,26 +42,23 @@ void App::Item::Edit::connectWithCommand()
 
 void App::Item::Edit::undo()
 {
-    assert(indexOnFile != -1);
+    content->undoModification();
 
-    historyEdit[indexOnFile].decrement();
-
-    imageInHistory = historyEdit.at(indexOnFile).file();
+    currentBillboard = content->billboardInHistory();
     mainWindow->changesItems(this);
 }
 
 void App::Item::Edit::redo()
 {
-    assert(indexOnFile != -1);
+    content->redoModification();
 
-    historyEdit[indexOnFile].increment();
-    imageInHistory = historyEdit.at(indexOnFile).file();
+    currentBillboard = content->billboardInHistory();
     mainWindow->changesItems(this);
 }
 
-Fk::Image App::Item::Edit::getCurrentImage() const
+std::shared_ptr<Billboard> App::Item::Edit::getBillboard() const
 {
-    return imageInHistory;
+    return currentBillboard;
 }
 
 QMenu* App::Item::Edit::getMenu() const
@@ -74,25 +71,18 @@ QToolBar* App::Item::Edit::getToolBar() const
     return toolBar.get();
 }
 
-void App::Item::Edit::saveChangesInHistory(Fk::Image image)
+void App::Item::Edit::saveChangesInHistory(std::shared_ptr<Billboard> billboard)
 {
-    assert(indexOnFile != -1);
-
-    historyEdit[indexOnFile].push_back(image);
-    imageInHistory = historyEdit[indexOnFile].last();
+    content->saveModifiedOnBillboard(billboard);
+    currentBillboard = content->lastModifiedOnBillboard();
     mainWindow->changesItems(this);
-}
-
-void App::Item::Edit::setContent(const Fk::Image&  image)
-{
-    historyEdit.push_back(FileModified::History<Fk::Image>{image});
 }
 
 void App::Item::Edit::checkStatyActions()
 {
     QVector<QString> icons;
 
-    if(historyEdit.empty()){
+    if(content->isHistoryEmpty()){
         icons << ":/Disabled/Redo.bmp" << ":/Disabled/Undo.bmp";
         setPropertyActions(false,icons);
     }

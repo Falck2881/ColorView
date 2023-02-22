@@ -49,9 +49,9 @@ void WinFilter::apply()
     imgItem->saveModifiedImage(this);
 }
 
-void WinFilter::setCollectionProcessingImage(QVector<Fk::Image> newCollectionProcessingImages)
+void WinFilter::setCollectionProcessingImage(QVector<Fk::Image> newCollageProcessingImages)
 {
-    collectionProcessingImages = newCollectionProcessingImages;
+    collageProcessingImages = newCollageProcessingImages;
 }
 
 void WinFilter::setModifiedImage(const Fk::Image& newImageProcessing)
@@ -62,7 +62,7 @@ void WinFilter::setModifiedImage(const Fk::Image& newImageProcessing)
 
 void WinFilter::updateContant(const Fk::Image& image)
 {
-    if(!collectionProcessingImages.isEmpty())
+    if(!collageProcessingImages.isEmpty())
         updateFilters();
 
     updateMainImage(image);
@@ -81,27 +81,23 @@ void WinFilter::updateFilters()
     {
         width = frames.at(i)->width();
         height = frames.at(i)->height();
-        collectionProcessingImages[i].scaled(width,height);
+        collageProcessingImages[i].scaled(width,height);
         frames.at(i)->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        frames.at(i)->setPixmap(collectionProcessingImages.at(i).pixmap());
+        frames.at(i)->setPixmap(collageProcessingImages.at(i).pixmap());
     }
 }
 
-void WinFilter::updateMainImage(Fk::Image image)
+void WinFilter::updateMainImage(const Fk::Image& image)
 {
-    image.scaled(ui->labelImage->width(), ui->labelImage->height());
-    ui->labelImage->setPixmap(image.pixmap());
+    Fk::Image tempImage{const_cast<const Fk::Image&>(image)};
+    tempImage.scaled(ui->labelImage->width(), ui->labelImage->height());
+    ui->labelImage->setPixmap(tempImage.pixmap());
 }
 
 void WinFilter::updateCommands(const Fk::Image& image)
 {
     for(auto command: comApplysFilters)
         command->setCurrentImage(image);
-}
-
-void WinFilter::updateDepthColorsInImage(QImage::Format depthColor)
-{
-    modifiedImage.setDepthColor(depthColor);
 }
 
 Fk::Image WinFilter::getModifiedImage() const

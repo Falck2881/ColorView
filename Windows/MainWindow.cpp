@@ -5,17 +5,27 @@
 
 App::MainWindow::MainWindow()
 {
-   initializeItemsApp();
+   initializeMembersOfClass();
+
+   if(!observers.isEmpty())
+        addAllItemsInManinWindow();
+
    setGeometryScreen();
 }
 
-void App::MainWindow::initializeItemsApp()
+void App::MainWindow::initializeMembersOfClass()
 {
     itemImage = std::make_unique<App::Item::Image>(this);
 
-    itemFile = std::make_unique<App::Item::File>(this);
+    if(itemImage != nullptr)
+        itemPage = std::make_unique<App::Item::Page>(this);
 
     itemEdit = std::make_unique<App::Item::Edit>(this);
+    itemFile = std::make_unique<App::Item::File>(this);
+}
+
+void App::MainWindow::addAllItemsInManinWindow()
+{
 
     menuBar()->addMenu(itemFile->getMenu());
     addToolBar(Qt::TopToolBarArea,itemFile->getToolBar());
@@ -26,7 +36,6 @@ void App::MainWindow::initializeItemsApp()
 
     menuBar()->addMenu(itemImage->getMenu());
 
-    itemPage = std::make_unique<App::Item::Page>(this);
     setCentralWidget(itemPage->getTabWidget());
 }
 
@@ -46,11 +55,11 @@ void App::MainWindow::appand(App::Base::Item *const observer)
 }
 
 
-void App::MainWindow::setFileInEachObserver(const Fk::Image& image)
+void App::MainWindow::setBillboardInEachObserver(const std::pair<QString,QString>& content)
 {
     for(auto obs: observers)
     {
-        obs->setContent(image);
+        obs->setContent(content);
         obs->checkStatyActions();
     }
 }
@@ -58,25 +67,31 @@ void App::MainWindow::setFileInEachObserver(const Fk::Image& image)
 void App::MainWindow::changeIndexOnFile(const quint32 index)
 {
     for(auto obs: observers){
-        obs->saveIndex(index);
+        obs->setIndex(index);
         obs->checkStatyActions();
     }
 }
 
-void App::MainWindow::updateFileInEachObserver(const Fk::Image& image)
+void App::MainWindow::updateBillboardInEachObserver(std::shared_ptr<Billboard> billboard)
 {
     for(auto obs: observers){
-        obs->updateContent(image);
+        obs->updateContent(billboard);
     }
 }
 
-void App::MainWindow::changesItems(Base::Item* const item)
+void App::MainWindow::changesItems(App::Base::Item* const item)
 {
     if(item == itemImage.get())
         itemEdit->saveChangesInHistory(itemImage->getImage());
     else if(item == itemEdit.get())
-        updateFileInEachObserver(itemEdit->getCurrentImage());
+        updateBillboardInEachObserver(itemEdit->getBillboard());
     else if(item == itemPage.get()){
-        itemImage->updateActivityFilter();
+        itemImage->startThreadsForProcessingImages();
+        itemImage->updateSubItems();
     }
+}
+
+bool App::MainWindow::observersExist() const
+{
+    return !observers.empty() ? true:false;
 }

@@ -5,6 +5,7 @@
 #include "Items.h"
 #include "Image.h"
 #include <QDebug>
+#include "Content.h"
 
 namespace App{
     class MainWindow;
@@ -17,13 +18,11 @@ namespace App::Item
         Q_OBJECT
 
         public:
-            File(App::MainWindow* const mainWin);
+            explicit File(App::MainWindow* const mainWin);
             QMenu* getMenu() const;
             QToolBar* getToolBar() const;
 
         private:
-            void updateContent(const Fk::Image& image) override final;
-            void setContent(const Fk::Image& image) override final;
             void checkStatyActions() override final;
 
         private:
@@ -39,12 +38,12 @@ namespace App::Item
             void exit();
 
         private:
+
             std::unique_ptr<QAction> aExite;
             std::unique_ptr<QAction> aSaveFileAs;
             std::unique_ptr<QAction> aSaveFile;
             std::unique_ptr<QAction> aOpenFile;
             std::unique_ptr<QMenu> mFile;
-            QList<Fk::Image> images;
             std::unique_ptr<QToolBar> toolBar;
             App::MainWindow* const mainWindow;
             std::unique_ptr<WinSaveImg> winSaveImg;

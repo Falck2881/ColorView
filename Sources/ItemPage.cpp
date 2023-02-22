@@ -1,14 +1,15 @@
 #include "ItemPage.h"
 #include "MainWindow.h"
 #include "Image.h"
+#include "ContentItemPage.h"
 #include <QLabel>
-#define NDEBUG
-#include <assert.h>
 #define START_PAGE 0
 
 App::Item::Page::Page(App::MainWindow* const mainWin):
+    App::Base::Item(std::make_unique<ContentItemPage>(this)),
     tabWidget{std::make_unique<QTabWidget>()},
-    mainWindow{mainWin}
+    mainWindow{mainWin},
+    indexOnPage(0)
 {
     mainWindow->appand(this);
     initializeStartPage();
@@ -32,48 +33,25 @@ void App::Item::Page::connectWithCommand()
 void App::Item::Page::currentPage(const qint32 index)
 {
     if(index >= 0){
+        indexOnPage = index;
         mainWindow->changeIndexOnFile(index);
         mainWindow->changesItems(this);
     }
 }
 
-void App::Item::Page::updateContent(const Fk::Image& image)
-{
-    updatePage(image);
-}
-
 void App::Item::Page::updatePage(const Fk::Image& image)
 {
-    assert(indexOnFile != -1);
 
-    images.replace(indexOnFile,image);
-    auto imageCurrentPage = images.at(indexOnFile);
+    QLabel* billboard = qobject_cast<QLabel*>(tabWidget->widget(indexOnPage));
+    billboard->setAlignment(Qt::AlignCenter);
+    billboard->setPixmap(image.pixmap());
 
-    QLabel* label = qobject_cast<QLabel*>(tabWidget->widget(indexOnFile));
-    label->setAlignment(Qt::AlignCenter);
-    label->setPixmap(imageCurrentPage.pixmap());
-
-    tabWidget->setCurrentIndex(tabWidget->insertTab(indexOnFile, label, "*"+imageCurrentPage.nameFile()));
+    tabWidget->setCurrentIndex(tabWidget->insertTab(indexOnPage, billboard, "*"+image.nameFile()));
 }
 
-void App::Item::Page::setContent(const Fk::Image& image)
+void App::Item::Page::setImageIntoPage(QWidget* const billboard, const Fk::Image& image)
 {
-    setImageIntoPage(image);
-}
-
-void App::Item::Page::setImageIntoPage(const Fk::Image& image)
-{
-    if(images.empty())
-        hideStartPage();
-
-    QLabel* label = new QLabel;
-    label->setAlignment(Qt::AlignCenter);
-    label->setPixmap(image.pixmap());
-
-    images.push_back(image);
-
-    if(!images.isEmpty())
-        tabWidget->setCurrentIndex(tabWidget->addTab(label,image.nameFile()));
+    tabWidget->setCurrentIndex(tabWidget->addTab(billboard,image.nameFile()));
 }
 
 QTabWidget* App::Item::Page::getTabWidget() const
@@ -81,10 +59,9 @@ QTabWidget* App::Item::Page::getTabWidget() const
     return tabWidget.get();
 }
 
-Fk::Image App::Item::Page::getImageCurrentPage() const
+std::shared_ptr<Fk::Image> App::Item::Page::getImageCurrentPage() const
 {
-    assert(indexOnFile != -1);
-    return images.at(indexOnFile);
+    return std::make_shared<Fk::Image>(content->image());
 }
 
 void App::Item::Page::hideStartPage()

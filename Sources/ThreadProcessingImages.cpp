@@ -16,7 +16,7 @@ void ThreadProcessingImages::setNumberThread(NumbersThreads numberThread)
 
 void ThreadProcessingImages::setCopyImage(Fk::Image image)
 {
-    collectionProcessingImages << image << image;
+    collageProcessingImages << image << image;
 }
 
 bool ThreadProcessingImages::isRun() const
@@ -27,10 +27,10 @@ bool ThreadProcessingImages::isRun() const
 void ThreadProcessingImages::run()
 {
 
-    auto processingImage{collectionProcessingImages.begin()};
+    auto processingImage{collageProcessingImages.begin()};
     auto iterMethods{methodsConversionColor.begin()};
 
-    while(processingImage != collectionProcessingImages.end() && iterMethods != methodsConversionColor.end())
+    while(processingImage != collageProcessingImages.end() && iterMethods != methodsConversionColor.end())
     {
         for(qsizetype y = 0; y < processingImage->height(); ++y)
         {
@@ -46,21 +46,21 @@ void ThreadProcessingImages::run()
         ++iterMethods;
     }
 
-    std::pair<QVector<Fk::Image>, NumbersThreads> pair(collectionProcessingImages,currentNumberThread);
+    std::pair<QVector<Fk::Image>, NumbersThreads> pair(collageProcessingImages,currentNumberThread);
     removeCollectionProcessingImages();
 
-    if(collectionProcessingImages.isEmpty())
+    if(collageProcessingImages.isEmpty())
         emit returnProcessingImages(pair);
 }
 
 void ThreadProcessingImages::removeCollectionProcessingImages()
 {
-    if(!collectionProcessingImages.isEmpty())
+    if(!collageProcessingImages.isEmpty())
     {
-        auto begin{collectionProcessingImages.constBegin()};
-        auto end{collectionProcessingImages.constEnd()};
-        collectionProcessingImages.erase(begin,end);
-        collectionProcessingImages.squeeze();
+        auto begin{collageProcessingImages.constBegin()};
+        auto end{collageProcessingImages.constEnd()};
+        collageProcessingImages.erase(begin,end);
+        collageProcessingImages.squeeze();
     }
 }
 
