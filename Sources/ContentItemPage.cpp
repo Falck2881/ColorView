@@ -27,13 +27,12 @@ void ContentItemPage::checkStartingPage()
 
 void ContentItemPage::createBillboardForPage(const std::pair<QString,QString>& newContent)
 {
-    //Fk::Allocation makeBillboardImage(newContent);
-    auto billboard = std::make_unique<Fk::Image>(newContent.first,newContent.second.toLatin1().data());
-    Fk::Image curr = billboard->toImage();
+    Fk::Allocation makeBillboardImage(newContent);
+    auto billboard = makeBillboardImage();
     QLabel* wgdBillboard{new QLabel};
     wgdBillboard->setAlignment(Qt::AlignCenter);
-    wgdBillboard->setPixmap(curr.pixmap());
+    wgdBillboard->setPixmap(billboard->toImage().pixmap());
 
+    itemPage->setImageIntoPage(wgdBillboard,billboard->toImage());
     billboards.push_back(std::move(billboard));
-    itemPage->setImageIntoPage(wgdBillboard,curr);
 }
