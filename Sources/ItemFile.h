@@ -4,7 +4,6 @@
 #include "Windows/WgtSaveImg.h"
 #include "Items.h"
 #include "Image.h"
-#include <QDebug>
 #include "Content.h"
 
 namespace App{
@@ -21,24 +20,28 @@ namespace App::Item
             explicit File(App::MainWindow* const mainWin);
             QMenu* getMenu() const;
             QToolBar* getToolBar() const;
-
+        public slots:
+            void save();
+            void saveAs();
         private:
-            void checkStatyActions() override final;
-
+            void setActivityOfWidgets() override final;
+            void setContent(const std::pair<QString, QString> &content) override;
+            void updateContent(std::shared_ptr<Billboard> billboard) override;
+            void setIndex(const qint32 newIndex) override;
+            void removeContent(const qint32 index) override;
         private:
             void connectWithCommand();
             void initializeDialogWindow();
             void initializeEachAction();
             void setPropertyActions(bool value, const QVector<QString>& icons);
-
+        signals:
+            void openFile(const QString&);
         private slots:
             void open();
-            void save();
-            void saveAs();
             void exit();
 
         private:
-
+            std::shared_ptr<Content> content;
             std::unique_ptr<QAction> aExite;
             std::unique_ptr<QAction> aSaveFileAs;
             std::unique_ptr<QAction> aSaveFile;

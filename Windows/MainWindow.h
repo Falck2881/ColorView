@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <memory>
 #include <QList>
+#include <QMovie>
+#include <QLabel>
 #include "ItemFile.h"
 #include "ItemEdit.h"
 #include "ItemPage.h"
@@ -25,10 +27,16 @@ namespace App
             MainWindow();
             void appand(App::Base::Item* const observer);
             void setBillboardInEachObserver(const std::pair<QString,QString>& content);
-            void changeIndexOnFile(const quint32 index);
+            void changeIndex(const qint32 newIndex);
             void updateBillboardInEachObserver(std::shared_ptr<Billboard> billboard);
-            void changesItems(Base::Item* const item);
+            void changeContentOfItems(Base::Item* const item);
+            void notifyAboutClosePage(const qint32 index);
+            void setActivityTheWitgetsInEachObserver();
+            void closePage(const qint32 index);
+            void closePageWithoutSave();
+            void closePageAndSave();
             bool observersExist() const;
+            void updateMessageInStatusBar(App::Base::Item* const item);
         private:
             void initializeMembersOfClass();
             void addAllItemsInManinWindow();
@@ -39,6 +47,7 @@ namespace App
             std::unique_ptr<App::Item::Image> itemImage;
             std::unique_ptr<App::Item::Page> itemPage;
             QList<App::Base::Item*> observers;
+            std::unique_ptr<QLabel> frame;
     };
 
 }

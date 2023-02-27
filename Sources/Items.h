@@ -17,15 +17,19 @@ namespace App::Base
         Q_OBJECT
 
         public:
-            Item() = default;
             virtual ~Item() = default;
-            void setContent(const std::pair<QString,QString>& content);
-            void updateContent(std::shared_ptr<Billboard> billboard);
-            void setIndex(const qint32 newIndex);
-            virtual void checkStatyActions(){};
+            virtual void updateContent(std::shared_ptr<Billboard> billboard){};
+            virtual void removeContent(const qint32 index){};
+            virtual void setIndex(const qint32 newIndex) = 0;
+            virtual void setActivityOfWidgets(){};
+            virtual void setContent(const std::pair<QString,QString>& content) = 0;
+            QString messageAboutAction() const;
+            void writeNoteAboutAction(const QString& message);
+        private:
+            QString note;
         protected:
-            Item(std::shared_ptr<Content> content);
-            std::shared_ptr<Content> content;
+            Item() = default;
+
     };
 }
 #endif // ITEMS_H

@@ -1,18 +1,41 @@
 #include "Content.h"
-#include <any>
+#include "Allocation.h"
+#include <exception>
+#include <QDebug>
 #include <assert.h>
 //#define NDEBUG
 
-Content::Content():index(0)
+void Content::updateContent(std::shared_ptr<Billboard> board)
 {
+    assert(index != -1);
 
+    billboards.replace(index,board);
+}
+
+void Content::setContent(const std::pair<QString,QString>& newContent)
+{
+    Fk::Allocation makeBillboardImage(newContent);
+    billboards.push_back(makeBillboardImage());
+}
+
+void Content::removeContent(const qint32 index)
+{
+    assert(index != -1);
+    billboards.removeAt(index);
 }
 
 void Content::setIndex(const qint32 newIndex)
 {
-    assert(index != -1);
-
-    index = newIndex;
+    try {
+        if(newIndex != -1)
+            index = newIndex;
+        else
+            throw std::logic_error("Variable 'newIndex' have value: -1 ");
+    }  catch (const std::logic_error& exce) {
+        qDebug() << exce.what();
+        index = 0;
+        throw;
+    }
 }
 
 bool Content::isBillboardEmpty() const
@@ -41,60 +64,9 @@ qsizetype Content::sizeBillboard() const
     return billboards.size();
 }
 
-void Content::saveModifiedOnBillboard(std::shared_ptr<Billboard> billboard)
-{
-    assert(index != -1);
-
-    history[index].push_back(billboard);
-}
-
-
-auto Content::historyAllBillboard() const
-{
-    return history;
-}
-
-bool Content::isHistoryEmpty() const
-{
-    return history.isEmpty();
-}
-
-void Content::undoModification()
-{
-    assert(index != -1);
-
-    history[index].undo();
-}
-
-void Content::redoModification()
-{
-    assert(index != -1);
-
-    history[index].redo();
-}
-
-
-std::shared_ptr<Billboard> Content::billboardInHistory() const
-{
-    assert(index != -1);
-
-    return history.at(index).billboard();}
-
-std::shared_ptr<Billboard> Content::lastModifiedOnBillboard() const
-{
-    assert(index != -1);
-
-    return history[index].last();
-}
-
 void Content::replaceBillboard(std::shared_ptr<Billboard> billboard)
 {
     assert(index != -1);
 
     billboards.replace(index, billboard);
-}
-
-QVector<Fk::Image> Content::collageOfImages() const
-{
-    return collageProcessingBillboards;
 }

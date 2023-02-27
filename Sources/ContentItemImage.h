@@ -4,7 +4,6 @@
 #include "Content.h"
 #include "ThreadProcessingImages.h"
 #include "SetConversions.h"
-#include "ItemImage.h"
 
 class ContentItemImage: public Content
 {
@@ -14,7 +13,8 @@ class ContentItemImage: public Content
         ContentItemImage();
         void setContent(const std::pair<QString,QString>& newContent) override;
         void updateContent(std::shared_ptr<Billboard> billboard) override;
-        void startThreadsForProcessingImages(const Fk::Image& image);
+        void startThreads(const Fk::Image& image);
+        QVector<Fk::Image> collageOfImages() const;
     private:
         void moveConversionsColorIntoThreads();
         void connect();
@@ -26,7 +26,7 @@ class ContentItemImage: public Content
         SetConversions collection;
         QVector<std::shared_ptr<ThreadProcessingImages>> threadsProcessingImages;
         QVector<std::pair<QVector<Fk::Image>, NumbersThreads>> readyProcessingOfBillboard;
-
+        QVector<Fk::Image> collageProcessingBillboards;
 };
 
 #endif // CONTENTITEMIMAGE_H

@@ -61,10 +61,7 @@ void WinSaveImg::updateContent(Fk::Image image)
 
 void WinSaveImg::changeStatusButtonSave(bool status)
 {
-    if(status)
-        ui->saveButton->setEnabled(status);
-    else
-        ui->saveButton->setEnabled(status);
+    ui->saveButton->setEnabled(status);
 }
 
 void WinSaveImg::save()

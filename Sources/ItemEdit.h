@@ -3,7 +3,7 @@
 
 #include "Items.h"
 #include "History.h"
-#include "Content.h"
+#include "ContentItemEdit.h"
 
 namespace App{
     class MainWindow;
@@ -20,9 +20,13 @@ namespace App::Item
             QMenu* getMenu() const;
             QToolBar* getToolBar() const;
             void saveChangesInHistory(std::shared_ptr<Billboard> board);
+            void checkHistoryModified(const qint32 index);
             std::shared_ptr<Billboard> getBillboard() const;
         private:
-            void checkStatyActions() override final;
+            void setActivityOfWidgets() override final;
+            void setContent(const std::pair<QString, QString> &content) override;
+            void removeContent(const qint32 index) override;
+            void setIndex(const qint32 newIndex) override;
         private:
             void initializeEachAction();
             void connectWithCommand();
@@ -31,6 +35,7 @@ namespace App::Item
             void undo();
             void redo();
         private:
+            std::unique_ptr<ContentItemEdit> content;
             std::shared_ptr<Billboard> currentBillboard;
             std::unique_ptr<QAction> aUndo;
             std::unique_ptr<QAction> aRedo;

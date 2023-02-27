@@ -48,6 +48,7 @@ void ContentItemImage::moveConversionsColorIntoThreads()
     }
 }
 
+
 void ContentItemImage::connect()
 {
     auto threadProcessingImg{threadsProcessingImages.begin()};
@@ -78,13 +79,14 @@ void ContentItemImage::setProcessingBillboards(std::pair<QVector<Fk::Image>, Num
 
 }
 
-void ContentItemImage::addCompletedBillboardProcessing(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedBillboardProcessing)
+void ContentItemImage::addCompletedBillboardProcessing
+(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedBillboardProcessing)
 {
     if(readyProcessingOfBillboard.size() != 3)
     {
         readyProcessingOfBillboard.append(newCompletedBillboardProcessing);
-        auto comparation{[](std::pair<QVector<Fk::Image>, NumbersThreads> fPair,
-                            std::pair<QVector<Fk::Image>, NumbersThreads> sPair)
+        auto comparation{[](const std::pair<QVector<Fk::Image>, NumbersThreads>& fPair,
+                            const std::pair<QVector<Fk::Image>, NumbersThreads>& sPair)
                             {
                                 return fPair.second < sPair.second;
                             }
@@ -115,11 +117,11 @@ void ContentItemImage::updateContent(std::shared_ptr<Billboard> billboard)
     Fk::Image currImage = image();
 
     if(currImage.isHighQuality())
-        startThreadsForProcessingImages(currImage);
+        startThreads(currImage);
 }
 
 
-void ContentItemImage::startThreadsForProcessingImages(const Fk::Image& image)
+void ContentItemImage::startThreads(const Fk::Image& image)
 {
     auto threadProcessingImage{threadsProcessingImages.begin()};
 
@@ -128,7 +130,13 @@ void ContentItemImage::startThreadsForProcessingImages(const Fk::Image& image)
         if(!threadProcessingImage->get()->isRun()){
             threadProcessingImage->get()->setCopyImage(image);
             threadProcessingImage->get()->start();
+            threadProcessingImage->get()->wait();
         }
         ++threadProcessingImage;
     }
+}
+
+QVector<Fk::Image> ContentItemImage::collageOfImages() const
+{
+    return collageProcessingBillboards;
 }

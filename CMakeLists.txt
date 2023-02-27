@@ -46,7 +46,6 @@ set(PROJECT_SOURCES     main.cpp
                         Sources/SCApplyFrame.h Sources/SCApplyFrame.cpp
                         Sources/Items.h Sources/Items.cpp
                         Sources/Content.h Sources/Content.cpp
-                        Sources/ContentItemFile.h Sources/ContentItemFile.cpp
                         Sources/ContentItemEdit.h Sources/ContentItemEdit.cpp
                         Sources/ContentItemImage.h Sources/ContentItemImage.cpp
                         Sources/ContentItemPage.h Sources/ContentItemPage.cpp

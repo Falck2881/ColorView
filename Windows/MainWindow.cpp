@@ -2,8 +2,10 @@
 #include <QMenuBar>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QStatusBar>
 
-App::MainWindow::MainWindow()
+App::MainWindow::MainWindow():
+    frame{std::make_unique<QLabel>()}
 {
    initializeMembersOfClass();
 
@@ -26,7 +28,6 @@ void App::MainWindow::initializeMembersOfClass()
 
 void App::MainWindow::addAllItemsInManinWindow()
 {
-
     menuBar()->addMenu(itemFile->getMenu());
     addToolBar(Qt::TopToolBarArea,itemFile->getToolBar());
 
@@ -49,7 +50,7 @@ void App::MainWindow::setGeometryScreen()
     this->setMinimumSize(800,600);
 }
 
-void App::MainWindow::appand(App::Base::Item *const observer)
+void App::MainWindow::appand(Base::Item *const observer)
 {
     observers.push_back(observer);
 }
@@ -58,40 +59,76 @@ void App::MainWindow::appand(App::Base::Item *const observer)
 void App::MainWindow::setBillboardInEachObserver(const std::pair<QString,QString>& content)
 {
     for(auto obs: observers)
-    {
         obs->setContent(content);
-        obs->checkStatyActions();
-    }
 }
 
-void App::MainWindow::changeIndexOnFile(const quint32 index)
+void App::MainWindow::changeIndex(const qint32 newIndex)
 {
-    for(auto obs: observers){
-        obs->setIndex(index);
-        obs->checkStatyActions();
-    }
+    for(auto obs: observers)
+        obs->setIndex(newIndex);
 }
 
 void App::MainWindow::updateBillboardInEachObserver(std::shared_ptr<Billboard> billboard)
 {
-    for(auto obs: observers){
+    for(auto obs: observers)
         obs->updateContent(billboard);
+}
+
+void App::MainWindow::notifyAboutClosePage(const qint32 index)
+{
+    for(auto obs: observers)
+        obs->removeContent(index);
+}
+
+void App::MainWindow::setActivityTheWitgetsInEachObserver()
+{
+    for(auto obs: observers)
+        obs->setActivityOfWidgets();
+}
+
+void App::MainWindow::changeContentOfItems(Base::Item* const item)
+{
+    if(item == itemImage.get()){
+        itemEdit->saveChangesInHistory(itemImage->getBillboard());
+    }
+    else if(item == itemEdit.get()){
+        updateBillboardInEachObserver(itemEdit->getBillboard());
+        setActivityTheWitgetsInEachObserver();
+    }
+    else if(item == itemPage.get()){
+        itemImage->startThreads();
+        setActivityTheWitgetsInEachObserver();
     }
 }
 
-void App::MainWindow::changesItems(App::Base::Item* const item)
+void App::MainWindow::closePage(const qint32 index)
 {
-    if(item == itemImage.get())
-        itemEdit->saveChangesInHistory(itemImage->getImage());
-    else if(item == itemEdit.get())
-        updateBillboardInEachObserver(itemEdit->getBillboard());
-    else if(item == itemPage.get()){
-        itemImage->startThreadsForProcessingImages();
-        itemImage->updateSubItems();
-    }
+    itemEdit->checkHistoryModified(index);
+}
+
+void App::MainWindow::closePageAndSave()
+{
+    itemFile->saveAs();
+}
+
+void App::MainWindow::closePageWithoutSave()
+{
+    itemFile->save();
 }
 
 bool App::MainWindow::observersExist() const
 {
     return !observers.empty() ? true:false;
+}
+
+void App::MainWindow::updateMessageInStatusBar(App::Base::Item* const item)
+{
+    if(item == itemFile.get())
+        statusBar()->showMessage(itemFile->messageAboutAction(), 1800);
+    else if(item == itemEdit.get())
+        statusBar()->showMessage(itemEdit->messageAboutAction(), 1800);
+    else if(item == itemImage.get())
+        statusBar()->showMessage(itemImage->messageAboutAction(), 1800);
+    else if(item == itemPage.get())
+        statusBar()->showMessage(itemPage->messageAboutAction(), 1800);
 }

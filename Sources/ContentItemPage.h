@@ -2,7 +2,10 @@
 #define CONTENTITEMPAGE_H
 
 #include "Content.h"
-#include "ItemPage.h"
+
+namespace App::Item{
+class Page;
+}
 
 class ContentItemPage: public Content
 {

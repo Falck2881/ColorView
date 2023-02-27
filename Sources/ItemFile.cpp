@@ -1,16 +1,16 @@
 #include "ItemFile.h"
 #include "Image.h"
 #include "MainWindow.h"
-#include "ContentItemFile.h"
 #include <utility>
 #include <QFileDialog>
 #include <QVector>
 #include <QDir>
 #include <QMessageBox>
 #include <QApplication>
+#include <QDebug>
 
 App::Item::File::File(App::MainWindow* const mainWin):
-    App::Base::Item(std::make_unique<ContentItemFile>()),
+    content(std::make_unique<Content>()),
     aExite{std::make_unique<QAction>("&Exit")},
     aSaveFileAs{std::make_unique<QAction>("&Save As ...")},
     aSaveFile{std::make_unique<QAction>("&Save")},
@@ -68,30 +68,62 @@ void App::Item::File::open()
     const QString pathToFile = QFileDialog::getOpenFileName(mainWindow, "Open File Image",
                                                              QDir::homePath(),"*.bmp ;; *.png ;; *.jpg");
     if(pathToFile.contains("bmp")){
+        writeNoteAboutAction(QString("Open file: ") + pathToFile);
+        mainWindow->updateMessageInStatusBar(this);
         mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"bmp"));
+        mainWindow->setActivityTheWitgetsInEachObserver();
     }
     else if(pathToFile.contains("jpg")){
+        writeNoteAboutAction(QString("Open file: ") + pathToFile);
+        mainWindow->updateMessageInStatusBar(this);
         mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"jpg"));
+        mainWindow->setActivityTheWitgetsInEachObserver();
     }
     else if(pathToFile.contains("png")){
+        writeNoteAboutAction(QString("Open file: ") + pathToFile);
+        mainWindow->updateMessageInStatusBar(this);
         mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"png"));
+        mainWindow->setActivityTheWitgetsInEachObserver();
     }
 }
 
 void App::Item::File::save()
 {
     Fk::Image image = content->image();
+    QString format{image.toFormat()};
 
-    if(image.save(image.absolutlePathToFile(),image.toCharFormat()))
-        qDebug() << "File is success save";
-    else
-        qDebug() << "Cancel save a file";
+    if(format.contains("bmp"))
+        image.save(image.absolutlePathToFile(), "bmp");
+    else if(format.contains("png"))
+        image.save(image.absolutlePathToFile(), "png");
+    else if(format.contains("jpg"))
+        image.save(image.absolutlePathToFile(), "jpg");
 }
 
 void App::Item::File::saveAs()
 {
     winSaveImg->updateContent(content->image());
     winSaveImg->show();
+}
+
+void App::Item::File::setIndex(const qint32 newIndex)
+{
+    content->setIndex(newIndex);
+}
+
+void App::Item::File::setContent(const std::pair<QString,QString>& newContent)
+{
+    content->setContent(newContent);
+}
+
+void App::Item::File::updateContent(std::shared_ptr<Billboard> billboard)
+{
+    content->updateContent(billboard);
+}
+
+void App::Item::File::removeContent(const qint32 index)
+{
+    content->removeContent(index);
 }
 
 void App::Item::File::exit()
@@ -110,7 +142,7 @@ void App::Item::File::exit()
     if(choice == QMessageBox::Yes)
     {
         for(auto& image: content->images())
-            image.save(image.absolutlePathToFile(), image.toCharFormat());
+            image.save(image.absolutlePathToFile(), image.toFormat());
 
         QApplication::quit();
     }
@@ -120,7 +152,7 @@ void App::Item::File::exit()
     }
 }
 
-void App::Item::File::checkStatyActions()
+void App::Item::File::setActivityOfWidgets()
 {
     QVector<QString> icons;
     if(content->isBillboardEmpty()){

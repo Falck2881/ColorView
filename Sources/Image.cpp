@@ -4,8 +4,9 @@
 #include <QPixmap>
 #include <thread>
 #include <QPainter>
+#include <QByteArray>
 
-Fk::Image::Image():Billboard(this), charFormat(nullptr)
+Fk::Image::Image():Billboard(this)
 {
 
 }
@@ -13,19 +14,16 @@ Fk::Image::Image():Billboard(this), charFormat(nullptr)
 Fk::Image::Image(const Fk::Image& copyObj):Billboard(this)
 {
     this->image = copyObj.image;
-    this->charFormat = copyObj.charFormat;
     this->absPathToFile = copyObj.absPathToFile;
-    this->strFormat = copyObj.strFormat;
+    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 }
 
 Fk::Image::Image(Fk::Image&& copyObj):Billboard(this)
 {
     this->image = copyObj.image;
-    this->charFormat = copyObj.charFormat;
-    copyObj.charFormat = nullptr;
     this->absPathToFile = copyObj.absPathToFile;
-    this->strFormat = copyObj.strFormat;
+    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 }
 
@@ -35,10 +33,8 @@ Fk::Image& Fk::Image::operator=(Fk::Image &&copyObj)
         return *this;
 
     this->image = copyObj.image;
-    this->charFormat = copyObj.charFormat;
-    copyObj.charFormat = nullptr;
     this->absPathToFile = copyObj.absPathToFile;
-    this->strFormat = copyObj.strFormat;
+    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 
     return *this;
@@ -50,20 +46,18 @@ Fk::Image& Fk::Image::operator=(const Fk::Image &copyObj)
         return *this;
 
     this->image = copyObj.image;
-    this->charFormat = copyObj.charFormat;
     this->absPathToFile = copyObj.absPathToFile;
-    this->strFormat = copyObj.strFormat;
+    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 
     return *this;
 }
 
-Fk::Image::Image(const QString pathFile, const char* format):
+Fk::Image::Image(const QString pathFile, const QString format):
     Billboard(this),
-    image(pathFile,format),
-    charFormat(const_cast<char*>(format)),
+    image(pathFile,format.toLatin1().data()),
     absPathToFile(pathFile),
-    strFormat(format)
+    format(format)
 {
     image = image.scaled(QSize(1024,768),Qt::KeepAspectRatio);
     setAllNameColorsInSet();
@@ -106,12 +100,16 @@ void Fk::Image::setDepthColor(QImage::Format depthColor)
     setAllNameColorsInSet();
 }
 
-bool Fk::Image::save(const QString newAbsPathToFile,const char* newFormat)
+bool Fk::Image::save(const QString newAbsPathToFile, const QString newFormat)
 {
-    if(!newAbsPathToFile.contains(newFormat))
-        return image.save(newAbsPathToFile + "." + newFormat,newFormat,90);
-    else
+    if(newAbsPathToFile.contains(newFormat)){
         return image.save(newAbsPathToFile,nullptr,90);
+    }
+    else{
+        QByteArray arr{newFormat.toLatin1()};
+        return image.save(newAbsPathToFile + "." + newFormat, arr.data(), 90);
+    }
+
 }
 
 QPixmap Fk::Image::pixmap() const
@@ -159,14 +157,9 @@ QString Fk::Image::numberBitOnPix() const
     return QString::number(image.depth());
 }
 
-char* Fk::Image::toCharFormat() const
+QString Fk::Image::toFormat() const
 {
-    return charFormat;
-}
-
-QString Fk::Image::toStrFormat() const
-{
-    return strFormat;
+    return format;
 }
 
 QString Fk::Image::nameFile() const
@@ -178,7 +171,6 @@ QString Fk::Image::nameFile() const
 
     return fileName;
 }
-
 
 QString Fk::Image::absolutlePathToFile() const
 {

@@ -11,7 +11,7 @@ class Billboard
     public:
         virtual ~Billboard() = default;
         Fk::Image toImage() const;
-        virtual bool save(const QString newAbsPathToFile, const char* newFormats) = 0;
+        virtual bool save(const QString newAbsPathToFile, const QString newFormats) = 0;
     private:
         Billboard* const derivative;
     protected:
