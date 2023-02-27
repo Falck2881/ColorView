@@ -34,4 +34,5 @@ class ThreadProcessingImages: public QThread
         void returnProcessingImages(std::pair<QVector<Fk::Image>, NumbersThreads> processingImages);
 };
 
+
 #endif // THREADPROCESSINGIMAGE_H

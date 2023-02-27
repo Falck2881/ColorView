@@ -6,7 +6,7 @@
 #include "WgtFilter.h"
 #include "WgtFraming.h"
 #include "ContentItemImage.h"
-
+#include <memory>
 
 namespace App{
     class MainWindow;
@@ -14,9 +14,8 @@ namespace App{
 
 namespace App
 {
-namespace Item {
-
-
+namespace Item
+{
     class Image: public App::Base::Item
     {
         Q_OBJECT
@@ -24,18 +23,20 @@ namespace Item {
         public:
             explicit Image(App::MainWindow* const mainWin);
             QMenu* getMenu() const;
-            std::shared_ptr<Fk::Image> getImage() const;
+            std::shared_ptr<Fk::Image> getBillboard() const;
             void saveModifiedImage(QWidget* const widget);
-            void updateSubItems();
-            void startThreadsForProcessingImages();
+            void startThreads();
         private:
-            void checkStatyActions() override final;
+            void setActivityOfWidgets() override final;
+            void setContent(const std::pair<QString, QString> &content) override;
+            void updateContent(std::shared_ptr<Billboard> billboard) override;
+            void setIndex(const qint32 newIndex) override;
+            void removeContent(const qint32 index) override;
         private:
             void connect();
             void initializeSubItemDepth();
             void initializeSubItemImage();
-            void setPropertActions(bool value);
-            void setFlagsSubitems();
+            void setActivityTheWidgetsWhichProcessingBillboard();
         private slots:
             void showProperty();
             void changeFilters();
@@ -47,6 +48,7 @@ namespace Item {
         signals:
             void sourceImage(const Fk::Image& image);
         private:
+            std::shared_ptr<ContentItemImage> content;
             Fk::Image modifiedImage;
             std::unique_ptr<WinFrames> winFrames;
             std::unique_ptr<WinFilter> winFilter;

@@ -12,13 +12,22 @@ Fk::Allocation::Allocation(const std::pair<QString,QString>& newContent):
 
 std::unique_ptr<Billboard> Fk::Allocation::operator()()
 {
-    std::unique_ptr<Billboard> billbord;
+    std::unique_ptr<Billboard> billboard;
 
-            billbord = make();
+    try {
+        std::unique_ptr<Billboard> billboard;
 
-        return billbord;
+        if(checkContentPair())
+            return make();
 
-
+    }  catch (const std::logic_error& exce) {
+        qDebug() << exce.what();
+        content.first = QString(":/imgNotFound.png");
+        content.second = QString("png");
+        billboard = make();
+        throw;
+    }
+    return billboard;
 }
 
 bool Fk::Allocation::checkContentPair() const

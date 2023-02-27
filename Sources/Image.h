@@ -20,13 +20,13 @@ namespace Fk {
             Image(Fk::Image&& copyObj);
             Fk::Image& operator=(Fk::Image&& oldImage);
             Fk::Image& operator=(const Fk::Image& oldImage);
-            Image(const QString nameFile, const char* format = nullptr);
+            Image(const QString nameFile, const QString format);
             bool isNull() const;
             bool isHighQuality() const;
             bool is16BitsOnPixel() const;
             bool is8BitsOnPixel() const;
             void setDepthColor(QImage::Format depthColor);
-            bool save(const QString newAbsPathToFile,const char* newFormats) override;
+            bool save(const QString newAbsPathToFile, const QString newFormats) override;
             QPixmap pixmap() const;
             QColor pixel(qint32 x, qint32 y) const;
             void setPixelColor(qint32 x, qint32 y, QColor newColor);
@@ -36,8 +36,7 @@ namespace Fk {
             QString numberColor() const;
             QString sizeImgInByte() const;
             QString numberBitOnPix() const;
-            char* toCharFormat() const;
-            QString toStrFormat() const;
+            QString toFormat() const;
             QString nameFile() const;
             QString absolutlePathToFile() const;
             void scaled(const quint32 width, const quint32 hight);
@@ -46,9 +45,8 @@ namespace Fk {
             void setAllNameColorsInSet();
        private:
             QImage image;
-            char* charFormat;
             QString absPathToFile;
-            QString strFormat;
+            QString format;
             QSet<QString> setColors;
     };
 }

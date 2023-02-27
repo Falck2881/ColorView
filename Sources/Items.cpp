@@ -1,21 +1,11 @@
 #include "Items.h"
 
-App::Base::Item::Item(std::shared_ptr<Content> newContent):
-    content(newContent)
+QString App::Base::Item::messageAboutAction() const
 {
-
-}
-void App::Base::Item::setIndex(const qint32 newIndex)
-{
-    content->setIndex(newIndex);
+    return note;
 }
 
-void App::Base::Item::setContent(const std::pair<QString,QString>& newContent)
+void App::Base::Item::writeNoteAboutAction(const QString &newNote)
 {
-    content->setContent(newContent);
-}
-
-void App::Base::Item::updateContent(std::shared_ptr<Billboard> billboard)
-{
-    content->updateContent(billboard);
+    note = newNote;
 }

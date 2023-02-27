@@ -6,7 +6,7 @@
 #include <memory>
 #include <assert.h>
 #include "Image.h"
-#define NDEBUG
+//#define NDEBUG
 
 template<typename T>
 concept isBillboard = std::same_as<T, Billboard>;
@@ -23,6 +23,8 @@ namespace Modified
                 explicit History(std::shared_ptr<T> typeFile);
                 auto billboard() const;
                 void push_back(std::shared_ptr<T> typeFile);
+                void erase();
+                bool isEmpty() const;
                 auto last() const;
                 void redo();
                 void undo();
@@ -40,6 +42,15 @@ Modified::Billboard::History<T>::History(std::shared_ptr<T> typeFile):index(0)
 }
 
 template<isBillboard T>
+void Modified::Billboard::History<T>::erase()
+{
+    if(!historyEdit.isEmpty()){
+        historyEdit.erase(historyEdit.cbegin(),historyEdit.cend());
+        historyEdit.squeeze();
+    }
+}
+
+template<isBillboard T>
 auto Modified::Billboard::History<T>::billboard() const
 {
     assert(index >= 0);
@@ -51,6 +62,12 @@ void Modified::Billboard::History<T>::push_back(std::shared_ptr<T> typeFile)
 {
     historyEdit.push_back(typeFile);
     ++index;
+}
+
+template<isBillboard T>
+bool Modified::Billboard::History<T>::isEmpty() const
+{
+    return historyEdit.isEmpty() ? true : false;
 }
 
 template<isBillboard T>

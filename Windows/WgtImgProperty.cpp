@@ -1,6 +1,6 @@
 #include "WgtImgProperty.h"
 #include "Image.h"
-#include "./ui_WgtImgProperty.h"
+#include "ui_WgtImgProperty.h"
 #include <QBuffer>
 #include <QIODevice>
 
@@ -20,7 +20,7 @@ void WinImgProperty::setPropertyImage(const Fk::Image& image)
     ui->numsUseColors->setText(image.numberColor());
     ui->numBitOnPix->setText(image.numberBitOnPix());
     ui->sizeImgInByte->setText(image.sizeImgInByte());
-    ui->formatFile->setText(image.toStrFormat());
+    ui->formatFile->setText(image.toFormat());
     ui->nameFile->setText(image.nameFile());
 }
 

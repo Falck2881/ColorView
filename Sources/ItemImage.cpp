@@ -1,12 +1,11 @@
 #include "ItemImage.h"
 #include "MainWindow.h"
 #include "ThreadProcessingImages.h"
-#include "ContentItemImage.h"
 #include <QList>
 #include <algorithm>
 
 App::Item::Image::Image(App::MainWindow* const mainWin):
-    App::Base::Item(std::make_unique<ContentItemImage>()),
+    content(std::make_unique<ContentItemImage>()),
     winFrames{std::make_unique<WinFrames>(this)},
     winFilter{std::make_unique<WinFilter>(this)},
     winProperty{std::make_unique<WinImgProperty>()},
@@ -113,7 +112,7 @@ void App::Item::Image::changeDepth256Color()
     aDepth24Color->setChecked(false);
     aDepth32Color->setChecked(false);
 
-    mainWindow->changesItems(this);
+    mainWindow->changeContentOfItems(this);
 }
 
 void App::Item::Image::changeDepth16Color()
@@ -124,7 +123,7 @@ void App::Item::Image::changeDepth16Color()
     aDepth24Color->setChecked(false);
     aDepth32Color->setChecked(false);
 
-    mainWindow->changesItems(this);
+    mainWindow->changeContentOfItems(this);
 }
 
 void App::Item::Image::changeDepth24Color()
@@ -135,7 +134,7 @@ void App::Item::Image::changeDepth24Color()
     aDepth16Color->setChecked(false);
     aDepth32Color->setChecked(false);
 
-    mainWindow->changesItems(this);
+    mainWindow->changeContentOfItems(this);
 }
 
 void App::Item::Image::changeDepth32Color()
@@ -146,7 +145,7 @@ void App::Item::Image::changeDepth32Color()
     aDepth16Color->setChecked(false);
     aDepth24Color->setChecked(false);
 
-    mainWindow->changesItems(this);
+    mainWindow->changeContentOfItems(this);
 }
 
 void App::Item::Image::showProperty()
@@ -171,19 +170,38 @@ void App::Item::Image::changeFrame()
     winFrames->show();
 }
 
-void App::Item::Image::checkStatyActions()
+void App::Item::Image::setActivityOfWidgets()
 {
-    if(content->isBillboardEmpty())
-        setPropertActions(false);
-    else
-        setPropertActions(true);
+    if(content->isBillboardEmpty()){
+        mDepthColor->setEnabled(false);
+        aProperty->setEnabled(false);
+        aFilter->setEnabled(false);
+        aFrame->setEnabled(false);
+    }else{
+        mDepthColor->setEnabled(true);
+        aProperty->setEnabled(true);
+        setActivityTheWidgetsWhichProcessingBillboard();
+    }
+}
 
- }
-
-void App::Item::Image::setPropertActions(bool value)
+void App::Item::Image::setIndex(const qint32 newIndex)
 {
-    mDepthColor->setEnabled(value);
-    aProperty->setEnabled(value);
+    content->setIndex(newIndex);
+}
+
+void App::Item::Image::setContent(const std::pair<QString,QString>& newContent)
+{
+    content->setContent(newContent);
+}
+
+void App::Item::Image::updateContent(std::shared_ptr<Billboard> billboard)
+{
+    content->updateContent(billboard);
+}
+
+void App::Item::Image::removeContent(const qint32 index)
+{
+    content->removeContent(index);
 }
 
 QMenu* App::Item::Image::getMenu() const
@@ -195,27 +213,23 @@ void App::Item::Image::saveModifiedImage(QWidget *const widget)
 {
     if(widget == winFilter.get()){
         modifiedImage = winFilter->getModifiedImage();
-        mainWindow->changesItems(this);
+        writeNoteAboutAction(QString("Processing > ") + modifiedImage.nameFile());
+        mainWindow->changeContentOfItems(this);
     }
     else if(widget == winFrames.get())
     {
         modifiedImage = winFrames->getModifiedImage();
-        mainWindow->changesItems(this);
+        writeNoteAboutAction(QString("Processing > ") + modifiedImage.nameFile());
+        mainWindow->changeContentOfItems(this);
     }
 }
 
-std::shared_ptr<Fk::Image> App::Item::Image::getImage() const
+std::shared_ptr<Fk::Image> App::Item::Image::getBillboard() const
 {
     return std::make_shared<Fk::Image>(modifiedImage);
 }
 
-void App::Item::Image::updateSubItems()
-{
-    if(!content->isBillboardEmpty())
-        setFlagsSubitems();
-}
-
-void App::Item::Image::setFlagsSubitems()
+void App::Item::Image::setActivityTheWidgetsWhichProcessingBillboard()
 {
     Fk::Image image = content->image();
 
@@ -231,11 +245,10 @@ void App::Item::Image::setFlagsSubitems()
     }
 }
 
-void App::Item::Image::startThreadsForProcessingImages()
+void App::Item::Image::startThreads()
 {
-    ContentItemImage* const childContent = dynamic_cast<ContentItemImage* const>(content.get());
-    Fk::Image image = childContent->image();
+    Fk::Image image = content->image();
 
     if(image.isHighQuality())
-        childContent->startThreadsForProcessingImages(image);
+        content->startThreads(image);
 }

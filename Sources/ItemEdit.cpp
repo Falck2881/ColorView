@@ -1,11 +1,13 @@
 #include "ItemEdit.h"
 #include "MainWindow.h"
-#include "ContentItemEdit.h"
 #include <QKeySequence>
 #include <QVector>
+#include <QMessageBox>
+
+bool warrning(const Fk::Image& image, App::MainWindow* const mainWindow);
 
 App::Item::Edit::Edit(App::MainWindow* const mainWin):
-    App::Base::Item(std::make_unique<ContentItemEdit>()),
+    content(std::make_unique<ContentItemEdit>()),
     aUndo{std::make_unique<QAction>("&Undo")},
     aRedo{std::make_unique<QAction>("&Redo")},
     mEdit{std::make_unique<QMenu>("&Edit")},
@@ -45,7 +47,9 @@ void App::Item::Edit::undo()
     content->undoModification();
 
     currentBillboard = content->billboardInHistory();
-    mainWindow->changesItems(this);
+    writeNoteAboutAction(QString("Processing > ") + currentBillboard->toImage().nameFile());
+    mainWindow->updateMessageInStatusBar(this);
+    mainWindow->changeContentOfItems(this);
 }
 
 void App::Item::Edit::redo()
@@ -53,7 +57,24 @@ void App::Item::Edit::redo()
     content->redoModification();
 
     currentBillboard = content->billboardInHistory();
-    mainWindow->changesItems(this);
+    writeNoteAboutAction(QString("Processing > ") + currentBillboard->toImage().nameFile());
+    mainWindow->updateMessageInStatusBar(this);
+    mainWindow->changeContentOfItems(this);
+}
+
+void App::Item::Edit::setIndex(const qint32 newIndex)
+{
+    content->setIndex(newIndex);
+}
+
+void App::Item::Edit::setContent(const std::pair<QString,QString>& newContent)
+{
+    content->setContent(newContent);
+}
+
+void App::Item::Edit::removeContent(const qint32 index)
+{
+    content->removeContent(index);
 }
 
 std::shared_ptr<Billboard> App::Item::Edit::getBillboard() const
@@ -75,10 +96,37 @@ void App::Item::Edit::saveChangesInHistory(std::shared_ptr<Billboard> billboard)
 {
     content->saveModifiedOnBillboard(billboard);
     currentBillboard = content->lastModifiedOnBillboard();
-    mainWindow->changesItems(this);
+    writeNoteAboutAction(QString("Processing > ") + currentBillboard->toImage().nameFile());
+    mainWindow->updateMessageInStatusBar(this);
+    mainWindow->changeContentOfItems(this);
 }
 
-void App::Item::Edit::checkStatyActions()
+void App::Item::Edit::checkHistoryModified(const qint32 index)
+{
+    auto historys = content->atHistory(index);
+    Fk::Image image{historys.billboard().get()->toImage()};
+
+    if(warrning(image,mainWindow))
+        mainWindow->closePageAndSave();
+
+}
+
+bool warrning(const Fk::Image& image, App::MainWindow* const mainWindow)
+{
+    QString message("We want closed the file: " + image.nameFile() + "." +
+                    "Do you save the modification of file.");
+
+    QMessageBox messageBox(QMessageBox::Question, "Save ?", message,
+                           QMessageBox::No|QMessageBox::Save, mainWindow);
+    quint32 choice = messageBox.exec();
+
+    if(choice == QMessageBox::Save)
+        return true;
+    else
+        return false;
+}
+
+void App::Item::Edit::setActivityOfWidgets()
 {
     QVector<QString> icons;
 
