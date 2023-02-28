@@ -34,6 +34,7 @@ namespace App::Item
             void initializeDialogWindow();
             void initializeEachAction();
             void setPropertyActions(bool value, const QVector<QString>& icons);
+            QString getPathToFile() const;
         signals:
             void openFile(const QString&);
         private slots:
