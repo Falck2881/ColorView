@@ -12,9 +12,9 @@ void Content::updateContent(std::shared_ptr<Billboard> board)
     billboards.replace(index,board);
 }
 
-void Content::setContent(const std::pair<QString,QString>& newContent)
+void Content::setContent(const QString& content)
 {
-    Fk::Allocation makeBillboardImage(newContent);
+    Fk::Allocation makeBillboardImage(content);
     billboards.push_back(makeBillboardImage());
 }
 

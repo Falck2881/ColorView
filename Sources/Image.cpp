@@ -5,6 +5,7 @@
 #include <thread>
 #include <QPainter>
 #include <QByteArray>
+#include <QImageReader>
 
 Fk::Image::Image():Billboard(this)
 {
@@ -15,7 +16,6 @@ Fk::Image::Image(const Fk::Image& copyObj):Billboard(this)
 {
     this->image = copyObj.image;
     this->absPathToFile = copyObj.absPathToFile;
-    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 }
 
@@ -23,7 +23,6 @@ Fk::Image::Image(Fk::Image&& copyObj):Billboard(this)
 {
     this->image = copyObj.image;
     this->absPathToFile = copyObj.absPathToFile;
-    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 }
 
@@ -34,7 +33,6 @@ Fk::Image& Fk::Image::operator=(Fk::Image &&copyObj)
 
     this->image = copyObj.image;
     this->absPathToFile = copyObj.absPathToFile;
-    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 
     return *this;
@@ -47,17 +45,15 @@ Fk::Image& Fk::Image::operator=(const Fk::Image &copyObj)
 
     this->image = copyObj.image;
     this->absPathToFile = copyObj.absPathToFile;
-    this->format = copyObj.format;
     this->setColors = copyObj.setColors;
 
     return *this;
 }
 
-Fk::Image::Image(const QString pathFile, const QString format):
+Fk::Image::Image(const QString pathFile):
     Billboard(this),
-    image(pathFile,format.toLatin1().data()),
-    absPathToFile(pathFile),
-    format(format)
+    image(pathFile,nullptr),
+    absPathToFile(pathFile)
 {
     image = image.scaled(QSize(1024,768),Qt::KeepAspectRatio);
     setAllNameColorsInSet();
@@ -159,7 +155,8 @@ QString Fk::Image::numberBitOnPix() const
 
 QString Fk::Image::toFormat() const
 {
-    return format;
+    QByteArray byteFormat{QImageReader::imageFormat(absPathToFile)};
+    return QString(byteFormat);
 }
 
 QString Fk::Image::nameFile() const

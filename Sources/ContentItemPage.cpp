@@ -14,7 +14,7 @@ void ContentItemPage::updateContent(std::shared_ptr<Billboard> billboard)
     itemPage->updatePage(billboard->toImage());
 }
 
-void ContentItemPage::setContent(const std::pair<QString,QString>& newContent)
+void ContentItemPage::setContent(const QString& newContent)
 {
     checkStartingPage();
     createBillboardForPage(newContent);
@@ -28,7 +28,7 @@ void ContentItemPage::checkStartingPage()
     }
 }
 
-void ContentItemPage::createBillboardForPage(const std::pair<QString,QString>& newContent)
+void ContentItemPage::createBillboardForPage(const QString& newContent)
 {
     Fk::Allocation makeBillboardImage(newContent);
     auto billboard{makeBillboardImage()};

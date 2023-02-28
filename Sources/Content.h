@@ -16,7 +16,7 @@ class Content: public QObject
     public:
         Content():index(0){}
         virtual ~Content() = default;
-        virtual void setContent(const std::pair<QString,QString>&);
+        virtual void setContent(const QString& content);
         virtual void updateContent(std::shared_ptr<Billboard>);
         virtual void removeContent(const qint32 index);
         void setIndex(const qint32 index);

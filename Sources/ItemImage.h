@@ -28,7 +28,7 @@ namespace Item
             void startThreads();
         private:
             void setActivityOfWidgets() override final;
-            void setContent(const std::pair<QString, QString> &content) override;
+            void setContent(const QString& content) override;
             void updateContent(std::shared_ptr<Billboard> billboard) override;
             void setIndex(const qint32 newIndex) override;
             void removeContent(const qint32 index) override;

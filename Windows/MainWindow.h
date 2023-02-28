@@ -26,7 +26,7 @@ namespace App
         public:
             MainWindow();
             void appand(App::Base::Item* const observer);
-            void setBillboardInEachObserver(const std::pair<QString,QString>& content);
+            void setBillboardInEachObserver(const QString& newContent);
             void changeIndex(const qint32 newIndex);
             void updateBillboardInEachObserver(std::shared_ptr<Billboard> billboard);
             void changeContentOfItems(Base::Item* const item);

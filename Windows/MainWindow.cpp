@@ -56,10 +56,10 @@ void App::MainWindow::appand(Base::Item *const observer)
 }
 
 
-void App::MainWindow::setBillboardInEachObserver(const std::pair<QString,QString>& content)
+void App::MainWindow::setBillboardInEachObserver(const QString& newContent)
 {
     for(auto obs: observers)
-        obs->setContent(content);
+        obs->setContent(newContent);
 }
 
 void App::MainWindow::changeIndex(const qint32 newIndex)

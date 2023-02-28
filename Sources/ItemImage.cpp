@@ -189,7 +189,7 @@ void App::Item::Image::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Item::Image::setContent(const std::pair<QString,QString>& newContent)
+void App::Item::Image::setContent(const QString& newContent)
 {
     content->setContent(newContent);
 }
