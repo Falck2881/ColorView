@@ -42,10 +42,10 @@ void App::MainWindow::addAllItemsInManinWindow()
 
 void App::MainWindow::setGeometryScreen()
 {
-    auto screen = QGuiApplication::primaryScreen();
-    quint32 width = screen->size().width();
-    quint32 height = screen->size().height();
-    this->setGeometry(0,0,width,height);
+    auto screen = QGuiApplication::primaryScreen()->availableGeometry().size();
+    quint32 width = screen.width() * 0.9;
+    quint32 height = screen.height() * 0.9;
+    this->setGeometry(50,50,width,height);
     this->setMaximumSize(width,height);
     this->setMinimumSize(800,600);
 }
