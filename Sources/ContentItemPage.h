@@ -12,10 +12,10 @@ class ContentItemPage: public Content
     public:
         ContentItemPage(App::Item::Page* const itemPage);
         void updateContent(std::shared_ptr<Billboard> billboard) override;
-        void setContent(const std::pair<QString,QString>& newContent) override;
+        void setContent(const QString& nameFile) override;
     private:
         void checkStartingPage();
-        void createBillboardForPage(const std::pair<QString,QString>& newContent);
+        void createBillboardForPage(const QString& newContent);
     private:
         App::Item::Page* const itemPage;
 

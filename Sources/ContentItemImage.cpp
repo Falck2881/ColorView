@@ -105,7 +105,7 @@ void ContentItemImage::removeOldsProcessingBillboards()
     }
 }
 
-void ContentItemImage::setContent(const std::pair<QString,QString>& newContent)
+void ContentItemImage::setContent(const QString& newContent)
 {
     Fk::Allocation makeBillboardImage(newContent);
     billboards.push_back(makeBillboardImage());

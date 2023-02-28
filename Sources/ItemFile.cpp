@@ -67,24 +67,11 @@ void App::Item::File::open()
 {
     const QString pathToFile = QFileDialog::getOpenFileName(mainWindow, "Open File Image",
                                                              QDir::homePath(),"*.bmp ;; *.png ;; *.jpg");
-    if(pathToFile.contains("bmp")){
-        writeNoteAboutAction(QString("Open file: ") + pathToFile);
-        mainWindow->updateMessageInStatusBar(this);
-        mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"bmp"));
-        mainWindow->setActivityTheWitgetsInEachObserver();
-    }
-    else if(pathToFile.contains("jpg")){
-        writeNoteAboutAction(QString("Open file: ") + pathToFile);
-        mainWindow->updateMessageInStatusBar(this);
-        mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"jpg"));
-        mainWindow->setActivityTheWitgetsInEachObserver();
-    }
-    else if(pathToFile.contains("png")){
-        writeNoteAboutAction(QString("Open file: ") + pathToFile);
-        mainWindow->updateMessageInStatusBar(this);
-        mainWindow->setBillboardInEachObserver(std::make_pair(pathToFile,"png"));
-        mainWindow->setActivityTheWitgetsInEachObserver();
-    }
+
+    writeNoteAboutAction(QString("Open file: ") + pathToFile);
+    mainWindow->updateMessageInStatusBar(this);
+    mainWindow->setBillboardInEachObserver(pathToFile);
+    mainWindow->setActivityTheWitgetsInEachObserver();
 }
 
 void App::Item::File::save()
@@ -98,6 +85,8 @@ void App::Item::File::save()
         image.save(image.absolutlePathToFile(), "png");
     else if(format.contains("jpg"))
         image.save(image.absolutlePathToFile(), "jpg");
+    else if(format.contains("jpeg"))
+        image.save(image.absolutlePathToFile(), "jpeg");
 }
 
 void App::Item::File::saveAs()
@@ -111,7 +100,7 @@ void App::Item::File::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Item::File::setContent(const std::pair<QString,QString>& newContent)
+void App::Item::File::setContent(const QString& newContent)
 {
     content->setContent(newContent);
 }

@@ -63,7 +63,7 @@ std::shared_ptr<Billboard> ContentItemEdit::lastModifiedOnBillboard() const
     return history[index].last();
 }
 
-void ContentItemEdit::setContent(const std::pair<QString,QString>& newContent)
+void ContentItemEdit::setContent(const QString& newContent)
 {
     Fk::Allocation makeBillboardImage(newContent);
     history.push_back(Modified::Billboard::History<Billboard>{makeBillboardImage()});

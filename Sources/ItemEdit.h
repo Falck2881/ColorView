@@ -24,7 +24,7 @@ namespace App::Item
             std::shared_ptr<Billboard> getBillboard() const;
         private:
             void setActivityOfWidgets() override final;
-            void setContent(const std::pair<QString, QString> &content) override;
+            void setContent(const QString& content) override;
             void removeContent(const qint32 index) override;
             void setIndex(const qint32 newIndex) override;
         private:

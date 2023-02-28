@@ -16,7 +16,7 @@ class ContentItemEdit
         std::shared_ptr<Billboard> billboardInHistory() const;
         std::shared_ptr<Billboard> lastModifiedOnBillboard() const;
         void saveModifiedOnBillboard(std::shared_ptr<Billboard>);
-        void setContent(const std::pair<QString,QString>& newContent);
+        void setContent(const QString& newContent);
         void removeContent(const qint32 index);
     private:
         QVector<Modified::Billboard::History<Billboard>> history;

@@ -11,7 +11,7 @@ class ContentItemImage: public Content
 
     public:
         ContentItemImage();
-        void setContent(const std::pair<QString,QString>& newContent) override;
+        void setContent(const QString& newContent) override;
         void updateContent(std::shared_ptr<Billboard> billboard) override;
         void startThreads(const Fk::Image& image);
         QVector<Fk::Image> collageOfImages() const;

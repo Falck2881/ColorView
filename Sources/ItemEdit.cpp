@@ -67,7 +67,7 @@ void App::Item::Edit::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Item::Edit::setContent(const std::pair<QString,QString>& newContent)
+void App::Item::Edit::setContent(const QString& newContent)
 {
     content->setContent(newContent);
 }
@@ -113,10 +113,10 @@ void App::Item::Edit::checkHistoryModified(const qint32 index)
 
 bool warrning(const Fk::Image& image, App::MainWindow* const mainWindow)
 {
-    QString message("We want closed the file: " + image.nameFile() + "." +
-                    "Do you save the modification of file.");
+    QString message("We want closed the file: " + image.nameFile() + ".\n" +
+                    "Save the modification of file ?");
 
-    QMessageBox messageBox(QMessageBox::Question, "Save ?", message,
+    QMessageBox messageBox(QMessageBox::Question, "Save Modification?", message,
                            QMessageBox::No|QMessageBox::Save, mainWindow);
     quint32 choice = messageBox.exec();
 

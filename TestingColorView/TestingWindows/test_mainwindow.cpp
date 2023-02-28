@@ -18,7 +18,7 @@ TEST(MainWindow, setBoardInEachObserver)
 {
     std::unique_ptr<App::MainWindow> mainWindow{std::make_unique<App::MainWindow>()};
 
-    ASSERT_NO_THROW(mainWindow->setBillboardInEachObserver(std::make_pair<QString,QString>(":/imgNotFound.png", "png")));
+    ASSERT_NO_THROW(mainWindow->setBillboardInEachObserver(":/imgNotFound.png"));
 }
 
 TEST(MainWindow, changeIndexOnFile)
