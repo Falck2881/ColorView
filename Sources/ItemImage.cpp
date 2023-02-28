@@ -61,38 +61,14 @@ void App::Item::Image::connect()
     QObject::connect(aDepth256Color.get(), &QAction::triggered,
                      this, &App::Item::Image::changeDepth256Color);
 
-    QObject::connect(aDepth256Color.get(), &QAction::triggered,
-                     aFilter.get(), &QAction::setDisabled);
-
-    QObject::connect(aDepth256Color.get(), &QAction::triggered,
-                     aFrame.get(), &QAction::setDisabled);
-
     QObject::connect(aDepth16Color.get(), &QAction::triggered,
                      this, &App::Item::Image::changeDepth16Color);
-
-    QObject::connect(aDepth16Color.get(), &QAction::triggered,
-                     aFilter.get(), &QAction::setDisabled);
-
-    QObject::connect(aDepth16Color.get(), &QAction::triggered,
-                     aFrame.get(), &QAction::setEnabled);
 
     QObject::connect(aDepth24Color.get(), &QAction::triggered,
                      this, &App::Item::Image::changeDepth24Color);
 
-    QObject::connect(aDepth24Color.get(), &QAction::triggered,
-                     aFilter.get(), &QAction::setEnabled);
-
-    QObject::connect(aDepth24Color.get(), &QAction::triggered,
-                     aFrame.get(), &QAction::setEnabled);
-
     QObject::connect(aDepth32Color.get(), &QAction::triggered,
                      this, &App::Item::Image::changeDepth32Color);
-
-    QObject::connect(aDepth32Color.get(), &QAction::triggered,
-                     aFilter.get(), &QAction::setEnabled);
-
-    QObject::connect(aDepth32Color.get(), &QAction::triggered,
-                     aFrame.get(), &QAction::setEnabled);
 
     QObject::connect(aProperty.get(), &QAction::triggered,
                      this, &App::Item::Image::showProperty);
@@ -107,45 +83,55 @@ void App::Item::Image::connect()
 void App::Item::Image::changeDepth256Color()
 {
     modifiedImage = content->image();
-    modifiedImage.setDepthColor(QImage::Format_Indexed8);
-    aDepth16Color->setChecked(false);
-    aDepth24Color->setChecked(false);
-    aDepth32Color->setChecked(false);
 
-    mainWindow->changeContentOfItems(this);
+    if(!modifiedImage.is8BitsOnPixel()){
+        modifiedImage.setDepthColor(QImage::Format_Indexed8);
+        aDepth16Color->setChecked(false);
+        aDepth24Color->setChecked(false);
+        aDepth32Color->setChecked(false);
+
+        mainWindow->changeContentOfItems(this);
+    }
 }
 
 void App::Item::Image::changeDepth16Color()
 {
     modifiedImage = content->image();
-    modifiedImage.setDepthColor(QImage::Format_RGB16);
-    aDepth256Color->setChecked(false);
-    aDepth24Color->setChecked(false);
-    aDepth32Color->setChecked(false);
 
-    mainWindow->changeContentOfItems(this);
+    if(!modifiedImage.is16BitsOnPixel()){
+        modifiedImage.setDepthColor(QImage::Format_RGB16);
+        aDepth256Color->setChecked(false);
+        aDepth24Color->setChecked(false);
+        aDepth32Color->setChecked(false);
+
+        mainWindow->changeContentOfItems(this);
+    }
 }
 
 void App::Item::Image::changeDepth24Color()
 {
     modifiedImage = content->image();
-    modifiedImage.setDepthColor(QImage::Format_RGB888);
-    aDepth256Color->setChecked(false);
-    aDepth16Color->setChecked(false);
-    aDepth32Color->setChecked(false);
+    if(!modifiedImage.isHighQuality()){
+        modifiedImage.setDepthColor(QImage::Format_RGB888);
+        aDepth256Color->setChecked(false);
+        aDepth16Color->setChecked(false);
+        aDepth32Color->setChecked(false);
 
-    mainWindow->changeContentOfItems(this);
+        mainWindow->changeContentOfItems(this);
+    }
 }
 
 void App::Item::Image::changeDepth32Color()
 {
     modifiedImage = content->image();
-    modifiedImage.setDepthColor(QImage::Format_RGB32);
-    aDepth256Color->setChecked(false);
-    aDepth16Color->setChecked(false);
-    aDepth24Color->setChecked(false);
+    if(!modifiedImage.isHighQuality()){
+        modifiedImage.setDepthColor(QImage::Format_RGB32);
+        aDepth256Color->setChecked(false);
+        aDepth16Color->setChecked(false);
+        aDepth24Color->setChecked(false);
 
-    mainWindow->changeContentOfItems(this);
+        mainWindow->changeContentOfItems(this);
+    }
 }
 
 void App::Item::Image::showProperty()
