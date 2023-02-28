@@ -65,13 +65,19 @@ void App::Item::File::connectWithCommand()
 
 void App::Item::File::open()
 {
-    const QString pathToFile = QFileDialog::getOpenFileName(mainWindow, "Open File Image",
-                                                             QDir::homePath(),"*.bmp ;; *.png ;; *.jpg");
+    const QString pathToFile = getPathToFile();
+    if(pathToFile != ""){
+        writeNoteAboutAction(QString("Open file: ") + pathToFile);
+        mainWindow->updateMessageInStatusBar(this);
+        mainWindow->setBillboardInEachObserver(pathToFile);
+        mainWindow->setActivityTheWitgetsInEachObserver();
+    }
+}
 
-    writeNoteAboutAction(QString("Open file: ") + pathToFile);
-    mainWindow->updateMessageInStatusBar(this);
-    mainWindow->setBillboardInEachObserver(pathToFile);
-    mainWindow->setActivityTheWitgetsInEachObserver();
+QString App::Item::File::getPathToFile() const
+{
+    return QFileDialog::getOpenFileName(mainWindow, "Open File Image",
+                                        QDir::homePath(),"*.bmp *.png *.jpg");
 }
 
 void App::Item::File::save()
