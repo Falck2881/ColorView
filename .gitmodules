@@ -1,3 +1,3 @@
-[submodule "libqpcx"]
-	path = libqpcx
-	url = https://github.com/roniemartinez/libqpcx.git
+[submodule "libpcx"]
+	path = libpcx
+	url = https://github.com/Falck2881/libqpcx.git
