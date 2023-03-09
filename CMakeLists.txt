@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(libqpcx)
+add_subdirectory(libpcx)
 find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui)
 
 qt_add_resources(IMG "${CMAKE_CURRENT_SOURCE_DIR}/Image/Img.qrc")
