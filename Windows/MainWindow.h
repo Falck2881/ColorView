@@ -6,6 +6,7 @@
 #include <QList>
 #include <QMovie>
 #include <QLabel>
+#include <QSplitter>
 #include "ItemFile.h"
 #include "ItemEdit.h"
 #include "ItemPage.h"
@@ -47,7 +48,6 @@ namespace App
             std::unique_ptr<App::Item::Image> itemImage;
             std::unique_ptr<App::Item::Page> itemPage;
             QList<App::Base::Item*> observers;
-            std::unique_ptr<QLabel> frame;
     };
 
 }

@@ -40,8 +40,6 @@ void App::Item::Page::connectWithCommand()
 void App::Item::Page::switchPage()
 {
     if(checkIndexOnPage()){
-        writeNoteAboutAction(QString("Switching on page: ") + QString::number(tabWidget->currentIndex()));
-        mainWindow->updateMessageInStatusBar(this);
         notifyAllColleagues();
         finishTheJob();
     }

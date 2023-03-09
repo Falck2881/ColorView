@@ -37,6 +37,7 @@ namespace Item
             void initializeSubItemDepth();
             void initializeSubItemImage();
             void setActivityTheWidgetsWhichProcessingBillboard();
+            void notifyMainWindow(const QString& message);
         private slots:
             void showProperty();
             void changeFilters();

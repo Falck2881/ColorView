@@ -31,6 +31,7 @@ namespace App::Item
             void initializeEachAction();
             void connectWithCommand();
             void setPropertyActions(bool value, const QVector<QString>& icons);
+            void notifyMainWindow(const QString& message);
         private slots:
             void undo();
             void redo();

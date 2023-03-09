@@ -74,19 +74,24 @@ bool Fk::Image::isNull() const
     return image.isNull();
 }
 
-bool Fk::Image::isHighQuality() const
+bool Fk::Image::is32BitsOnPixel() const
 {
-    return numberBitOnPix() == "24" || numberBitOnPix() == "32" ? true : false;
+    return numberBitOnPix() == "32";
+}
+
+bool Fk::Image::is24BitsOnPixel() const
+{
+    return numberBitOnPix() == "24";
 }
 
 bool Fk::Image::is16BitsOnPixel() const
 {
-    return numberBitOnPix() == "16" ? true : false;
+    return numberBitOnPix() == "16";
 }
 
 bool Fk::Image::is8BitsOnPixel() const
 {
-    return numberBitOnPix() == "8" ? true : false;
+    return numberBitOnPix() == "8";
 }
 
 void Fk::Image::setDepthColor(QImage::Format depthColor)
