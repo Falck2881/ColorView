@@ -77,7 +77,7 @@ void App::Item::File::open()
 QString App::Item::File::getPathToFile() const
 {
     return QFileDialog::getOpenFileName(mainWindow, "Open File Image",
-                                        QDir::homePath(),"*.bmp *.png *.jpg");
+                                        QDir::homePath(),"*.bmp *.png *.jpg *.pcx");
 }
 
 void App::Item::File::save()
@@ -93,6 +93,8 @@ void App::Item::File::save()
         image.save(image.absolutlePathToFile(), "jpg");
     else if(format.contains("jpeg"))
         image.save(image.absolutlePathToFile(), "jpeg");
+    else if(format.contains("pcx"))
+        image.save(image.absolutlePathToFile(), "pcx");
 }
 
 void App::Item::File::saveAs()

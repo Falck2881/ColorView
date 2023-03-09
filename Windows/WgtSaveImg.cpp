@@ -68,7 +68,7 @@ void WinSaveImg::save()
 {
     QString newFormat;
     const QString newAbsPathToFile = QFileDialog::getSaveFileName(this, "Save As", QDir::homePath(),
-                                                                  "*.bmp ;; *.png ;; *.jpg", &newFormat);
+                                                                  "*.bmp ;; *.png ;; *.jpg ;; *.pcx", &newFormat);
 
     if(newFormat.contains("bmp"))
         currentImage.save(newAbsPathToFile, "bmp");
@@ -78,6 +78,8 @@ void WinSaveImg::save()
         currentImage.save(newAbsPathToFile, "jpg");
     else if(newFormat.contains("jpeg"))
         currentImage.save(newAbsPathToFile, "jpeg");
+    else if(newFormat.contains("pcx"))
+        currentImage.save(newAbsPathToFile, "pcx");
 }
 
 
