@@ -22,7 +22,8 @@ namespace Fk {
             Fk::Image& operator=(const Fk::Image& oldImage);
             Image(const QString nameFile);
             bool isNull() const;
-            bool isHighQuality() const;
+            bool is32BitsOnPixel() const;
+            bool is24BitsOnPixel() const;
             bool is16BitsOnPixel() const;
             bool is8BitsOnPixel() const;
             void setDepthColor(QImage::Format depthColor);

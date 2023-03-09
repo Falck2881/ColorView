@@ -116,7 +116,7 @@ void ContentItemImage::updateContent(std::shared_ptr<Billboard> billboard)
     replaceBillboard(billboard);
     Fk::Image currImage = image();
 
-    if(currImage.isHighQuality())
+    if(currImage.is24BitsOnPixel() || currImage.is32BitsOnPixel())
         startThreads(currImage);
 }
 

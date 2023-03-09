@@ -3,9 +3,9 @@
 #include <QGuiApplication>
 #include <QScreen>
 #include <QStatusBar>
+#include <QSplitterHandle>
 
-App::MainWindow::MainWindow():
-    frame{std::make_unique<QLabel>()}
+App::MainWindow::MainWindow()
 {
    initializeMembersOfClass();
 
@@ -54,7 +54,6 @@ void App::MainWindow::appand(Base::Item *const observer)
 {
     observers.push_back(observer);
 }
-
 
 void App::MainWindow::setBillboardInEachObserver(const QString& newContent)
 {
@@ -123,12 +122,10 @@ bool App::MainWindow::observersExist() const
 
 void App::MainWindow::updateMessageInStatusBar(App::Base::Item* const item)
 {
-    if(item == itemFile.get())
-        statusBar()->showMessage(itemFile->messageAboutAction(), 1800);
-    else if(item == itemEdit.get())
-        statusBar()->showMessage(itemEdit->messageAboutAction(), 1800);
+    if(item == itemEdit.get())
+        statusBar()->showMessage(itemEdit->messageAboutAction(), 2800);
     else if(item == itemImage.get())
-        statusBar()->showMessage(itemImage->messageAboutAction(), 1800);
+        statusBar()->showMessage(itemImage->messageAboutAction(), 2800);
     else if(item == itemPage.get())
-        statusBar()->showMessage(itemPage->messageAboutAction(), 1800);
+        statusBar()->showMessage(itemPage->messageAboutAction(), 2800);
 }
