@@ -67,8 +67,6 @@ void App::Item::File::open()
 {
     const QString pathToFile = getPathToFile();
     if(pathToFile != ""){
-        writeNoteAboutAction(QString("Open file: ") + pathToFile);
-        mainWindow->updateMessageInStatusBar(this);
         mainWindow->setBillboardInEachObserver(pathToFile);
         mainWindow->setActivityTheWitgetsInEachObserver();
     }
@@ -77,8 +75,10 @@ void App::Item::File::open()
 QString App::Item::File::getPathToFile() const
 {
     return QFileDialog::getOpenFileName(mainWindow, "Open File Image",
-                                        QDir::homePath(),"*.bmp *.png *.jpg *.pcx");
+                                        QDir::homePath(),"*.bmp *.png *.jpg *.jpeg *.pcx");
 }
+
+void messageWhenSaveIntoPCXFormat(QWidget* const parrent);
 
 void App::Item::File::save()
 {
@@ -94,7 +94,18 @@ void App::Item::File::save()
     else if(format.contains("jpeg"))
         image.save(image.absolutlePathToFile(), "jpeg");
     else if(format.contains("pcx"))
-        image.save(image.absolutlePathToFile(), "pcx");
+        messageWhenSaveIntoPCXFormat(mainWindow);
+}
+
+void messageWhenSaveIntoPCXFormat(QWidget* const parrent)
+{
+    QString message("Sorry image in format 'pcx' cannot \n"
+                    "       save in that application.   \n"
+                    "You can save image in other format:\n"
+                    "          BMP,JPG,JPEG,PNG         \n");
+    QMessageBox messageBox(QMessageBox::Question,"Save",message,QMessageBox::Ok,parrent);
+
+    messageBox.exec();
 }
 
 void App::Item::File::saveAs()

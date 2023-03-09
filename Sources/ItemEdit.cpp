@@ -47,9 +47,7 @@ void App::Item::Edit::undo()
     content->undoModification();
 
     currentBillboard = content->billboardInHistory();
-    writeNoteAboutAction(QString("Processing > ") + currentBillboard->toImage().nameFile());
-    mainWindow->updateMessageInStatusBar(this);
-    mainWindow->changeContentOfItems(this);
+    notifyMainWindow(QString("Wait, goes update :") + currentBillboard->toImage().nameFile());
 }
 
 void App::Item::Edit::redo()
@@ -57,7 +55,12 @@ void App::Item::Edit::redo()
     content->redoModification();
 
     currentBillboard = content->billboardInHistory();
-    writeNoteAboutAction(QString("Processing > ") + currentBillboard->toImage().nameFile());
+    notifyMainWindow(QString("Wait, goes update :") + currentBillboard->toImage().nameFile());
+}
+
+void App::Item::Edit::notifyMainWindow(const QString &message)
+{
+    writeNoteAboutAction(message);
     mainWindow->updateMessageInStatusBar(this);
     mainWindow->changeContentOfItems(this);
 }
@@ -96,9 +99,7 @@ void App::Item::Edit::saveChangesInHistory(std::shared_ptr<Billboard> billboard)
 {
     content->saveModifiedOnBillboard(billboard);
     currentBillboard = content->lastModifiedOnBillboard();
-    writeNoteAboutAction(QString("Processing > ") + currentBillboard->toImage().nameFile());
-    mainWindow->updateMessageInStatusBar(this);
-    mainWindow->changeContentOfItems(this);
+    notifyMainWindow(QString("Wait, goes update :") + currentBillboard->toImage().nameFile());
 }
 
 void App::Item::Edit::checkHistoryModified(const qint32 index)
@@ -113,7 +114,7 @@ void App::Item::Edit::checkHistoryModified(const qint32 index)
 
 bool warrning(const Fk::Image& image, App::MainWindow* const mainWindow)
 {
-    QString message("We want closed the file: " + image.nameFile() + ".\n" +
+    QString message("You want closed the file: " + image.nameFile() + ".\n" +
                     "Save the modification of file ?");
 
     QMessageBox messageBox(QMessageBox::Question, "Save Modification?", message,

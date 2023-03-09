@@ -84,54 +84,55 @@ void App::Item::Image::changeDepth256Color()
 {
     modifiedImage = content->image();
 
-    if(!modifiedImage.is8BitsOnPixel()){
-        modifiedImage.setDepthColor(QImage::Format_Indexed8);
-        aDepth16Color->setChecked(false);
-        aDepth24Color->setChecked(false);
-        aDepth32Color->setChecked(false);
+    modifiedImage.setDepthColor(QImage::Format_Indexed8);
+    aDepth16Color->setChecked(false);
+    aDepth24Color->setChecked(false);
+    aDepth32Color->setChecked(false);
 
-        mainWindow->changeContentOfItems(this);
-    }
+    notifyMainWindow(QString("Wait, goes update :") + modifiedImage.nameFile());
 }
 
 void App::Item::Image::changeDepth16Color()
 {
     modifiedImage = content->image();
 
-    if(!modifiedImage.is16BitsOnPixel()){
-        modifiedImage.setDepthColor(QImage::Format_RGB16);
-        aDepth256Color->setChecked(false);
-        aDepth24Color->setChecked(false);
-        aDepth32Color->setChecked(false);
+    modifiedImage.setDepthColor(QImage::Format_RGB16);
+    aDepth256Color->setChecked(false);
+    aDepth24Color->setChecked(false);
+    aDepth32Color->setChecked(false);
 
-        mainWindow->changeContentOfItems(this);
-    }
+    notifyMainWindow(QString("Wait, goes update :") + modifiedImage.nameFile());
 }
 
 void App::Item::Image::changeDepth24Color()
 {
     modifiedImage = content->image();
-    if(!modifiedImage.isHighQuality()){
-        modifiedImage.setDepthColor(QImage::Format_RGB888);
-        aDepth256Color->setChecked(false);
-        aDepth16Color->setChecked(false);
-        aDepth32Color->setChecked(false);
 
-        mainWindow->changeContentOfItems(this);
-    }
+    modifiedImage.setDepthColor(QImage::Format_RGB888);
+    aDepth256Color->setChecked(false);
+    aDepth16Color->setChecked(false);
+    aDepth32Color->setChecked(false);
+
+    notifyMainWindow(QString("Wait, goes update :") + modifiedImage.nameFile());
 }
 
 void App::Item::Image::changeDepth32Color()
 {
     modifiedImage = content->image();
-    if(!modifiedImage.isHighQuality()){
-        modifiedImage.setDepthColor(QImage::Format_RGB32);
-        aDepth256Color->setChecked(false);
-        aDepth16Color->setChecked(false);
-        aDepth24Color->setChecked(false);
 
-        mainWindow->changeContentOfItems(this);
-    }
+    modifiedImage.setDepthColor(QImage::Format_RGB32);
+    aDepth256Color->setChecked(false);
+    aDepth16Color->setChecked(false);
+    aDepth24Color->setChecked(false);
+
+    notifyMainWindow(QString("Wait, goes update :") + modifiedImage.nameFile());
+}
+
+void App::Item::Image::notifyMainWindow(const QString &message)
+{
+    writeNoteAboutAction(message);
+    mainWindow->updateMessageInStatusBar(this);
+    mainWindow->changeContentOfItems(this);
 }
 
 void App::Item::Image::showProperty()
@@ -199,14 +200,11 @@ void App::Item::Image::saveModifiedImage(QWidget *const widget)
 {
     if(widget == winFilter.get()){
         modifiedImage = winFilter->getModifiedImage();
-        writeNoteAboutAction(QString("Processing > ") + modifiedImage.nameFile());
-        mainWindow->changeContentOfItems(this);
+        notifyMainWindow(QString("Wait, goes update :") + modifiedImage.nameFile());
     }
-    else if(widget == winFrames.get())
-    {
+    else if(widget == winFrames.get()){
         modifiedImage = winFrames->getModifiedImage();
-        writeNoteAboutAction(QString("Processing > ") + modifiedImage.nameFile());
-        mainWindow->changeContentOfItems(this);
+        notifyMainWindow(QString("Wait, goes update :") + modifiedImage.nameFile());
     }
 }
 
@@ -219,7 +217,7 @@ void App::Item::Image::setActivityTheWidgetsWhichProcessingBillboard()
 {
     Fk::Image image = content->image();
 
-    if(image.isHighQuality()){
+    if(image.is24BitsOnPixel() || image.is32BitsOnPixel()){
         aFilter->setEnabled(true);
         aFrame->setEnabled(true);
     }
@@ -235,6 +233,6 @@ void App::Item::Image::startThreads()
 {
     Fk::Image image = content->image();
 
-    if(image.isHighQuality())
+    if(image.is24BitsOnPixel() || image.is32BitsOnPixel())
         content->startThreads(image);
 }
