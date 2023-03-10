@@ -1,7 +1,9 @@
 # ColorView - 
 Этот проект демонстрирует как я работаю с растровым изображением. 
 В этом проекте вы можете:
-- открывать изображение формата: JPEG, PNG, BMP
+- открывать изображение формата: 
+  JPG,JPEG,BMP,PNG - READ and WRITE
+  PCX - only READ
 - открывать неограниченное колличество изображений
 - накладывать на изображение фильтр.
 - накладывать на изображение рамку. 
@@ -14,7 +16,7 @@
 Вы можете выбрать доступную целевую платформу:
 
 - Для ОС Windows - https://drive.google.com/drive/folders/1SG3K5GRt4IEAvdlYrqhmmW0z0uZOhRAJ?usp=share_link 
-- Для ОС Linux - https://drive.google.com/drive/folders/1qdZq4HuMhf6_JNeYnZrKDDrGrIqWI0uQ?usp=share_link
+- Для ОС Linux - https://drive.google.com/drive/folders/13GJ-Fp2Qsr2GRrOUYTVQv47R2S0g2Y1P?usp=share_link
 
 # Скриншоты 
 Ниже будут ознакомительные скриншоты проекта.
