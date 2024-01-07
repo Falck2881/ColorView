@@ -18,14 +18,14 @@ void ContentItemEdit::setIndex(const qint32 newIndex)
     }
 }
 
-void ContentItemEdit::saveModifiedOnBillboard(std::shared_ptr<Billboard> billboard)
+void ContentItemEdit::saveModifiedOnImage(const Fk::Image& image)
 {
     assert(index != -1);
 
-    history[index].push_back(billboard);
+    history[index].push_back(image);
 }
 
-Modified::Billboard::History<Billboard> ContentItemEdit::atHistory(const qint32 index) const
+Modified::Image::History<Fk::Image> ContentItemEdit::atHistory(const qint32 index) const
 {
     return history.at(index);
 }
@@ -49,14 +49,14 @@ void ContentItemEdit::redoModification()
     history[index].redo();
 }
 
-std::shared_ptr<Billboard> ContentItemEdit::billboardInHistory() const
+Fk::Image ContentItemEdit::imageInHistory() const
 {
     assert(index != -1);
 
-    return history.at(index).billboard();
+    return history.at(index).image();
 }
 
-std::shared_ptr<Billboard> ContentItemEdit::lastModifiedOnBillboard() const
+Fk::Image ContentItemEdit::lastModifiedOnImage() const
 {
     assert(index != -1);
 
@@ -65,8 +65,8 @@ std::shared_ptr<Billboard> ContentItemEdit::lastModifiedOnBillboard() const
 
 void ContentItemEdit::setContent(const QString& newContent)
 {
-    Fk::Allocation makeBillboardImage(newContent);
-    history.push_back(Modified::Billboard::History<Billboard>{makeBillboardImage()});
+    auto image = Fk::Image(newContent);
+    history.push_back(Modified::Image::History<Fk::Image>{image});
 }
 
 void ContentItemEdit::removeContent(const qint32 index)

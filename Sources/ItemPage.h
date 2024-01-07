@@ -1,11 +1,12 @@
 #ifndef ITEMPAGE_H
 #define ITEMPAGE_H
 
-#include "ContentItemPage.h"
+#include "Billboard.h"
+#include "PencilBox.h"
+#include "Content.h"
 #include "Items.h"
 #include <QTabWidget>
 #include <QList>
-#include <QLabel>
 
 namespace App{
     class MainWindow;
@@ -24,30 +25,36 @@ namespace  App::Item
         public:
            explicit Page(App::MainWindow* const mainWin);
            QTabWidget* getTabWidget() const;
-           std::shared_ptr<Fk::Image> getImageCurrentPage() const;
-           void updatePage(const Fk::Image& image);
-           void removeStartPage(const qint32 index = 0);
-           void addBillboardIntoPage(QWidget* const billboard, const Fk::Image& image);
-           void enableTabsClosable();
+           Fk::Image getImageCurrentPage() const;
+           void preparePageToDrawing(const Fk::PencilBox& pencilBox);
+           qint32 currentIndexOfPage() const;
         private:
+           void updateContent(const Fk::Image& image) override;
            void setContent(const QString& content) override;
-           void updateContent(std::shared_ptr<Billboard> billboard) override;
            void setIndex(const qint32 newIndex) override;
            void removeContent(const qint32 index) override;
         private:
+           void removeStartPage(const qint32 index = 0);
+           void addImageIntoBillboardOfPage(const Fk::Image& image);
+           void enableTabsClosable();
            void connectWithCommand();
+           void connectToBillboard(Fk::Image image);
            void initializeStartPage();
            void finishTheJob();
            bool checkIndexOnPage() const;
            void notifyAllColleagues();
            void isThereAnyPage();
+           void setConnectWithBillboard(Fk::Billboard* const billboard);
+           void saveCurrentIndexOfPage();
         private slots:
            void switchPage();
            void closePage(const qint32 index);
+           void receiveUpdatedImage(Fk::Image image);
         private:
-           std::shared_ptr<ContentItemPage> content;
+           std::shared_ptr<Content> content;
            std::unique_ptr<QTabWidget> tabWidget;
            App::MainWindow* const mainWindow;
+           qint32 indexOfPage;
     };
 }
 #endif // ITEMPAGE_H

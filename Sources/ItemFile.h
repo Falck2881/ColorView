@@ -26,7 +26,7 @@ namespace App::Item
         private:
             void setActivityOfWidgets() override final;
             void setContent(const QString& content) override;
-            void updateContent(std::shared_ptr<Billboard> billboard) override;
+            void updateContent(const Fk::Image& billboard) override;
             void setIndex(const qint32 newIndex) override;
             void removeContent(const qint32 index) override;
         private:
@@ -37,16 +37,18 @@ namespace App::Item
             QString getPathToFile() const;
         signals:
             void openFile(const QString&);
+            void createNewFileImage();
         private slots:
             void open();
             void exit();
-
+            void add();
         private:
             std::shared_ptr<Content> content;
             std::unique_ptr<QAction> aExite;
             std::unique_ptr<QAction> aSaveFileAs;
             std::unique_ptr<QAction> aSaveFile;
             std::unique_ptr<QAction> aOpenFile;
+            std::unique_ptr<QAction> aCreateImage;
             std::unique_ptr<QMenu> mFile;
             std::unique_ptr<QToolBar> toolBar;
             App::MainWindow* const mainWindow;

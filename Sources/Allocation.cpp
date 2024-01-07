@@ -33,5 +33,5 @@ bool Fk::Allocation::checkContentPair() const
 
 std::unique_ptr<Billboard> Fk::Allocation::make() const
 {
-    return std::make_unique<Fk::Image>(nameFile);
+    return std::make_unique<Billboard>();
 }

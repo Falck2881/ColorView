@@ -37,8 +37,8 @@ QPushButton:disabled
 /*-----QLabel-----*/
 QLabel
 {
-	background-color: transparent;
-	color: #fff;
+        background-color: transparent;
+        color: #fff;
 
 }
 

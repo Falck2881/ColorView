@@ -7,18 +7,17 @@
 #include <QToolButton>
 #include <QMenu>
 #include <memory>
-#include "Content.h"
-#include "Billboard.h"
+#include "Image.h"
 
 namespace App::Base
 {
-    class Item: public QObject
+    class Item: public QWidget
     {
         Q_OBJECT
 
         public:
             virtual ~Item() = default;
-            virtual void updateContent(std::shared_ptr<Billboard> billboard){};
+            virtual void updateContent(const Fk::Image& image){};
             virtual void removeContent(const qint32 index){};
             virtual void setIndex(const qint32 newIndex) = 0;
             virtual void setActivityOfWidgets(){};

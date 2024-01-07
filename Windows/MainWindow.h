@@ -11,7 +11,7 @@
 #include "ItemEdit.h"
 #include "ItemPage.h"
 #include "ItemImage.h"
-#include "Billboard.h"
+#include "ItemDrawingTools.h"
 
 namespace Fk{
     class Image;
@@ -29,7 +29,8 @@ namespace App
             void appand(App::Base::Item* const observer);
             void setBillboardInEachObserver(const QString& newContent);
             void changeIndex(const qint32 newIndex);
-            void updateBillboardInEachObserver(std::shared_ptr<Billboard> billboard);
+            void updateImageInEachObserver(const Fk::Image& image);
+            void drawnImageWasModified(const Fk::Image& image);
             void changeContentOfItems(Base::Item* const item);
             void notifyAboutClosePage(const qint32 index);
             void setActivityTheWitgetsInEachObserver();
@@ -38,15 +39,20 @@ namespace App
             void closePageAndSave();
             bool observersExist() const;
             void updateMessageInStatusBar(App::Base::Item* const item);
+        private slots:
+            void updateDrawingToolsOnPage();
+            void addImage();
         private:
             void initializeMembersOfClass();
             void addAllItemsInManinWindow();
             void setGeometryScreen();
+            void setConnectWithApplicationItems();
         private:
             std::unique_ptr<App::Item::File> itemFile;
             std::unique_ptr<App::Item::Edit> itemEdit;
             std::unique_ptr<App::Item::Image> itemImage;
             std::unique_ptr<App::Item::Page> itemPage;
+            std::unique_ptr<App::Item::DrawingTools> itemDrawingTools;
             QList<App::Base::Item*> observers;
     };
 

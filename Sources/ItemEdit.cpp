@@ -46,21 +46,18 @@ void App::Item::Edit::undo()
 {
     content->undoModification();
 
-    currentBillboard = content->billboardInHistory();
-    notifyMainWindow(QString("Wait, goes update :") + currentBillboard->toImage().nameFile());
+    currentImage = content->imageInHistory();
+    writeNoteAboutAction(QString("Wait, goes update :") + currentImage.nameFile());
+    mainWindow->updateMessageInStatusBar(this);
+    mainWindow->changeContentOfItems(this);
 }
 
 void App::Item::Edit::redo()
 {
     content->redoModification();
 
-    currentBillboard = content->billboardInHistory();
-    notifyMainWindow(QString("Wait, goes update :") + currentBillboard->toImage().nameFile());
-}
-
-void App::Item::Edit::notifyMainWindow(const QString &message)
-{
-    writeNoteAboutAction(message);
+    currentImage = content->imageInHistory();
+    writeNoteAboutAction(QString("Wait, goes update :") + currentImage.nameFile());
     mainWindow->updateMessageInStatusBar(this);
     mainWindow->changeContentOfItems(this);
 }
@@ -80,9 +77,9 @@ void App::Item::Edit::removeContent(const qint32 index)
     content->removeContent(index);
 }
 
-std::shared_ptr<Billboard> App::Item::Edit::getBillboard() const
+const Fk::Image& App::Item::Edit::getImage() const
 {
-    return currentBillboard;
+    return currentImage;
 }
 
 QMenu* App::Item::Edit::getMenu() const
@@ -95,19 +92,29 @@ QToolBar* App::Item::Edit::getToolBar() const
     return toolBar.get();
 }
 
-void App::Item::Edit::saveChangesInHistory(std::shared_ptr<Billboard> billboard)
+void App::Item::Edit::saveModifiedImageInHistory(const Fk::Image& image)
 {
-    content->saveModifiedOnBillboard(billboard);
-    currentBillboard = content->lastModifiedOnBillboard();
-    notifyMainWindow(QString("Wait, goes update :") + currentBillboard->toImage().nameFile());
+    content->saveModifiedOnImage(image);
+    currentImage = content->lastModifiedOnImage();
+    writeNoteAboutAction(QString("Wait, goes update :") + currentImage.nameFile());
+    mainWindow->updateMessageInStatusBar(this);
+    mainWindow->changeContentOfItems(this);
+}
+
+void App::Item::Edit::saveDrawnImageModified(const Fk::Image& image)
+{
+    content->saveModifiedOnImage(image);
+    currentImage = content->lastModifiedOnImage();
+    writeNoteAboutAction(QString("Wait, goes update :") + currentImage.nameFile());
+    mainWindow->updateMessageInStatusBar(this);
 }
 
 void App::Item::Edit::checkHistoryModified(const qint32 index)
 {
     auto historys = content->atHistory(index);
-    Fk::Image image{historys.billboard().get()->toImage()};
+    Fk::Image img{historys.image()};
 
-    if(warrning(image,mainWindow))
+    if(warrning(img, mainWindow))
         mainWindow->closePageAndSave();
 
 }

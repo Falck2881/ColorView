@@ -14,6 +14,7 @@ WinFrames::WinFrames(App::Item::Image* const imageItem) :
     setPropertyTabWidget();
     initializeCommands();
     connect();
+    setCursor(QCursor(QPixmap(":/Normal/cursor.png")));
 }
 
 void WinFrames::setPropertyTabWidget()

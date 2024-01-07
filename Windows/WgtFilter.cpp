@@ -15,6 +15,7 @@ WinFilter::WinFilter(App::Item::Image* const itemImage):
     ui->setupUi(this);
     initializeCommands();
     connect();
+    setCursor(QCursor(QPixmap(":/Normal/cursor.png")));
 }
 
 void WinFilter::initializeCommands()

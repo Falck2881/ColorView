@@ -23,13 +23,13 @@ namespace Item
         public:
             explicit Image(App::MainWindow* const mainWin);
             QMenu* getMenu() const;
-            std::shared_ptr<Fk::Image> getBillboard() const;
+            Fk::Image getImage() const;
             void saveModifiedImage(QWidget* const widget);
             void startThreads();
         private:
             void setActivityOfWidgets() override final;
             void setContent(const QString& content) override;
-            void updateContent(std::shared_ptr<Billboard> billboard) override;
+            void updateContent(const Fk::Image& image) override;
             void setIndex(const qint32 newIndex) override;
             void removeContent(const qint32 index) override;
         private:

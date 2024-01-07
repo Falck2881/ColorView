@@ -6,20 +6,23 @@
 #include <QPainter>
 #include <QByteArray>
 #include <QImageReader>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QGraphicsSceneMouseEvent>
 
-Fk::Image::Image():Billboard(this)
+Fk::Image::Image():absPathToFile("")
 {
 
 }
 
-Fk::Image::Image(const Fk::Image& copyObj):Billboard(this)
+Fk::Image::Image(const Fk::Image& copyObj)
 {
     this->image = copyObj.image;
     this->absPathToFile = copyObj.absPathToFile;
     this->setColors = copyObj.setColors;
 }
 
-Fk::Image::Image(Fk::Image&& copyObj):Billboard(this)
+Fk::Image::Image(Fk::Image&& copyObj)
 {
     this->image = copyObj.image;
     this->absPathToFile = copyObj.absPathToFile;
@@ -51,12 +54,17 @@ Fk::Image& Fk::Image::operator=(const Fk::Image &copyObj)
 }
 
 Fk::Image::Image(const QString pathFile):
-    Billboard(this),
     image(pathFile,nullptr),
     absPathToFile(pathFile)
 {
-    image = image.scaled(QSize(1024,768),Qt::KeepAspectRatio);
-    setAllNameColorsInSet();
+    if(!image.isNull()){
+        setAllNameColorsInSet();
+        type = TypeImage::SimpleImage;
+    }
+    else{
+        fillImageWithWhiteColor();
+        type = TypeImage::DrawImage;
+    }
 }
 
 void Fk::Image::setAllNameColorsInSet()
@@ -67,6 +75,26 @@ void Fk::Image::setAllNameColorsInSet()
     for(qint32 y = 0; y < image.height(); ++y)
         for(qint32 x = 0; x < image.width(); ++x)
             setColors << image.pixelColor(x,y).name();
+}
+
+void Fk::Image::fillImageWithWhiteColor()
+{
+    auto screen = QGuiApplication::primaryScreen()->availableGeometry().size();
+    quint32 width = screen.width() * 1.2;
+    quint32 height = screen.height() * 1.2;
+
+    image = QImage(width, height, QImage::Format_RGB32);
+
+    for (int x = 0; x < image.width(); ++x) {
+        for (int y = 0; y < image.height(); ++y) {
+            setPixelColor(x, y, QColor(Qt::white));
+        }
+    }
+}
+
+Fk::TypeImage Fk::Image::getType() const
+{
+    return type;
 }
 
 bool Fk::Image::isNull() const
@@ -118,6 +146,16 @@ QPixmap Fk::Image::pixmap() const
     return QPixmap::fromImage(image);
 }
 
+QImage Fk::Image::context() const
+{
+    return image;
+}
+
+void Fk::Image::updateContext(const QImage& newImage)
+{
+    image = newImage;
+}
+
 QColor Fk::Image::pixel(qint32 x, qint32 y) const
 {
     return image.pixelColor(x, y);
@@ -167,11 +205,7 @@ QString Fk::Image::toFormat() const
 QString Fk::Image::nameFile() const
 {
     QFileInfo fileInfo(absPathToFile);
-    QString fileName;
-    if(fileInfo.exists())
-        fileName = fileInfo.fileName();
-
-    return fileName;
+    return fileInfo.fileName();
 }
 
 QString Fk::Image::absolutlePathToFile() const

@@ -10,6 +10,7 @@ WinSaveImg::WinSaveImg() :
     changeStatusButtonSave(false);
     initializeCommands();
     connect();
+    setCursor(QCursor(QPixmap(":/Normal/cursor.png")));
 }
 
 void WinSaveImg::initializeCommands()
@@ -68,7 +69,8 @@ void WinSaveImg::save()
 {
     QString newFormat;
     const QString newAbsPathToFile = QFileDialog::getSaveFileName(this, "Save As", QDir::homePath(),
-                                                                  "*.bmp;;*.png;;*.jpg;;*.jpeg;;", &newFormat);
+                                                                  "*.bmp;;*.png;;*.jpg;;*.jpeg;;",
+                                                                  &newFormat, QFileDialog::DontUseNativeDialog);
 
     if(newFormat.contains("bmp"))
         currentImage.save(newAbsPathToFile, "bmp");

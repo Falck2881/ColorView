@@ -4,6 +4,7 @@
 #include <QScreen>
 #include <QStatusBar>
 #include <QSplitterHandle>
+#include <QObject>
 
 App::MainWindow::MainWindow()
 {
@@ -13,6 +14,9 @@ App::MainWindow::MainWindow()
         addAllItemsInManinWindow();
 
    setGeometryScreen();
+   setCursor(QCursor(QPixmap(":/Normal/cursor.png")));
+   setAttribute( Qt::WA_AcceptDrops, true );
+   setConnectWithApplicationItems();
 }
 
 void App::MainWindow::initializeMembersOfClass()
@@ -24,6 +28,7 @@ void App::MainWindow::initializeMembersOfClass()
 
     itemEdit = std::make_unique<App::Item::Edit>(this);
     itemFile = std::make_unique<App::Item::File>(this);
+    itemDrawingTools = std::make_unique<App::Item::DrawingTools>();
 }
 
 void App::MainWindow::addAllItemsInManinWindow()
@@ -32,7 +37,8 @@ void App::MainWindow::addAllItemsInManinWindow()
     addToolBar(Qt::TopToolBarArea,itemFile->getToolBar());
 
     menuBar()->addMenu(itemEdit->getMenu());
-    addToolBar(Qt::TopToolBarArea,itemEdit->getToolBar());
+    addToolBar(Qt::TopToolBarArea, itemEdit->getToolBar());
+    addToolBar(Qt::TopToolBarArea, itemDrawingTools->getToolBar());
     addToolBarBreak(Qt::TopToolBarArea);
 
     menuBar()->addMenu(itemImage->getMenu());
@@ -48,6 +54,13 @@ void App::MainWindow::setGeometryScreen()
     this->setGeometry(50,50,width,height);
     this->setMaximumSize(width,height);
     this->setMinimumSize(800,600);
+}
+
+void App::MainWindow::setConnectWithApplicationItems()
+{
+    QObject::connect(itemDrawingTools.get(), &App::Item::DrawingTools::toolsHaveBeenUpdate, this, &App::MainWindow::updateDrawingToolsOnPage);
+
+    QObject::connect(itemFile.get(), &App::Item::File::createNewFileImage, this, &App::MainWindow::addImage);
 }
 
 void App::MainWindow::appand(Base::Item *const observer)
@@ -67,10 +80,10 @@ void App::MainWindow::changeIndex(const qint32 newIndex)
         obs->setIndex(newIndex);
 }
 
-void App::MainWindow::updateBillboardInEachObserver(std::shared_ptr<Billboard> billboard)
+void App::MainWindow::updateImageInEachObserver(const Fk::Image& image)
 {
     for(auto obs: observers)
-        obs->updateContent(billboard);
+        obs->updateContent(image);
 }
 
 void App::MainWindow::notifyAboutClosePage(const qint32 index)
@@ -81,6 +94,11 @@ void App::MainWindow::notifyAboutClosePage(const qint32 index)
 
 void App::MainWindow::setActivityTheWitgetsInEachObserver()
 {
+    if(itemPage->currentIndexOfPage() != -1)
+        itemDrawingTools->setActivateToolsDrawing(true);
+    else
+        itemDrawingTools->setActivateToolsDrawing(false);
+
     for(auto obs: observers)
         obs->setActivityOfWidgets();
 }
@@ -88,10 +106,10 @@ void App::MainWindow::setActivityTheWitgetsInEachObserver()
 void App::MainWindow::changeContentOfItems(Base::Item* const item)
 {
     if(item == itemImage.get()){
-        itemEdit->saveChangesInHistory(itemImage->getBillboard());
+        itemEdit->saveModifiedImageInHistory(itemImage->getImage());
     }
     else if(item == itemEdit.get()){
-        updateBillboardInEachObserver(itemEdit->getBillboard());
+        updateImageInEachObserver(itemEdit->getImage());
         setActivityTheWitgetsInEachObserver();
     }
     else if(item == itemPage.get()){
@@ -128,4 +146,21 @@ void App::MainWindow::updateMessageInStatusBar(App::Base::Item* const item)
         statusBar()->showMessage(itemImage->messageAboutAction(), 2800);
     else if(item == itemPage.get())
         statusBar()->showMessage(itemPage->messageAboutAction(), 2800);
+}
+
+void App::MainWindow::updateDrawingToolsOnPage()
+{
+    itemPage->preparePageToDrawing(itemDrawingTools->getPencilBox());
+}
+
+void App::MainWindow::addImage()
+{
+    setBillboardInEachObserver("Undefined");
+    setActivityTheWitgetsInEachObserver();
+}
+
+void App::MainWindow::drawnImageWasModified(const Fk::Image& image)
+{
+    itemEdit->saveDrawnImageModified(image);
+    updateImageInEachObserver(itemEdit->getImage());
 }

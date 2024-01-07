@@ -11,6 +11,7 @@ WinImgProperty::WinImgProperty():
     this->move(500,400);
     this->setWindowFlag(Qt::WindowStaysOnTopHint);
     this->connect();
+    setCursor(QCursor(QPixmap(":/Normal/cursor.png")));
 }
 
 void WinImgProperty::setPropertyImage(const Fk::Image& image)

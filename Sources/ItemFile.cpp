@@ -3,6 +3,7 @@
 #include "MainWindow.h"
 #include <utility>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QVector>
 #include <QDir>
 #include <QMessageBox>
@@ -15,6 +16,7 @@ App::Item::File::File(App::MainWindow* const mainWin):
     aSaveFileAs{std::make_unique<QAction>("&Save As ...")},
     aSaveFile{std::make_unique<QAction>("&Save")},
     aOpenFile{std::make_unique<QAction>("&Open")},
+    aCreateImage{std::make_unique<QAction>("&New File")},
     mFile{std::make_unique<QMenu>("&File")},
     toolBar{std::make_unique<QToolBar>()},
     mainWindow{mainWin},
@@ -32,6 +34,13 @@ void App::Item::File::initializeEachAction()
     aOpenFile->setIcon(QIcon(":/Normal/Open Image.bmp"));
     mFile->addAction(aOpenFile.get());
     toolBar->addAction(aOpenFile.get());
+
+    aCreateImage->setShortcut(QKeySequence("CTRL+N"));
+    aCreateImage->setWhatsThis("Create new file");
+    aCreateImage->setIcon(QIcon(":/Normal/New.bmp"));
+    mFile->addAction(aCreateImage.get());
+    toolBar->addAction(aCreateImage.get());
+
     aSaveFileAs->setShortcut(QKeySequence("Shift+CTRL+S"));
     aSaveFileAs->setWhatsThis("Save an image in specified the folder");
     aSaveFileAs->setIcon(QIcon(":/Disabled/Save as.bmp"));
@@ -61,6 +70,8 @@ void App::Item::File::connectWithCommand()
     QObject::connect(aSaveFileAs.get(), &QAction::triggered, this, &App::Item::File::saveAs);
 
     QObject::connect(aExite.get(), &QAction::triggered, this, &App::Item::File::exit);
+
+    QObject::connect(aCreateImage.get(), &QAction::triggered, this, &App::Item::File::add);
 }
 
 void App::Item::File::open()
@@ -75,7 +86,8 @@ void App::Item::File::open()
 QString App::Item::File::getPathToFile() const
 {
     return QFileDialog::getOpenFileName(mainWindow, "Open File Image",
-                                        QDir::homePath(),"*.bmp *.png *.jpg *.jpeg *.pcx");
+                                        QDir::homePath(),"*.bmp *.png *.jpg *.jpeg *.pcx",
+                                        nullptr, QFileDialog::DontUseNativeDialog);
 }
 
 void messageWhenSaveIntoPCXFormat(QWidget* const parrent);
@@ -124,9 +136,9 @@ void App::Item::File::setContent(const QString& newContent)
     content->setContent(newContent);
 }
 
-void App::Item::File::updateContent(std::shared_ptr<Billboard> billboard)
+void App::Item::File::updateContent(const Fk::Image& image)
 {
-    content->updateContent(billboard);
+    content->updateContent(image);
 }
 
 void App::Item::File::removeContent(const qint32 index)
@@ -158,6 +170,11 @@ void App::Item::File::exit()
         qDebug() << "Cancel save changes in files and exit from program";
         QApplication::quit();
     }
+}
+
+void App::Item::File::add()
+{
+    emit createNewFileImage();
 }
 
 void App::Item::File::setActivityOfWidgets()

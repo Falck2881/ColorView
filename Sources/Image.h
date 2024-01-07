@@ -5,14 +5,16 @@
 #include <QImage>
 #include <QSet>
 #include <memory>
-#include "Billboard.h"
+#include <QPointF>
 
 class QPixmap;
 class QColor;
 
 namespace Fk {
 
-    class Image: public Billboard
+    enum class TypeImage{DrawImage, SimpleImage};
+
+    class Image
     {
         public:
             Image();
@@ -27,8 +29,10 @@ namespace Fk {
             bool is16BitsOnPixel() const;
             bool is8BitsOnPixel() const;
             void setDepthColor(QImage::Format depthColor);
-            bool save(const QString newAbsPathToFile, const QString newFormats) override;
+            bool save(const QString newAbsPathToFile, const QString newFormats);
             QPixmap pixmap() const;
+            QImage context() const;
+            void updateContext(const QImage& newImage);
             QColor pixel(qint32 x, qint32 y) const;
             void setPixelColor(qint32 x, qint32 y, QColor newColor);
             const uchar* scanLine(const qsizetype y) const;
@@ -42,12 +46,16 @@ namespace Fk {
             QString absolutlePathToFile() const;
             void scaled(const quint32 width, const quint32 hight);
             void setFraming(const QString nameFileFrame);
+            TypeImage getType() const;
        private:
             void setAllNameColorsInSet();
+           void fillImageWithWhiteColor();
        private:
             QImage image;
             QString absPathToFile;
             QSet<QString> setColors;
+            QPointF moveDraw;
+            TypeImage type;
     };
 }
 #endif // IMAGE_H

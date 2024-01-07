@@ -1,18 +1,31 @@
 <RCC>
     <qresource prefix="/">
+        <file>Normal/New.bmp</file>
+        <file>Normal/cursor.png</file>
+        <file>Normal/eraser.png</file>
+        <file>Normal/pencil-normal.png</file>
+        <file>Normal/palette-normal.png</file>
+        <file>Normal/shirina-normal.png</file>
         <file>imgNotFound.png</file>
-        <file>ship.bmp</file>
         <file>Normal/Undo.bmp</file>
         <file>Normal/Save as.bmp</file>
         <file>Normal/Save.bmp</file>
         <file>Normal/Redo.bmp</file>
         <file>Normal/Open Image.bmp</file>
         <file>Normal/Export.bmp</file>
+        <file>Normal/width5px.png</file>
+        <file>Normal/width10px.png</file>
+        <file>Normal/width15px.png</file>
+        <file>Normal/width20px.png</file>
+        <file>Disabled/New.bmp</file>
         <file>Disabled/Undo.bmp</file>
         <file>Disabled/Save as.bmp</file>
         <file>Disabled/Save.bmp</file>
         <file>Disabled/Redo.bmp</file>
         <file>Disabled/Export.bmp</file>
+        <file>Disabled/pancil-disabled.png</file>
+        <file>Disabled/palette-disabled.png</file>
+        <file>Disabled/shirina-disabled.png</file>
         <file>Takezo.qss</file>
         <file>ImgFrames/BlueFrame.png</file>
         <file>ImgFrames/ClassicFrame.png</file>

@@ -29,7 +29,8 @@ set(WINDOWS_SRC Windows/MainWindow.h Windows/MainWindow.cpp
                 Windows/WgtFraming.ui
                 Windows/WgtSaveImg.h
                 Windows/WgtSaveImg.cpp
-                Windows/WgtSaveImg.ui)
+                Windows/WgtSaveImg.ui
+                Windows/WgtSelectWidthPencil.h Windows/WgtSelectWidthPencil.cpp)
 
 set(PROJECT_SOURCES
                         Sources/History.h
@@ -49,12 +50,12 @@ set(PROJECT_SOURCES
                         Sources/Content.h Sources/Content.cpp
                         Sources/ContentItemEdit.h Sources/ContentItemEdit.cpp
                         Sources/ContentItemImage.h Sources/ContentItemImage.cpp
-                        Sources/ContentItemPage.h Sources/ContentItemPage.cpp
-                        Sources/Allocation.h Sources/Allocation.cpp
                         Sources/ItemFile.h Sources/ItemFile.cpp
                         Sources/ItemEdit.h Sources/ItemEdit.cpp
                         Sources/ItemImage.h Sources/ItemImage.cpp
                         Sources/ItemPage.h Sources/ItemPage.cpp
+                        Sources/ItemDrawingTools.h Sources/ItemDrawingTools.cpp
+                        Sources/PencilBox.h Sources/PencilBox.cpp
                         Sources/Billboard.h Sources/Billboard.cpp
                         Sources/Image.h Sources/Image.cpp
                         )

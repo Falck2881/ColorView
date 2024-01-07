@@ -1,27 +1,30 @@
 #include "Content.h"
-#include "Allocation.h"
 #include <exception>
 #include <QDebug>
 #include <assert.h>
 //#define NDEBUG
 
-void Content::updateContent(std::shared_ptr<Billboard> board)
+Content::Content():index(-1)
+{
+}
+
+void Content::updateContent(const Fk::Image& image)
 {
     assert(index != -1);
 
-    billboards.replace(index,board);
+    imageArray.replace(index,image);
 }
 
-void Content::setContent(const QString& content)
+void Content::setContent(const QString& fileName)
 {
-    Fk::Allocation makeBillboardImage(content);
-    billboards.push_back(makeBillboardImage());
+    Fk::Image image(fileName);
+    imageArray.push_back(image);
 }
 
 void Content::removeContent(const qint32 index)
 {
     assert(index != -1);
-    billboards.removeAt(index);
+    imageArray.removeAt(index);
 }
 
 void Content::setIndex(const qint32 newIndex)
@@ -40,33 +43,33 @@ void Content::setIndex(const qint32 newIndex)
 
 bool Content::isBillboardEmpty() const
 {
-    return billboards.isEmpty();
+    return imageArray.isEmpty();
 }
 
-Fk::Image Content::image() const
+const Fk::Image& Content::image() const
 {
     assert(index != -1);
-    return billboards.at(index)->toImage();
+    return imageArray.at(index);
 }
 
+const Fk::Image& Content::lastImage() const
+{
+    return imageArray.last();
+}
 
 QVector<Fk::Image> Content::images() const
 {
-    QVector<Fk::Image> images;
-    for(auto billboard{billboards.begin()}; billboard != billboards.end(); ++billboard)
-        images.push_back(billboard->get()->toImage());
-
-    return images;
+    return imageArray;
 }
 
 qsizetype Content::sizeBillboard() const
 {
-    return billboards.size();
+    return imageArray.size();
 }
 
-void Content::replaceBillboard(std::shared_ptr<Billboard> billboard)
+void Content::replaceImage(Fk::Image image)
 {
     assert(index != -1);
 
-    billboards.replace(index, billboard);
+    imageArray.replace(index, image);
 }

@@ -2,7 +2,6 @@
 #define ITEMEDIT_H
 
 #include "Items.h"
-#include "History.h"
 #include "ContentItemEdit.h"
 
 namespace App{
@@ -19,9 +18,10 @@ namespace App::Item
             explicit Edit(App::MainWindow* const mainWin);
             QMenu* getMenu() const;
             QToolBar* getToolBar() const;
-            void saveChangesInHistory(std::shared_ptr<Billboard> board);
+            void saveModifiedImageInHistory(const Fk::Image& image);
+            void saveDrawnImageModified(const Fk::Image& image);
             void checkHistoryModified(const qint32 index);
-            std::shared_ptr<Billboard> getBillboard() const;
+            const Fk::Image& getImage() const;
         private:
             void setActivityOfWidgets() override final;
             void setContent(const QString& content) override;
@@ -31,13 +31,12 @@ namespace App::Item
             void initializeEachAction();
             void connectWithCommand();
             void setPropertyActions(bool value, const QVector<QString>& icons);
-            void notifyMainWindow(const QString& message);
         private slots:
             void undo();
             void redo();
         private:
             std::unique_ptr<ContentItemEdit> content;
-            std::shared_ptr<Billboard> currentBillboard;
+            Fk::Image currentImage;
             std::unique_ptr<QAction> aUndo;
             std::unique_ptr<QAction> aRedo;
             std::unique_ptr<QMenu> mEdit;

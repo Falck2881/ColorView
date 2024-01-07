@@ -1,5 +1,4 @@
 #include "ContentItemImage.h"
-#include "Allocation.h"
 #include <assert.h>
 //#define NDEBUG
 
@@ -56,35 +55,35 @@ void ContentItemImage::connect()
     while(threadProcessingImg != threadsProcessingImages.end())
     {
         QObject::connect(threadProcessingImg->get(), &ThreadProcessingImages::returnProcessingImages,
-                         this, &ContentItemImage::setProcessingBillboards);
+                         this, &ContentItemImage::setProcessingImage);
 
         ++threadProcessingImg;
     }
 }
 
-void ContentItemImage::setProcessingBillboards(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedBillboardProcessing)
+void ContentItemImage::setProcessingImage(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing)
 {
-    addCompletedBillboardProcessing(newCompletedBillboardProcessing);
-    removeOldsProcessingBillboards();
+    addCompletedImageProcessing(newCompletedImageProcessing);
+    removeOldsProcessingImage();
 
-    if(readyProcessingOfBillboard.size() == 3)
+    if(readyProcessingOfImages.size() == 3)
     {
-        for(auto& processingBillboard: readyProcessingOfBillboard){
-               collageProcessingBillboards.append(processingBillboard.first);
+        for(auto& processingImage: readyProcessingOfImages){
+               collageProcessingImages.append(processingImage.first);
         }
 
-        readyProcessingOfBillboard.erase(readyProcessingOfBillboard.constBegin(), readyProcessingOfBillboard.constEnd());
-        readyProcessingOfBillboard.squeeze();
+        readyProcessingOfImages.erase(readyProcessingOfImages.constBegin(), readyProcessingOfImages.constEnd());
+        readyProcessingOfImages.squeeze();
     }
 
 }
 
-void ContentItemImage::addCompletedBillboardProcessing
+void ContentItemImage::addCompletedImageProcessing
 (std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedBillboardProcessing)
 {
-    if(readyProcessingOfBillboard.size() != 3)
+    if(readyProcessingOfImages.size() != 3)
     {
-        readyProcessingOfBillboard.append(newCompletedBillboardProcessing);
+        readyProcessingOfImages.append(newCompletedBillboardProcessing);
         auto comparation{[](const std::pair<QVector<Fk::Image>, NumbersThreads>& fPair,
                             const std::pair<QVector<Fk::Image>, NumbersThreads>& sPair)
                             {
@@ -92,32 +91,26 @@ void ContentItemImage::addCompletedBillboardProcessing
                             }
                         };
 
-        std::sort(readyProcessingOfBillboard.begin(),readyProcessingOfBillboard.end(),comparation);
+        std::sort(readyProcessingOfImages.begin(),readyProcessingOfImages.end(),comparation);
     }
 }
 
-void ContentItemImage::removeOldsProcessingBillboards()
+void ContentItemImage::removeOldsProcessingImage()
 {
-    if(!collageProcessingBillboards.isEmpty())
+    if(!collageProcessingImages.isEmpty())
     {
-        collageProcessingBillboards.erase(collageProcessingBillboards.constBegin(), collageProcessingBillboards.constEnd());
-        collageProcessingBillboards.squeeze();
+        collageProcessingImages.erase(collageProcessingImages.constBegin(), collageProcessingImages.constEnd());
+        collageProcessingImages.squeeze();
     }
 }
 
-void ContentItemImage::setContent(const QString& newContent)
+void ContentItemImage::updateContent(const Fk::Image& img)
 {
-    Fk::Allocation makeBillboardImage(newContent);
-    billboards.push_back(makeBillboardImage());
-}
-
-void ContentItemImage::updateContent(std::shared_ptr<Billboard> billboard)
-{
-    replaceBillboard(billboard);
+    Content::updateContent(img);
     Fk::Image currImage = image();
 
     if(currImage.is24BitsOnPixel() || currImage.is32BitsOnPixel())
-        startThreads(currImage);
+        std::async(std::launch::async , &ContentItemImage::startThreads, this, currImage);
 }
 
 
@@ -130,7 +123,6 @@ void ContentItemImage::startThreads(const Fk::Image& image)
         if(!threadProcessingImage->get()->isRun()){
             threadProcessingImage->get()->setCopyImage(image);
             threadProcessingImage->get()->start();
-            threadProcessingImage->get()->wait();
         }
         ++threadProcessingImage;
     }
@@ -138,5 +130,5 @@ void ContentItemImage::startThreads(const Fk::Image& image)
 
 QVector<Fk::Image> ContentItemImage::collageOfImages() const
 {
-    return collageProcessingBillboards;
+    return collageProcessingImages;
 }

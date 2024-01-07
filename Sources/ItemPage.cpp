@@ -4,7 +4,7 @@
 #include <QLabel>
 
 App::Item::Page::Page(App::MainWindow* const mainWin):
-    content(std::make_unique<ContentItemPage>(this)),
+    content(std::make_unique<Content>()),
     tabWidget{std::make_unique<QTabWidget>()},
     mainWindow{mainWin}
 {
@@ -23,12 +23,23 @@ void App::Item::Page::isThereAnyPage()
 {
     if(tabWidget->currentIndex() == -1)
     {
-        QLabel* label = new QLabel;
-        label->setAlignment(Qt::AlignCenter);
-        label->setPixmap(QPixmap(":/imgNotFound.png"));
-        tabWidget->addTab(label,"Untiled");
+        Fk::Image image(":/imgNotFound.png");
+        Fk::Billboard* billboard = new Fk::Billboard(image);
+        setConnectWithBillboard(billboard);
+        tabWidget->addTab(billboard,"Untiled");
         tabWidget->setTabsClosable(false);
     }
+}
+
+void App::Item::Page::setConnectWithBillboard(Fk::Billboard* const newBillboard)
+{
+    QObject::connect(newBillboard, &Fk::Billboard::updateBillboard, this, &App::Item::Page::receiveUpdatedImage);
+}
+
+void App::Item::Page::receiveUpdatedImage(Fk::Image image)
+{
+    content->updateContent(image);
+    mainWindow->drawnImageWasModified(image);
 }
 
 void App::Item::Page::connectWithCommand()
@@ -68,9 +79,15 @@ void App::Item::Page::closePage(const qint32 index)
         mainWindow->closePage(index);
         mainWindow->notifyAboutClosePage(index);
         removeStartPage(index);
+        saveCurrentIndexOfPage();
         isThereAnyPage();
         mainWindow->setActivityTheWitgetsInEachObserver();
     }
+}
+
+void App::Item::Page::saveCurrentIndexOfPage()
+{
+    indexOfPage = tabWidget->currentIndex();
 }
 
 void App::Item::Page::setIndex(const qint32 newIndex)
@@ -78,14 +95,26 @@ void App::Item::Page::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Item::Page::setContent(const QString& newContent)
+void App::Item::Page::setContent(const QString& fileName)
 {
-    content->setContent(newContent);
+    if(content->isBillboardEmpty())
+        removeStartPage();
+
+    content->setContent(fileName);
+
+    if(!content->isBillboardEmpty())
+        enableTabsClosable();
+
+    addImageIntoBillboardOfPage(content->lastImage());
 }
 
-void App::Item::Page::updateContent(std::shared_ptr<Billboard> billboard)
+void App::Item::Page::updateContent(const Fk::Image& img)
 {
-    content->updateContent(billboard);
+    content->updateContent(img);
+    Fk::Billboard* currentBillboard = qobject_cast<Fk::Billboard*>(tabWidget->widget(tabWidget->currentIndex()));
+    currentBillboard->setImage(img);
+
+    tabWidget->setCurrentIndex(tabWidget->insertTab(tabWidget->currentIndex(), currentBillboard, "*"+img.nameFile()));
 }
 
 void App::Item::Page::removeContent(const qint32 index)
@@ -93,18 +122,11 @@ void App::Item::Page::removeContent(const qint32 index)
     content->removeContent(index);
 }
 
-void App::Item::Page::updatePage(const Fk::Image& image)
+void App::Item::Page::addImageIntoBillboardOfPage(const Fk::Image& image)
 {
-    QLabel* billboard = qobject_cast<QLabel*>(tabWidget->widget(tabWidget->currentIndex()));
-    billboard->setAlignment(Qt::AlignCenter);
-    billboard->setPixmap(image.pixmap());
-
-    tabWidget->setCurrentIndex(tabWidget->insertTab(tabWidget->currentIndex(), billboard, "*"+image.nameFile()));
-}
-
-void App::Item::Page::addBillboardIntoPage(QWidget* const billboard, const Fk::Image& image)
-{
-    tabWidget->setCurrentIndex(tabWidget->addTab(billboard,image.nameFile()));
+    Fk::Billboard* billboard = new Fk::Billboard(image);
+    setConnectWithBillboard(billboard);
+    tabWidget->setCurrentIndex(tabWidget->addTab(billboard, image.nameFile()));
 }
 
 QTabWidget* App::Item::Page::getTabWidget() const
@@ -112,9 +134,14 @@ QTabWidget* App::Item::Page::getTabWidget() const
     return tabWidget.get();
 }
 
-std::shared_ptr<Fk::Image> App::Item::Page::getImageCurrentPage() const
+Fk::Image App::Item::Page::getImageCurrentPage() const
 {
-    return std::make_shared<Fk::Image>(content->image());
+    return content->image();
+}
+
+qint32 App::Item::Page::currentIndexOfPage() const
+{
+    return indexOfPage;
 }
 
 void App::Item::Page::removeStartPage(const qint32 index)
@@ -126,4 +153,10 @@ void App::Item::Page::removeStartPage(const qint32 index)
 void App::Item::Page::enableTabsClosable()
 {
     tabWidget->setTabsClosable(true);
+}
+
+void App::Item::Page::preparePageToDrawing(const Fk::PencilBox& pencilBox)
+{
+    auto bilboard = qobject_cast<Fk::Billboard*>(tabWidget->widget(tabWidget->currentIndex()));
+    bilboard->setPencilBox(pencilBox);
 }

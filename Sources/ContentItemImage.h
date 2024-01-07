@@ -11,22 +11,21 @@ class ContentItemImage: public Content
 
     public:
         ContentItemImage();
-        void setContent(const QString& newContent) override;
-        void updateContent(std::shared_ptr<Billboard> billboard) override;
+        void updateContent(const Fk::Image& billboard) override;
         void startThreads(const Fk::Image& image);
         QVector<Fk::Image> collageOfImages() const;
     private:
         void moveConversionsColorIntoThreads();
         void connect();
-        void addCompletedBillboardProcessing(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedBillboardProcessing);
-        void removeOldsProcessingBillboards();
+        void addCompletedImageProcessing(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing);
+        void removeOldsProcessingImage();
     private slots:
-        void setProcessingBillboards(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedBillboardProcessing);
+        void setProcessingImage(std::pair<QVector<Fk::Image>, NumbersThreads> newCompletedImageProcessing);
     private:
         SetConversions collection;
         QVector<std::shared_ptr<ThreadProcessingImages>> threadsProcessingImages;
-        QVector<std::pair<QVector<Fk::Image>, NumbersThreads>> readyProcessingOfBillboard;
-        QVector<Fk::Image> collageProcessingBillboards;
+        QVector<std::pair<QVector<Fk::Image>, NumbersThreads>> readyProcessingOfImages;
+        QVector<Fk::Image> collageProcessingImages;
 };
 
 #endif // CONTENTITEMIMAGE_H

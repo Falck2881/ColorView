@@ -1,6 +1,5 @@
 #include "ItemImage.h"
 #include "MainWindow.h"
-#include "ThreadProcessingImages.h"
 #include <QList>
 #include <algorithm>
 
@@ -37,7 +36,6 @@ void App::Item::Image::initializeSubItemDepth()
         depth->setChecked(false);
         mDepthColor->addAction(depth);
     }
-
 }
 
 void App::Item::Image::initializeSubItemImage()
@@ -164,7 +162,8 @@ void App::Item::Image::setActivityOfWidgets()
         aProperty->setEnabled(false);
         aFilter->setEnabled(false);
         aFrame->setEnabled(false);
-    }else{
+    }
+    else{
         mDepthColor->setEnabled(true);
         aProperty->setEnabled(true);
         setActivityTheWidgetsWhichProcessingBillboard();
@@ -181,9 +180,10 @@ void App::Item::Image::setContent(const QString& newContent)
     content->setContent(newContent);
 }
 
-void App::Item::Image::updateContent(std::shared_ptr<Billboard> billboard)
+void App::Item::Image::updateContent(const Fk::Image& image)
 {
-    content->updateContent(billboard);
+    modifiedImage = image;
+    content->updateContent(image);
 }
 
 void App::Item::Image::removeContent(const qint32 index)
@@ -208,9 +208,9 @@ void App::Item::Image::saveModifiedImage(QWidget *const widget)
     }
 }
 
-std::shared_ptr<Fk::Image> App::Item::Image::getBillboard() const
+Fk::Image App::Item::Image::getImage() const
 {
-    return std::make_shared<Fk::Image>(modifiedImage);
+    return modifiedImage;
 }
 
 void App::Item::Image::setActivityTheWidgetsWhichProcessingBillboard()
@@ -234,5 +234,5 @@ void App::Item::Image::startThreads()
     Fk::Image image = content->image();
 
     if(image.is24BitsOnPixel() || image.is32BitsOnPixel())
-        content->startThreads(image);
+        std::async(std::launch::async, &ContentItemImage::startThreads, content, image);
 }

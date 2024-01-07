@@ -11,11 +11,7 @@ class ContentItemPage: public Content
 {
     public:
         ContentItemPage(App::Item::Page* const itemPage);
-        void updateContent(std::shared_ptr<Billboard> billboard) override;
-        void setContent(const QString& nameFile) override;
-    private:
-        void checkStartingPage();
-        void createBillboardForPage(const QString& newContent);
+        void updateContent(std::shared_ptr<Fk::Image> image) override;
     private:
         App::Item::Page* const itemPage;
 

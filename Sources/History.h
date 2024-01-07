@@ -6,23 +6,23 @@
 #include <memory>
 #include <assert.h>
 #include "Image.h"
+
 //#define NDEBUG
 
 template<typename T>
-concept isBillboard = std::same_as<T, Billboard>;
+concept isImage = std::same_as<T, Fk::Image>;
 
 namespace Modified
 {
-    namespace Billboard {
-
-
-        template<isBillboard T>
+    namespace Image
+    {
+        template<isImage T>
         class History
         {
             public:
-                explicit History(std::shared_ptr<T> typeFile);
-                auto billboard() const;
-                void push_back(std::shared_ptr<T> typeFile);
+                explicit History(const T& typeFile);
+                auto image() const;
+                void push_back(const T& typeFile);
                 void erase();
                 bool isEmpty() const;
                 auto last() const;
@@ -30,19 +30,19 @@ namespace Modified
                 void undo();
             private:
                 qint32 index;
-                QList<std::shared_ptr<T>> historyEdit;
+                QList<T> historyEdit;
         };
     }
 }
 
-template<isBillboard T>
-Modified::Billboard::History<T>::History(std::shared_ptr<T> typeFile):index(0)
+template<isImage T>
+Modified::Image::History<T>::History(const T& typeFile):index(0)
 {
     historyEdit.push_back(typeFile);
 }
 
-template<isBillboard T>
-void Modified::Billboard::History<T>::erase()
+template<isImage T>
+void Modified::Image::History<T>::erase()
 {
     if(!historyEdit.isEmpty()){
         historyEdit.erase(historyEdit.cbegin(),historyEdit.cend());
@@ -50,43 +50,43 @@ void Modified::Billboard::History<T>::erase()
     }
 }
 
-template<isBillboard T>
-auto Modified::Billboard::History<T>::billboard() const
+template<isImage T>
+auto Modified::Image::History<T>::image() const
 {
     assert(index >= 0);
     return historyEdit.at(index);
 }
 
-template<isBillboard T>
-void Modified::Billboard::History<T>::push_back(std::shared_ptr<T> typeFile)
+template<isImage T>
+void Modified::Image::History<T>::push_back(const T& typeFile)
 {
     historyEdit.push_back(typeFile);
     ++index;
 }
 
-template<isBillboard T>
-bool Modified::Billboard::History<T>::isEmpty() const
+template<isImage T>
+bool Modified::Image::History<T>::isEmpty() const
 {
     return historyEdit.isEmpty() ? true : false;
 }
 
-template<isBillboard T>
-auto Modified::Billboard::History<T>::last() const
+template<isImage T>
+auto Modified::Image::History<T>::last() const
 {
     assert(!historyEdit.empty());
     return historyEdit.last();
 }
 
-template<isBillboard T>
-void Modified::Billboard::History<T>::redo()
+template<isImage T>
+void Modified::Image::History<T>::redo()
 {
     if(index < historyEdit.size()-1)
         ++index;
 
 }
 
-template<isBillboard T>
-void Modified::Billboard::History<T>::undo()
+template<isImage T>
+void Modified::Image::History<T>::undo()
 {
     if(index != 0)
         --index;
