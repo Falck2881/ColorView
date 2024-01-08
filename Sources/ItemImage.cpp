@@ -234,5 +234,5 @@ void App::Item::Image::startThreads()
     Fk::Image image = content->image();
 
     if(image.is24BitsOnPixel() || image.is32BitsOnPixel())
-        std::async(std::launch::async, &ContentItemImage::startThreads, content, image);
+        content->startThreads(image);
 }

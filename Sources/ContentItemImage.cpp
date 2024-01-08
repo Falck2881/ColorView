@@ -110,9 +110,8 @@ void ContentItemImage::updateContent(const Fk::Image& img)
     Fk::Image currImage = image();
 
     if(currImage.is24BitsOnPixel() || currImage.is32BitsOnPixel())
-        std::async(std::launch::async , &ContentItemImage::startThreads, this, currImage);
+        startThreads(currImage);
 }
-
 
 void ContentItemImage::startThreads(const Fk::Image& image)
 {
