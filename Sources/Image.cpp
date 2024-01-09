@@ -58,6 +58,7 @@ Fk::Image::Image(const QString pathFile):
     absPathToFile(pathFile)
 {
     if(!image.isNull()){
+        image = image.scaled(image.width(),image.height());
         setAllNameColorsInSet();
         type = TypeImage::SimpleImage;
     }
@@ -220,7 +221,7 @@ QString Fk::Image::absolutlePathToFile() const
 
 void Fk::Image::scaled(const quint32 width, const quint32 hight)
 {
-    image = image.scaled(width,hight,Qt::KeepAspectRatio);
+    image = image.scaled(width, hight, Qt::KeepAspectRatio);
 }
 
 void Fk::Image::setFraming(const QString nameFileFrame)

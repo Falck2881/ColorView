@@ -1,13 +1,14 @@
 #include "Billboard.h"
 #include <QMouseEvent>
 #include <QPainter>
-
+#include <QImage>
 
 Fk::Billboard::Billboard(const Fk::Image& newImage):
     image(newImage),moveDraw(0.0,0.0),mouseTracking(false)
 {
     pencilBox.readiness = Readiness::Show;
-    setPixmap(image.pixmap());
+    if(image.getType() == Fk::TypeImage::SimpleImage)
+        setPixmap(image.pixmap());
     setAlignment(Qt::AlignCenter);
     setCursor(QCursor(QPixmap(":/Normal/cursor.png")));
     setMouseTracking(true);
@@ -48,7 +49,7 @@ void Fk::Billboard::mousePressEvent(QMouseEvent* event)
     if(pencilBox.readiness == Readiness::Drawing || pencilBox.readiness == Readiness::Edit)
     {
         mouseTracking = true;
-        moveDraw = event->globalPosition();
+        moveDraw = event->pos();
     }
 
     if(event->button() == Qt::MouseButton::LeftButton)
@@ -70,7 +71,7 @@ void Fk::Billboard::mouseMoveEvent(QMouseEvent* event)
 
     if(mouseTracking)
     {
-        moveDraw = event->globalPosition();
+        moveDraw = event->pos();
         update();
     }
 
@@ -82,16 +83,20 @@ void Fk::Billboard::paintEvent(QPaintEvent* event)
     Q_UNUSED(event);
 
     QImage context = image.context();
+    context = context.scaled(event->rect().width(), event->rect().height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+    if(!pixmap().isNull()){
+        context = image.pixmap().toImage();
+        context = context.scaled(event->rect().width(), event->rect().height());
+    }
+
     QPainter painter;
     painter.begin(&context);
     painter.setPen(QPen(QBrush(pencilBox.color, Qt::BrushStyle::SolidPattern),pencilBox.width));
-    if(image.getType() == Fk::TypeImage::DrawImage)
-        painter.drawPoint(moveDraw.rx() + 120.0f, moveDraw.ry() + 25.0f);
-    else
-        painter.drawPoint(moveDraw.rx() -  412.0f, moveDraw.ry() - 182.0f);
+    painter.drawPoint(moveDraw.x() - 18.0f, moveDraw.y() + 18.0f);
     painter.end();
 
-    setPixmap(image.pixmap());
+    setPixmap(QPixmap::fromImage(context));
     image.updateContext(context);
     QLabel::paintEvent(event);
 }

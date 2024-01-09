@@ -25,7 +25,7 @@ namespace Fk
             Fk::PencilBox pencilBox;
             QColor colorToDrawing;
             Fk::Image image;
-            QPointF moveDraw;
+            QPoint moveDraw;
             bool mouseTracking;
     };
 }
