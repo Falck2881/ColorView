@@ -46,6 +46,7 @@
 
 - Рисование на чистом холсте
 
-![sib](https://github.com/Falck2881/ColorView/assets/100667839/b35caa56-d920-4c0a-bbc9-53d270ea2ed2)
+![image](https://github.com/Falck2881/ColorView/assets/100667839/f43df3e3-5667-4045-8446-3f723d987c1d)
+
 
   
