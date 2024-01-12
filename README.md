@@ -18,8 +18,8 @@
 # Платформы
 Вы можете выбрать доступную целевую платформу:
 
-- Для ОС Windows - https://drive.google.com/drive/folders/1SG3K5GRt4IEAvdlYrqhmmW0z0uZOhRAJ?usp=share_link 
-- Для ОС Linux - https://drive.google.com/drive/folders/13GJ-Fp2Qsr2GRrOUYTVQv47R2S0g2Y1P?usp=share_link
+- Для ОС Windows - https://drive.google.com/drive/folders/1jhM3ZXar0IUb4zhevm-g80m5TgQaMMsz?usp=sharing
+- Для ОС Linux - 
 
 # Скриншоты 
 Ниже будут ознакомительные скриншоты проекта.
