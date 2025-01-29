@@ -25,7 +25,7 @@ namespace App::Item
             void saveAs();
         private:
             void setActivityOfWidgets() override final;
-            void setContent(const QString& content) override;
+            void setContent(const Fk::Image& content) override;
             void updateContent(const Fk::Image& billboard) override;
             void setIndex(const qint32 newIndex) override;
             void removeContent(const qint32 index) override;
@@ -53,7 +53,6 @@ namespace App::Item
             std::unique_ptr<QToolBar> toolBar;
             App::MainWindow* const mainWindow;
             std::unique_ptr<WinSaveImg> winSaveImg;
-
     };
 }
 #endif // ITEMFILE_H

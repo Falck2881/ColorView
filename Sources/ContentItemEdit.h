@@ -15,7 +15,7 @@ class ContentItemEdit
         Fk::Image imageInHistory() const;
         Fk::Image lastModifiedOnImage() const;
         void saveModifiedOnImage(const Fk::Image&);
-        void setContent(const QString& newContent);
+        void setContent(const Fk::Image& newContent);
         void removeContent(const qint32 index);
     private:
         QVector<Modified::Image::History<Fk::Image>> history;

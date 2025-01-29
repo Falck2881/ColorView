@@ -8,7 +8,7 @@
 
 namespace Fk
 {
-    enum class Readiness{Show, Edit, Drawing};
+    enum class Readiness{Show, Edit, Drawing, Zoom};
 
     class PencilBox
     {

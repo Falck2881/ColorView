@@ -2,6 +2,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QImage>
+#include <QVBoxLayout>
 
 Fk::Billboard::Billboard(const Fk::Image& newImage):
     image(newImage),moveDraw(0.0,0.0),mouseTracking(false)
@@ -9,7 +10,8 @@ Fk::Billboard::Billboard(const Fk::Image& newImage):
     pencilBox.readiness = Readiness::Show;
     if(image.getType() == Fk::TypeImage::SimpleImage)
         setPixmap(image.pixmap());
-    setAlignment(Qt::AlignCenter);
+
+    setMaximumSize(image.width(), image.height());
     setCursor(QCursor(QPixmap(":/Normal/cursor.png")));
     setMouseTracking(true);
 }
@@ -43,19 +45,39 @@ void Fk::Billboard::mouseReleaseEvent(QMouseEvent* event)
 
 void Fk::Billboard::mousePressEvent(QMouseEvent* event)
 {
-    if(pencilBox.readiness == Readiness::Show)
+    // Если просмотр то ничего не делаем
+    if (pencilBox.readiness == Readiness::Show)
         return;
 
-    if(pencilBox.readiness == Readiness::Drawing || pencilBox.readiness == Readiness::Edit)
+    if (pencilBox.readiness == Readiness::Zoom)
+    {
+        if (event->button() == Qt::MouseButton::LeftButton)
+        {
+            image.scaled(image.width() * 2, image.height() * 2);
+            setPixmap(QPixmap::fromImage(image.context()));
+        }
+
+        if (event->button() == Qt::MouseButton::RightButton)
+        {
+            image.scaled(image.width() / 2, image.height() / 2);
+            setPixmap(QPixmap::fromImage(image.context()));
+        }
+
+        emit updateBillboard(image);
+        return;
+    }
+
+    // Если режим "Рисование" или "Редактирования" то отслеживаем перемещение мышки и её позицию для рисования
+    if (pencilBox.readiness == Readiness::Drawing || pencilBox.readiness == Readiness::Edit)
     {
         mouseTracking = true;
         moveDraw = event->pos();
     }
 
-    if(event->button() == Qt::MouseButton::LeftButton)
+    if (event->button() == Qt::MouseButton::LeftButton)
         pencilBox.color = colorToDrawing;
 
-    if(event->button() == Qt::MouseButton::RightButton)
+    if (event->button() == Qt::MouseButton::RightButton)
     {
         setCursor(QCursor(QPixmap(":/Normal/eraser.png")));
         colorToDrawing = pencilBox.color;
@@ -66,10 +88,10 @@ void Fk::Billboard::mousePressEvent(QMouseEvent* event)
 
 void Fk::Billboard::mouseMoveEvent(QMouseEvent* event)
 {
-    if(pencilBox.readiness == Readiness::Show)
+    if (pencilBox.readiness == Readiness::Show)
         return;
 
-    if(mouseTracking)
+    if (mouseTracking)
     {
         moveDraw = event->pos();
         update();
@@ -83,9 +105,9 @@ void Fk::Billboard::paintEvent(QPaintEvent* event)
     Q_UNUSED(event);
 
     QImage context = image.context();
-    context = context.scaled(event->rect().width(), event->rect().height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-    if(!pixmap().isNull()){
+    if (!pixmap().isNull())
+    {
         context = image.pixmap().toImage();
         context = context.scaled(event->rect().width(), event->rect().height());
     }
@@ -99,4 +121,14 @@ void Fk::Billboard::paintEvent(QPaintEvent* event)
     setPixmap(QPixmap::fromImage(context));
     image.updateContext(context);
     QLabel::paintEvent(event);
+}
+
+int Fk::Billboard::width() const
+{
+    return image.width();
+}
+
+int Fk::Billboard::height() const
+{
+    return image.height();
 }

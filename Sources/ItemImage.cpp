@@ -175,7 +175,7 @@ void App::Item::Image::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Item::Image::setContent(const QString& newContent)
+void App::Item::Image::setContent(const Fk::Image& newContent)
 {
     content->setContent(newContent);
 }

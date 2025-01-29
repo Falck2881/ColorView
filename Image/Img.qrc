@@ -13,6 +13,7 @@
         <file>Normal/Redo.bmp</file>
         <file>Normal/Open Image.bmp</file>
         <file>Normal/Export.bmp</file>
+        <file>Normal/loupe_enable.png</file>
         <file>Normal/width5px.png</file>
         <file>Normal/width10px.png</file>
         <file>Normal/width15px.png</file>
@@ -26,6 +27,7 @@
         <file>Disabled/pancil-disabled.png</file>
         <file>Disabled/palette-disabled.png</file>
         <file>Disabled/shirina-disabled.png</file>
+        <file>Disabled/loupe_disable.png</file>
         <file>Takezo.qss</file>
         <file>ImgFrames/BlueFrame.png</file>
         <file>ImgFrames/ClassicFrame.png</file>

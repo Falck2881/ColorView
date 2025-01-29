@@ -15,7 +15,7 @@ class Content: public QObject
     public:
         Content();
         virtual ~Content() = default;
-        virtual void setContent(const QString& content);
+        virtual void setContent(const Fk::Image&);
         virtual void updateContent(const Fk::Image&);
         virtual void removeContent(const qint32 index);
         void setIndex(const qint32 index);

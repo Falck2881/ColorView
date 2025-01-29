@@ -57,15 +57,49 @@ Fk::Image::Image(const QString pathFile):
     image(pathFile,nullptr),
     absPathToFile(pathFile)
 {
-    if(!image.isNull()){
-        image = image.scaled(image.width(),image.height());
+    if(!image.isNull())
+    {
+        // Если слишком большое приложение то уменьшаем масштаб
+        if (isBigSize())
+            image = image.scaled(defineWidth(), defineHeight(), Qt::KeepAspectRatioByExpanding);
+
         setAllNameColorsInSet();
         type = TypeImage::SimpleImage;
     }
-    else{
+    else
+    {
         fillImageWithWhiteColor();
         type = TypeImage::DrawImage;
     }
+}
+
+
+bool Fk::Image::isBigSize()
+{
+    return  image.width() <= MaxWidthImage::W640 || image.height() <= MaxHeightImage::H480
+            ? false : image.width() <= MaxWidthImage::W800 || image.height() <= MaxHeightImage::H600
+            ? true : image.width() <= MaxWidthImage::W1024 || image.height() <= MaxHeightImage::H768
+            ? true : image.width() <= MaxWidthImage::W1280 || image.height() <= MaxHeightImage::H1024
+            ? true : image.width() <= MaxWidthImage::W1600 || image.height() <= MaxHeightImage::H1200
+            ? true : image.width() > MaxWidthImage::W1600 || image.height() > MaxHeightImage::H1200 ;
+}
+
+int Fk::Image::defineWidth()
+{
+    return  image.width() <= MaxWidthImage::W800
+            ? image.width() / 1.2 : image.width() <= MaxWidthImage::W1024
+            ? image.width() / 1.8 : image.width() <= MaxWidthImage::W1280
+            ? image.width() / 2 : image.width() <= MaxWidthImage::W1600
+            ? image.width() / 4 : image.width() > MaxWidthImage::W1600;
+}
+
+int Fk::Image::defineHeight()
+{
+    return  image.height() <= MaxHeightImage::H600
+            ? image.height() : image.height() <= MaxHeightImage::H768
+            ? image.height() / 1.2 : image.height() <= MaxHeightImage::H1024
+            ? image.height() / 1.4: image.height() <= MaxHeightImage::H1200
+            ? image.height() / 1.8: image.height() > MaxHeightImage::H1200 ;
 }
 
 void Fk::Image::setAllNameColorsInSet()

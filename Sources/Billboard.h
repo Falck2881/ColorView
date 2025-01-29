@@ -19,6 +19,8 @@ namespace Fk
             void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
             void mousePressEvent(QMouseEvent* mouseEvent) override;
             void paintEvent(QPaintEvent* event) override;
+            int width() const;
+            int height() const;
         signals:
             void updateBillboard(Fk::Image image);
         private:

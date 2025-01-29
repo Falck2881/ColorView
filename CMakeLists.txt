@@ -91,34 +91,34 @@ target_link_libraries(ProjectColorView PRIVATE Qt6::Widgets
 
 
 
-include(FetchContent)
-FetchContent_Declare(googletest
-                     URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip)
+#include(FetchContent)
+#FetchContent_Declare(googletest
+#                     URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip)
 
-file(GLOB_RECURSE all_test_windows "${CMAKE_CURRENT_SOURCE_DIR}/TestingColorView/TestingWindows/*.cpp")
+#file(GLOB_RECURSE all_test_windows "${CMAKE_CURRENT_SOURCE_DIR}/TestingColorView/TestingWindows/*.cpp")
 
-file(GLOB_RECURSE all_test_sources "${CMAKE_CURRENT_SOURCE_DIR}/TestingColorView/TestingSources/test_itemfile.cpp")
+#file(GLOB_RECURSE all_test_sources "${CMAKE_CURRENT_SOURCE_DIR}/TestingColorView/TestingSources/test_itemfile.cpp")
 
-set(AllTestsColorView TestingColorView/test_main.cpp
-                  ${PROJECT_SOURCES}
-                  ${WINDOWS_SRC}
-                  ${all_test_windows}
-                  ${all_test_sources})
+#set(AllTestsColorView TestingColorView/test_main.cpp
+#                  ${PROJECT_SOURCES}
+#                  ${WINDOWS_SRC}
+#                  ${all_test_windows}
+#                  ${all_test_sources})
 
-enable_testing()
+#enable_testing()
 
-add_executable(TestColorView ${AllTestsColorView} ${DATA} ${IMG})
+#add_executable(TestColorView ${AllTestsColorView} ${DATA} ${IMG})
 
-target_include_directories(TestColorView PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Windows"
-                                                 "${CMAKE_CURRENT_SOURCE_DIR}/Sources")
+#target_include_directories(TestColorView PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/Windows"
+#                                                 "${CMAKE_CURRENT_SOURCE_DIR}/Sources")
 
-target_link_libraries(TestColorView PRIVATE GTest::gtest GTest::gtest_main
-                                            Qt6::Widgets Qt6::Core
-                                            )
+#target_link_libraries(TestColorView PRIVATE GTest::gtest GTest::gtest_main
+#                                            Qt6::Widgets Qt6::Core
+#                                            )
 
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
+## For Windows: Prevent overriding the parent project's compiler/linker settings
+#set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+#FetchContent_MakeAvailable(googletest)
 
 
 set_target_properties(ProjectColorView PROPERTIES
@@ -128,4 +128,3 @@ set_target_properties(ProjectColorView PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-

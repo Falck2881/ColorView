@@ -28,7 +28,7 @@ namespace Item
             void startThreads();
         private:
             void setActivityOfWidgets() override final;
-            void setContent(const QString& content) override;
+            void setContent(const Fk::Image& content) override;
             void updateContent(const Fk::Image& image) override;
             void setIndex(const qint32 newIndex) override;
             void removeContent(const qint32 index) override;

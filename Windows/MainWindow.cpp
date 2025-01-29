@@ -49,9 +49,9 @@ void App::MainWindow::addAllItemsInManinWindow()
 void App::MainWindow::setGeometryScreen()
 {
     auto screen = QGuiApplication::primaryScreen()->availableGeometry().size();
-    quint32 width = screen.width() * 0.9;
-    quint32 height = screen.height() * 0.9;
-    this->setGeometry(50,50,width,height);
+    quint32 width = screen.width();
+    quint32 height = screen.height();
+    this->setGeometry(0,0,width,height);
     this->setMaximumSize(width,height);
     this->setMinimumSize(800,600);
 }
@@ -68,7 +68,7 @@ void App::MainWindow::appand(Base::Item *const observer)
     observers.push_back(observer);
 }
 
-void App::MainWindow::setBillboardInEachObserver(const QString& newContent)
+void App::MainWindow::setBillboardInEachObserver(const Fk::Image& newContent)
 {
     for(auto obs: observers)
         obs->setContent(newContent);
@@ -155,7 +155,8 @@ void App::MainWindow::updateDrawingToolsOnPage()
 
 void App::MainWindow::addImage()
 {
-    setBillboardInEachObserver("Undefined");
+    Fk::Image image("Undefined");
+    setBillboardInEachObserver(image);
     setActivityTheWitgetsInEachObserver();
 }
 

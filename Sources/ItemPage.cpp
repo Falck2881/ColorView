@@ -2,11 +2,14 @@
 #include "MainWindow.h"
 #include "Image.h"
 #include <QLabel>
+#include <QVBoxLayout>
+#include <future>
 
 App::Item::Page::Page(App::MainWindow* const mainWin):
     content(std::make_unique<Content>()),
     tabWidget{std::make_unique<QTabWidget>()},
-    mainWindow{mainWin}
+    mainWindow{mainWin},
+    indexOfPage{-1}
 {
     mainWindow->appand(this);
     initializeStartPage();
@@ -16,6 +19,7 @@ App::Item::Page::Page(App::MainWindow* const mainWin):
 void App::Item::Page::initializeStartPage()
 {
     tabWidget->setTabPosition(QTabWidget::North);
+
     isThereAnyPage();
 }
 
@@ -24,9 +28,25 @@ void App::Item::Page::isThereAnyPage()
     if(tabWidget->currentIndex() == -1)
     {
         Fk::Image image(":/imgNotFound.png");
+        // Родительский виджет нужен только для центрирования билборда
+        QLabel* parentFrame = new QLabel();
+
         Fk::Billboard* billboard = new Fk::Billboard(image);
+        billboard->setParent(parentFrame);
+
+        QRect rect (tabWidget->width() / 1.4, 20, image.pixmap().width(), image.pixmap().height());
+        parentFrame->setFrameRect(rect);
+
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->setAlignment(Qt::AlignVCenter);
+        // В родительский виджет упаковываем билборд
+        layout->addWidget(billboard);
+        parentFrame->setLayout(layout);
+
         setConnectWithBillboard(billboard);
-        tabWidget->addTab(billboard,"Untiled");
+
+        // Добавляем родительский виджет
+        tabWidget->addTab(parentFrame,"Untiled");
         tabWidget->setTabsClosable(false);
     }
 }
@@ -92,10 +112,11 @@ void App::Item::Page::saveCurrentIndexOfPage()
 
 void App::Item::Page::setIndex(const qint32 newIndex)
 {
+
     content->setIndex(newIndex);
 }
 
-void App::Item::Page::setContent(const QString& fileName)
+void App::Item::Page::setContent(const Fk::Image& fileName)
 {
     if(content->isBillboardEmpty())
         removeStartPage();
@@ -111,10 +132,16 @@ void App::Item::Page::setContent(const QString& fileName)
 void App::Item::Page::updateContent(const Fk::Image& img)
 {
     content->updateContent(img);
-    Fk::Billboard* currentBillboard = qobject_cast<Fk::Billboard*>(tabWidget->widget(tabWidget->currentIndex()));
-    currentBillboard->setImage(img);
+    QLabel* parentFrame = qobject_cast<QLabel*>(tabWidget->widget(tabWidget->currentIndex()));
 
-    tabWidget->setCurrentIndex(tabWidget->insertTab(tabWidget->currentIndex(), currentBillboard, "*"+img.nameFile()));
+    Fk::Billboard* currentBillboard = parentFrame->findChild<Fk::Billboard*>();
+
+    if (currentBillboard != nullptr)
+    {
+        currentBillboard->setImage(img);
+        tabWidget->setCurrentIndex(tabWidget->insertTab(tabWidget->currentIndex(), parentFrame, "*"+img.nameFile()));
+        saveCurrentIndexOfPage();
+    }
 }
 
 void App::Item::Page::removeContent(const qint32 index)
@@ -124,9 +151,25 @@ void App::Item::Page::removeContent(const qint32 index)
 
 void App::Item::Page::addImageIntoBillboardOfPage(const Fk::Image& image)
 {
+    // Родительский виджет нужен только для центрирования билборда
+    QLabel* parentFrame = new QLabel();
+    parentFrame->setMaximumSize(tabWidget->width(), tabWidget->height());
+
     Fk::Billboard* billboard = new Fk::Billboard(image);
+    billboard->setParent(parentFrame);
+
+    QRect rect (parentFrame->width() / 1.4 , 5, image.pixmap().width(), image.pixmap().height());
+    parentFrame->setFrameRect(rect);
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->setAlignment(Qt::AlignVCenter);
+    // В родительский виджет упаковываем билборд
+    layout->addWidget(billboard);
+    parentFrame->setLayout(layout);
+
     setConnectWithBillboard(billboard);
-    tabWidget->setCurrentIndex(tabWidget->addTab(billboard, image.nameFile()));
+    tabWidget->setCurrentIndex(tabWidget->addTab(parentFrame, image.nameFile()));
+    saveCurrentIndexOfPage();
 }
 
 QTabWidget* App::Item::Page::getTabWidget() const
@@ -157,6 +200,10 @@ void App::Item::Page::enableTabsClosable()
 
 void App::Item::Page::preparePageToDrawing(const Fk::PencilBox& pencilBox)
 {
-    auto bilboard = qobject_cast<Fk::Billboard*>(tabWidget->widget(tabWidget->currentIndex()));
-    bilboard->setPencilBox(pencilBox);
+    QLabel* parentFrame = qobject_cast<QLabel*>(tabWidget->widget(tabWidget->currentIndex()));
+
+    Fk::Billboard* currentBillboard = parentFrame->findChild<Fk::Billboard*>();
+
+    if (currentBillboard != nullptr)
+        currentBillboard->setPencilBox(pencilBox);
 }

@@ -77,8 +77,11 @@ void App::Item::File::connectWithCommand()
 void App::Item::File::open()
 {
     const QString pathToFile = getPathToFile();
-    if(pathToFile != ""){
-        mainWindow->setBillboardInEachObserver(pathToFile);
+
+    if(pathToFile != "")
+    {
+        Fk::Image image(pathToFile);
+        mainWindow->setBillboardInEachObserver(image);
         mainWindow->setActivityTheWitgetsInEachObserver();
     }
 }
@@ -131,7 +134,7 @@ void App::Item::File::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Item::File::setContent(const QString& newContent)
+void App::Item::File::setContent(const Fk::Image& newContent)
 {
     content->setContent(newContent);
 }

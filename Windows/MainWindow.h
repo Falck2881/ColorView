@@ -27,7 +27,7 @@ namespace App
         public:
             MainWindow();
             void appand(App::Base::Item* const observer);
-            void setBillboardInEachObserver(const QString& newContent);
+            void setBillboardInEachObserver(const Fk::Image& newContent);
             void changeIndex(const qint32 newIndex);
             void updateImageInEachObserver(const Fk::Image& image);
             void drawnImageWasModified(const Fk::Image& image);

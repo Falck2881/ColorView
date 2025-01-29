@@ -30,7 +30,7 @@ namespace  App::Item
            qint32 currentIndexOfPage() const;
         private:
            void updateContent(const Fk::Image& image) override;
-           void setContent(const QString& content) override;
+           void setContent(const Fk::Image& content) override;
            void setIndex(const qint32 newIndex) override;
            void removeContent(const qint32 index) override;
         private:

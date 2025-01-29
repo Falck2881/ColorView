@@ -1,5 +1,5 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef FKIMAGE_H
+#define FKIMAGE_H
 
 #include <QtGlobal>
 #include <QImage>
@@ -13,6 +13,12 @@ class QColor;
 namespace Fk {
 
     enum class TypeImage{DrawImage, SimpleImage};
+
+    // Максимальная ширина изображения
+    enum MaxWidthImage{W1600 = 1600, W1280 = 1280, W1024 = 1024, W800 = 800, W640 = 640};
+
+    // Максимальная высота изображения
+    enum MaxHeightImage{H1200 = 1200, H1024 = 1024, H768 = 768, H600 = 600, H480 = 480};
 
     class Image
     {
@@ -48,8 +54,11 @@ namespace Fk {
             void setFraming(const QString nameFileFrame);
             TypeImage getType() const;
        private:
+            bool isBigSize();
+            int defineWidth();
+            int defineHeight();
             void setAllNameColorsInSet();
-           void fillImageWithWhiteColor();
+            void fillImageWithWhiteColor();
        private:
             QImage image;
             QString absPathToFile;
@@ -58,4 +67,4 @@ namespace Fk {
             TypeImage type;
     };
 }
-#endif // IMAGE_H
+#endif // FKIMAGE_H

@@ -8,6 +8,7 @@ App::Item::DrawingTools::DrawingTools():
     aEraser{std::make_unique<QAction>("&Eraser")},
     aPalette{std::make_unique<QAction>("&Palette")},
     aPenWidth{std::make_unique<QAction>("&Pen width")},
+    aLoupe{std::make_unique<QAction>("&Loupe")},
     selectionWidget{std::make_unique<WgtSelectWidthPencil>(toolBar.get())}
 {
     initializeEachAction();
@@ -17,9 +18,10 @@ App::Item::DrawingTools::DrawingTools():
 void App::Item::DrawingTools::initializeEachAction()
 {
     QList<QString> namesFiles{":/Normal/cursor.png",":/Normal/pencil-normal.png",
-                              ":/Normal/eraser.png",":/Normal/palette-normal.png",":/Normal/shirina-normal.png"};
+                              ":/Normal/eraser.png",":/Normal/palette-normal.png",
+                              ":/Normal/shirina-normal.png", ":/Normal/loupe_enable.png"};
 
-    QList<QAction*> actions{aCursor.get(),aPencilAndEraser.get(),aEraser.get(),aPalette.get(),aPenWidth.get()};
+    QList<QAction*> actions{aCursor.get(),aPencilAndEraser.get(),aEraser.get(),aPalette.get(),aPenWidth.get(), aLoupe.get()};
 
     for(int i=0; i < actions.size(); ++i)
     {
@@ -38,6 +40,8 @@ void App::Item::DrawingTools::connectWithCommand()
     QObject::connect(aEraser.get(), &QAction::triggered, this, &App::Item::DrawingTools::setEraser);
 
     QObject::connect(aPalette.get(), &QAction::triggered, this, &App::Item::DrawingTools::setColor);
+
+    QObject::connect(aLoupe.get(), &QAction::triggered, this, &App::Item::DrawingTools::setLoupe);
 
     QObject::connect(aPenWidth.get(), &QAction::triggered, selectionWidget.get(), &WgtSelectWidthPencil::show);
 
@@ -82,6 +86,13 @@ void App::Item::DrawingTools::setColor()
     }
 }
 
+void App::Item::DrawingTools::setLoupe()
+{
+    pencilBox.cursor = QCursor(QPixmap(":/Normal/loupe_enable.png"));
+    pencilBox.readiness = Fk::Readiness::Zoom;
+    emit toolsHaveBeenUpdate();
+}
+
 void App::Item::DrawingTools::setWidthPencilAndEraser(qint32 width)
 {
     pencilBox.width = width;
@@ -100,7 +111,7 @@ const Fk::PencilBox& App::Item::DrawingTools::getPencilBox() const
 
 void App::Item::DrawingTools::setActivateToolsDrawing(bool status)
 {
-    QList<QAction*> actions{aCursor.get(),aPencilAndEraser.get(),aEraser.get(),aPalette.get(),aPenWidth.get()};
+    QVector<QAction*> actions{aCursor.get(),aPencilAndEraser.get(),aEraser.get(),aPalette.get(),aPenWidth.get(),aLoupe.get()};
 
     for(int i=0; i < actions.size(); ++i)
         actions[i]->setEnabled(status);

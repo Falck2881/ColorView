@@ -24,7 +24,7 @@ namespace App::Item
             const Fk::Image& getImage() const;
         private:
             void setActivityOfWidgets() override final;
-            void setContent(const QString& content) override;
+            void setContent(const Fk::Image& content) override;
             void removeContent(const qint32 index) override;
             void setIndex(const qint32 newIndex) override;
         private:

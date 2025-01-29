@@ -2,6 +2,7 @@
 #include <exception>
 #include <QDebug>
 #include <assert.h>
+#include <future>
 //#define NDEBUG
 
 Content::Content():index(-1)
@@ -15,10 +16,9 @@ void Content::updateContent(const Fk::Image& image)
     imageArray.replace(index,image);
 }
 
-void Content::setContent(const QString& fileName)
+void Content::setContent(const Fk::Image& content)
 {
-    Fk::Image image(fileName);
-    imageArray.push_back(image);
+    imageArray.push_back(content);
 }
 
 void Content::removeContent(const qint32 index)

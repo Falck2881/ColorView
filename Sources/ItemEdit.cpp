@@ -67,7 +67,7 @@ void App::Item::Edit::setIndex(const qint32 newIndex)
     content->setIndex(newIndex);
 }
 
-void App::Item::Edit::setContent(const QString& newContent)
+void App::Item::Edit::setContent(const Fk::Image& newContent)
 {
     content->setContent(newContent);
 }

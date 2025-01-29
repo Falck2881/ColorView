@@ -11,6 +11,7 @@
 
 namespace App::Base
 {
+
     class Item: public QWidget
     {
         Q_OBJECT
@@ -21,7 +22,7 @@ namespace App::Base
             virtual void removeContent(const qint32 index){};
             virtual void setIndex(const qint32 newIndex) = 0;
             virtual void setActivityOfWidgets(){};
-            virtual void setContent(const QString& content) = 0;
+            virtual void setContent(const Fk::Image& content) = 0;
             QString messageAboutAction() const;
             void writeNoteAboutAction(const QString& message);
         private:

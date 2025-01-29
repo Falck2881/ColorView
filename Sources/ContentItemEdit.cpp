@@ -63,10 +63,9 @@ Fk::Image ContentItemEdit::lastModifiedOnImage() const
     return history[index].last();
 }
 
-void ContentItemEdit::setContent(const QString& newContent)
+void ContentItemEdit::setContent(const Fk::Image& newContent)
 {
-    auto image = Fk::Image(newContent);
-    history.push_back(Modified::Image::History<Fk::Image>{image});
+    history.push_back(Modified::Image::History<Fk::Image>{newContent});
 }
 
 void ContentItemEdit::removeContent(const qint32 index)

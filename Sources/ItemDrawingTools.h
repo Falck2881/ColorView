@@ -31,6 +31,7 @@ namespace App {
             void setPencil();
             void setEraser();
             void setColor();
+            void setLoupe();
             void setWidthPencilAndEraser(qint32 width);
         signals:
             void toolsHaveBeenUpdate();
@@ -41,6 +42,7 @@ namespace App {
             std::unique_ptr<QAction> aEraser;
             std::unique_ptr<QAction> aPalette;
             std::unique_ptr<QAction> aPenWidth;
+            std::unique_ptr<QAction> aLoupe;
             std::unique_ptr<WgtSelectWidthPencil> selectionWidget;
             Fk::PencilBox pencilBox;
             QColor colorToDrawing;
