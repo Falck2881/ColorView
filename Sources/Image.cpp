@@ -64,6 +64,7 @@ Fk::Image::Image(const QString pathFile):
             image = image.scaled(defineWidth(), defineHeight(), Qt::KeepAspectRatioByExpanding);
 
         setAllNameColorsInSet();
+        image = image.convertToFormat(QImage::Format_ARGB32);
         type = TypeImage::SimpleImage;
     }
     else

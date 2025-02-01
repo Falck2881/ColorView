@@ -1,9 +1,11 @@
 #include "ItemPage.h"
 #include "MainWindow.h"
 #include "Image.h"
+#include "GraphicsCanvasView.h"
 #include <QLabel>
 #include <QVBoxLayout>
-#include <future>
+#include <QGraphicsView>
+#include <QWidget>
 
 App::Item::Page::Page(App::MainWindow* const mainWin):
     content(std::make_unique<Content>()),
@@ -19,7 +21,6 @@ App::Item::Page::Page(App::MainWindow* const mainWin):
 void App::Item::Page::initializeStartPage()
 {
     tabWidget->setTabPosition(QTabWidget::North);
-
     isThereAnyPage();
 }
 
@@ -27,36 +28,30 @@ void App::Item::Page::isThereAnyPage()
 {
     if(tabWidget->currentIndex() == -1)
     {
-        Fk::Image image(":/imgNotFound.png");
-        // Родительский виджет нужен только для центрирования билборда
-        QLabel* parentFrame = new QLabel();
+        Fk::Image image(":/startLogo.jpg");
 
-        Fk::Billboard* billboard = new Fk::Billboard(image);
-        billboard->setParent(parentFrame);
+        auto billboard = std::make_shared<Fk::GraphicsImageItem>(image);
+        auto scene = new Fk::GraphicsBillboardScene(QRectF(0, 0,tabWidget->width(), tabWidget->height()));
+        scene->addBillboard(billboard);
 
-        QRect rect (tabWidget->width() / 1.4, 20, image.pixmap().width(), image.pixmap().height());
-        parentFrame->setFrameRect(rect);
-
-        QVBoxLayout* layout = new QVBoxLayout();
-        layout->setAlignment(Qt::AlignVCenter);
-        // В родительский виджет упаковываем билборд
-        layout->addWidget(billboard);
-        parentFrame->setLayout(layout);
-
-        setConnectWithBillboard(billboard);
+        QGraphicsView* view = new QGraphicsView(scene, tabWidget.get());
+        view->setRenderHint(QPainter::Antialiasing);
+        view->setAlignment(Qt::AlignVCenter);
+        // Устанавливаем подходящий размер сцены
+        setConnectWithBillboard(scene);
 
         // Добавляем родительский виджет
-        tabWidget->addTab(parentFrame,"Untiled");
+        tabWidget->addTab(view,"Untiled");
         tabWidget->setTabsClosable(false);
     }
 }
 
-void App::Item::Page::setConnectWithBillboard(Fk::Billboard* const newBillboard)
+void App::Item::Page::setConnectWithBillboard(Fk::GraphicsBillboardScene* scene)
 {
-    QObject::connect(newBillboard, &Fk::Billboard::updateBillboard, this, &App::Item::Page::receiveUpdatedImage);
+    QObject::connect(scene, &Fk::GraphicsBillboardScene::updateBillboard, this, &App::Item::Page::receiveUpdatedImage);
 }
 
-void App::Item::Page::receiveUpdatedImage(Fk::Image image)
+void App::Item::Page::receiveUpdatedImage(Fk::Image& image)
 {
     content->updateContent(image);
     mainWindow->drawnImageWasModified(image);
@@ -132,14 +127,15 @@ void App::Item::Page::setContent(const Fk::Image& fileName)
 void App::Item::Page::updateContent(const Fk::Image& img)
 {
     content->updateContent(img);
-    QLabel* parentFrame = qobject_cast<QLabel*>(tabWidget->widget(tabWidget->currentIndex()));
+    auto view = qobject_cast<QGraphicsView*>(tabWidget->widget(tabWidget->currentIndex()));
 
-    Fk::Billboard* currentBillboard = parentFrame->findChild<Fk::Billboard*>();
+    auto sceneFrame = qobject_cast<Fk::GraphicsBillboardScene*>(view->scene());
 
-    if (currentBillboard != nullptr)
+    if (sceneFrame != nullptr)
     {
-        currentBillboard->setImage(img);
-        tabWidget->setCurrentIndex(tabWidget->insertTab(tabWidget->currentIndex(), parentFrame, "*"+img.nameFile()));
+        auto billboard = sceneFrame->getBillboard();
+        billboard->setImage(img);
+        tabWidget->setCurrentIndex(tabWidget->insertTab(tabWidget->currentIndex(), view, "*"+img.nameFile()));
         saveCurrentIndexOfPage();
     }
 }
@@ -151,24 +147,18 @@ void App::Item::Page::removeContent(const qint32 index)
 
 void App::Item::Page::addImageIntoBillboardOfPage(const Fk::Image& image)
 {
-    // Родительский виджет нужен только для центрирования билборда
-    QLabel* parentFrame = new QLabel();
-    parentFrame->setMaximumSize(tabWidget->width(), tabWidget->height());
+    auto billboard = std::make_shared<Fk::GraphicsImageItem>(image);
 
-    Fk::Billboard* billboard = new Fk::Billboard(image);
-    billboard->setParent(parentFrame);
+    auto scene = new Fk::GraphicsBillboardScene(QRect(0, 0, image.pixmap().width(), image.pixmap().height()));
+    scene->addBillboard(billboard);
 
-    QRect rect (parentFrame->width() / 1.4 , 5, image.pixmap().width(), image.pixmap().height());
-    parentFrame->setFrameRect(rect);
+    QGraphicsView* view = new QGraphicsView(scene, tabWidget.get());
+    view->setRenderHint(QPainter::Antialiasing);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->setAlignment(Qt::AlignVCenter);
-    // В родительский виджет упаковываем билборд
-    layout->addWidget(billboard);
-    parentFrame->setLayout(layout);
-
-    setConnectWithBillboard(billboard);
-    tabWidget->setCurrentIndex(tabWidget->addTab(parentFrame, image.nameFile()));
+    setConnectWithBillboard(scene);
+    tabWidget->setCurrentIndex(tabWidget->addTab(view, image.nameFile()));
     saveCurrentIndexOfPage();
 }
 
@@ -200,10 +190,9 @@ void App::Item::Page::enableTabsClosable()
 
 void App::Item::Page::preparePageToDrawing(const Fk::PencilBox& pencilBox)
 {
-    QLabel* parentFrame = qobject_cast<QLabel*>(tabWidget->widget(tabWidget->currentIndex()));
+    auto view = qobject_cast<QGraphicsView*>(tabWidget->widget(tabWidget->currentIndex()));
+    auto currScene = qobject_cast<Fk::GraphicsBillboardScene*>(view->scene());
 
-    Fk::Billboard* currentBillboard = parentFrame->findChild<Fk::Billboard*>();
-
-    if (currentBillboard != nullptr)
-        currentBillboard->setPencilBox(pencilBox);
+    if (currScene != nullptr)
+        currScene->setPencilBox(pencilBox);
 }

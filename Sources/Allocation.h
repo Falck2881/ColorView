@@ -1,7 +1,7 @@
 #ifndef ALLOCATION_H
 #define ALLOCATION_H
 
-#include "Billboard.h"
+#include "GraphicsImageItem.h"
 #include <utility>
 #include <memory>
 
@@ -11,10 +11,10 @@ namespace Fk
     {
         public:
             Allocation(const QString& nameFile);
-            std::unique_ptr<Billboard> operator()();
+            std::unique_ptr<Fk::GraphicsImageItem> operator()();
         private:
             bool checkContentPair() const;
-            std::unique_ptr<Billboard> make() const;
+            std::unique_ptr<Fk::GraphicsImageItem> make() const;
             const QString nameFile;
     };
 }

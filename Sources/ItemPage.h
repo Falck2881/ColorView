@@ -1,7 +1,8 @@
 #ifndef ITEMPAGE_H
 #define ITEMPAGE_H
 
-#include "Billboard.h"
+#include "GraphicsBillboardScene.h"
+#include "GraphicsImageItem.h"
 #include "PencilBox.h"
 #include "Content.h"
 #include "Items.h"
@@ -44,12 +45,12 @@ namespace  App::Item
            bool checkIndexOnPage() const;
            void notifyAllColleagues();
            void isThereAnyPage();
-           void setConnectWithBillboard(Fk::Billboard* const billboard);
+           void setConnectWithBillboard(Fk::GraphicsBillboardScene* scene);
            void saveCurrentIndexOfPage();
         private slots:
            void switchPage();
            void closePage(const qint32 index);
-           void receiveUpdatedImage(Fk::Image image);
+           void receiveUpdatedImage(Fk::Image& image);
         private:
            std::shared_ptr<Content> content;
            std::unique_ptr<QTabWidget> tabWidget;
