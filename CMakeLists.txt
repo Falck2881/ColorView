@@ -58,7 +58,6 @@ set(PROJECT_SOURCES
                         Sources/PencilBox.h Sources/PencilBox.cpp
                         Sources/GraphicsImageItem.h Sources/GraphicsImageItem.cpp
                         Sources/GraphicsBillboardScene.h Sources/GraphicsBillboardScene.cpp
-                        Sources/GraphicsCanvasView.h Sources/GraphicsCanvasView.cpp
                         Sources/Image.h Sources/Image.cpp)
 
 if(WIN32)

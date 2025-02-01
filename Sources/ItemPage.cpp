@@ -1,7 +1,6 @@
 #include "ItemPage.h"
 #include "MainWindow.h"
 #include "Image.h"
-#include "GraphicsCanvasView.h"
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QGraphicsView>
